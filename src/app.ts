@@ -1,6 +1,8 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import { Engine, Scene, ArcRotateCamera, Vector3, HemisphericLight, Mesh, MeshBuilder } from "@babylonjs/core";
+import {KeyboardInput} from "./Input/KeyboardInput";
+import {InputStrategy} from "./Input/InputStrategy";
 
 class App {
     constructor() {
@@ -20,6 +22,8 @@ class App {
         var light1: HemisphericLight = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
         var sphere: Mesh = MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
 
+        const input: InputStrategy = new KeyboardInput().attach();
+
         // hide/show the Inspector
         window.addEventListener("keydown", (ev) => {
             // Shift+Ctrl+Alt+I
@@ -35,6 +39,7 @@ class App {
         // run the main render loop
         engine.runRenderLoop(() => {
             scene.render();
+            input.update();
         });
     }
 }

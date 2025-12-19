@@ -6,32 +6,45 @@ import {InputStrategy} from "./Input/InputStrategy";
 
 class App {
     constructor() {
-        // create the canvas html element and attach it to the webpage
-        var canvas = document.createElement("canvas");
+
+        document.documentElement.style["overflow"] = "hidden";
+        document.documentElement.style.overflow = "hidden";
+        document.documentElement.style.width = "100%";
+        document.documentElement.style.height = "100%";
+        document.documentElement.style.margin = "0";
+        document.documentElement.style.padding = "0";
+        document.body.style.overflow = "hidden";
+        document.body.style.width = "100%";
+        document.body.style.height = "100%";
+        document.body.style.margin = "0";
+        document.body.style.padding = "0";
+
+        // create the canvas HTML element and attach it to the webpage
+        const canvas = document.createElement("canvas");
         canvas.style.width = "100%";
         canvas.style.height = "100%";
         canvas.id = "gameCanvas";
         document.body.appendChild(canvas);
 
         // initialize babylon scene and engine
-        var engine = new Engine(canvas, true);
-        var scene = new Scene(engine);
+        const engine = new Engine(canvas, true);
+        const scene = new Scene(engine);
 
-        var camera: ArcRotateCamera = new ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, Vector3.Zero(), scene);
+        let camera: ArcRotateCamera = new ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, Vector3.Zero(), scene);
         camera.attachControl(canvas, true);
-        var light1: HemisphericLight = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
-        var sphere: Mesh = MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
+        let light1: HemisphericLight = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
+        let sphere: Mesh = MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
 
         const input: InputStrategy = new KeyboardInput().attach();
 
         // hide/show the Inspector
         window.addEventListener("keydown", (ev) => {
             // Shift+Ctrl+Alt+I
-            if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.keyCode === 73) {
+            if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.code === "KeyI") {
                 if (scene.debugLayer.isVisible()) {
                     scene.debugLayer.hide();
                 } else {
-                    scene.debugLayer.show();
+                    scene.debugLayer.show().then(() => {});
                 }
             }
         });
@@ -43,4 +56,5 @@ class App {
         });
     }
 }
+
 new App();

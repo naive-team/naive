@@ -1,13 +1,10 @@
 import {GameState} from "./States/GameState";
-import {SoundScreenState} from "./States/SoundScreenState";
 import {Printer} from "./util/Printer";
 
 export class Game {
     private gameState_ : GameState;
 
-    constructor() {
-        this.changeState(new SoundScreenState(this));
-    }
+    constructor() {}
 
     public changeState(gameState: GameState): void {
         Printer.print("Changing game state...");

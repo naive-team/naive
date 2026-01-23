@@ -1,4 +1,4 @@
-import {EngineStore, Scene} from "@babylonjs/core";
+import {Scene} from "@babylonjs/core";
 import {BabylonManager} from "../util/BabylonManager";
 import {Game} from "../Game";
 
@@ -9,7 +9,6 @@ export abstract class GameState {
     protected constructor(game: Game) {
         this.scene_ = new Scene(BabylonManager.instance.engine);
         this.game_ = game;
-        this.handle();
     }
 
     public abstract handle(): void;

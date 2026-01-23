@@ -5,9 +5,9 @@ import {
     PBRMaterial, PhysicsAggregate, PhysicsShapeType, Texture,
     Vector3
 } from "@babylonjs/core";
-import {BabylonManager} from "../util/BabylonManager";
+import {BabylonManager} from "../../util/BabylonManager";
 import {Printer} from "../util/Printer";
-import {Game} from "../Game";
+import {Game} from "../../Game";
 import HavokPhysics from "@babylonjs/havok";
 
 

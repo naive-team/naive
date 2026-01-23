@@ -1,4 +1,4 @@
-import {GameState} from "./States/GameState";
+import {GameState} from "./States/GameStates/GameState";
 import {Printer} from "./util/Printer";
 
 export class Game {

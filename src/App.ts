@@ -1,7 +1,5 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
-import "@babylonjs/core/Debug/debugLayer";
-import "@babylonjs/inspector";
 import {Game} from "./Game";
 import {SoundScreenState} from "./States/SoundScreenState";
 

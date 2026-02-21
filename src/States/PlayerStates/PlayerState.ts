@@ -1,9 +1,9 @@
-import {SoundScreenState} from "../GameStates/SoundScreenState";
-import {CharacterSupportedState, Vector3} from "@babylonjs/core";
+import {CharacterSupportedState, CharacterSurfaceInfo, PhysicsCharacterController, Vector3} from "@babylonjs/core";
+import {PlayerPhysics} from "../../PlayerPhysics";
 
 export abstract class PlayerState {
-
-    public abstract getNextState(support: CharacterSupportedState, wantToJump : boolean) : PlayerState;
-
-    public abstract getDesiredVelocity() : Vector3;
+    public abstract getNextState(support: CharacterSupportedState, playerPhysics: PlayerPhysics) : PlayerState;
+    public getDesiredVelocity(_characterController: PhysicsCharacterController, _playerPhysics: PlayerPhysics, _deltaTime: number, _supportInfo: CharacterSurfaceInfo) : Vector3 {
+        return Vector3.Zero();
+    }
 }

@@ -1,13 +1,16 @@
 import {GameState} from "./States/GameStates/GameState";
-import {Printer} from "./util/Printer";
+import {Printer} from "./util/Printer/Printer";
+import {PrinterTag} from "./util/Printer/PrinterTag";
+
 
 export class Game {
     private gameState_ : GameState;
 
+
     constructor() {}
 
     public changeState(gameState: GameState): void {
-        Printer.print("Changing game state...");
+        Printer.print(PrinterTag.INPUT, "Changing game state...");
         if (this.gameState_) {
             this.gameState_.dispose();
         }

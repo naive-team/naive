@@ -1,5 +1,5 @@
 import {GameState} from "./States/GameState";
-import {Printer} from "./util/Printer";
+import {Printer} from "./util/Printer/Printer";
 
 export class Game {
     private gameState_ : GameState;

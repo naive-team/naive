@@ -6,7 +6,7 @@ import {
     Vector3
 } from "@babylonjs/core";
 import {BabylonManager} from "../util/BabylonManager";
-import {Printer} from "../util/Printer";
+import {Printer} from "../util/Printer/Printer";
 import {Game} from "../Game";
 import HavokPhysics from "@babylonjs/havok";
 
@@ -61,7 +61,7 @@ export class InGameState extends GameState {
         assetContainerTask.onSuccess = (task) => {
             task.loadedContainer.addAllToScene();
             task.loadedMeshes[0].position = Vector3.Zero();
-            Printer.print("assetContainer success");
+            //Printer.print("assetContainer success");
         }
 
         assetsManager.onFinish = () => {
@@ -75,7 +75,7 @@ export class InGameState extends GameState {
         let textTask = assetsManager.addTextureTask("lightmap", "https://raw.githubusercontent.com/CedricGuillemet/dump/master/CharController/lightmap.jpg");
         textTask.onSuccess = (task) => {
             lightmap = task.texture;
-            Printer.print("texture success");
+            //Printer.print("texture success");
         }
 
         await assetsManager.loadAsync().then(() => {

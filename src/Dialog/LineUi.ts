@@ -1,31 +1,16 @@
 import * as GUI from "@babylonjs/gui";
 
 export class LineUi {
-    private panel: GUI.Rectangle;
+    protected panel: GUI.Rectangle;
     private textBlock: GUI.TextBlock;
 
     constructor(
         ui: GUI.AdvancedDynamicTexture,
-        text: string,
-        width: string = "300px",
-        height: string = "100px"
     ) {
-        // Création du panel
-        this.panel = new GUI.Rectangle();
-
-        this.panel.width = width;
-        this.panel.height = height;
-        this.panel.cornerRadius = 20;
-        this.panel.color = "white";
-        this.panel.thickness = 2;
-        this.panel.background = "black";
+        this.createPanel();
 
         // Création du texte
-        this.textBlock = new GUI.TextBlock();
-
-        this.textBlock.text = text;
-        this.textBlock.color = "white";
-        this.textBlock.fontSize = 24;
+        this.createTextBlock();
 
         // Ajout du texte dans le panel
         this.panel.addControl(this.textBlock);
@@ -37,14 +22,21 @@ export class LineUi {
     public setText(text: string): void {
         this.textBlock.text = text;
     }
+    protected createPanel(): void {
+        this.panel = new GUI.Rectangle();
 
-    public setPosition(top: string, left: string): void {
-        this.panel.top = top;
-        this.panel.left = left;
+        this.panel.width = 300;
+        this.panel.height = 100;
+        this.panel.cornerRadius = 20;
+        this.panel.color = "white";
+        this.panel.thickness = 2;
+        this.panel.background = "black"; // todo remplacer par une image
     }
-
-    public setBackground(color: string): void {
-        this.panel.background = color;
+    protected createTextBlock(): void {
+        this.textBlock = new GUI.TextBlock();
+        //TODO remplqcer style
+        this.textBlock.color = "white";
+        this.textBlock.fontSize = 24;
     }
 
     public show(): void {

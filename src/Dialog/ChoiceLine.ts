@@ -1,23 +1,34 @@
 import {AbstractLine} from "./AbstractLine";
+import {ChoiceUI} from "./ChoiceUI";
+import * as GUI from "@babylonjs/gui";
 
 export class ChoiceLine extends AbstractLine {
     choices : string[];
     possibleLines : AbstractLine[];
+    uiChoice : ChoiceUI;
 
-    public override hasNext() : boolean {
-        return this.possibleLines != null && this.possibleLines.length < 0;
+    constructor(choices : string[],
+                possibleLines : AbstractLine[],
+                ui: GUI.AdvancedDynamicTexture)
+    {
+        super(" ");
+        this.possibleLines = possibleLines;
+        this.choices = choices;
+        this.uiChoice = new ChoiceUI(ui, choices)
     }
-    public getNextLine(): AbstractLine {
+    public override hasNext() : boolean {
+        return this.possibleLines != null && this.possibleLines.length > 0;
+    }
+    public async getNextLine(): Promise<AbstractLine | null> {
 
         if (!this.hasNext()) {
             return null;
         }
 
-        let index: number = -1;
-        // TODO afficher l ui de choix, recuperer la valeur
-        // on attend l input avant de continuer
+        this.uiChoice.show();
+        const index = await this.uiChoice.waitForChoice();
 
-        if (index <= -1 || index > this.possibleLines.length) {// c est juste pour eviter un bug bidon
+        if (index  < 0 || index >= this.possibleLines.length) {// c est juste pour eviter un bug bidon
             return this.possibleLines[0];
         }
         return this.possibleLines[index];

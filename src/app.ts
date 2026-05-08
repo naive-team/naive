@@ -1,7 +1,6 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import {Engine, Scene, FreeCamera, Vector3} from "@babylonjs/core";
-import {GameState} from "./GameStates/GameState";
 import {Input} from "./Input";
 import {Player} from "./Player";
 

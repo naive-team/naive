@@ -1,14 +1,25 @@
 import {AbstractLine} from "./AbstractLine";
 import {SimpleLineUi} from "./SimpleLineUi";
+import * as GUI from "@babylonjs/gui";
 
 export class Line extends AbstractLine {
     nextLine: AbstractLine | null;
+    ui: SimpleLineUi;
     private resolveNext: ((line: AbstractLine | null) => void) | null = null;
 
-    constructor(text: string, nextLine: AbstractLine | null) {
+    constructor(text: string, nextLine: AbstractLine | null, private uiGlobale:  GUI.AdvancedDynamicTexture) {
         super(text);
         this.nextLine = nextLine;
+        this.ui = new SimpleLineUi(uiGlobale)
+    }
 
+    public display(): void {
+        this.ui.show();
+        this.ui.onNextClicked(() => this.onNextButtonPressed());
+    }
+
+    public hide(): void {
+        this.ui.hide();
     }
 
     public getNextLine(): Promise<AbstractLine | null> {

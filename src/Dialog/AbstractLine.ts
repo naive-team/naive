@@ -8,6 +8,8 @@ export abstract class AbstractLine {
     constructor(texteLine: string) {
         this.texteLine = texteLine;
     }
+    abstract display(): void;
+    abstract hide(): void;
     public abstract getNextLine(): Promise<AbstractLine>;
     public abstract hasNext(): boolean;
     public getOratorName(): string {

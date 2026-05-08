@@ -21,7 +21,7 @@ export class SimpleLineUi extends LineUi {
         this.nextButton.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
     }
 
-    public onNextPressed(callback: () => void): void {
+    public onNextClicked(callback: () => void): void {
         this.nextButton.onPointerClickObservable.clear();
         this.nextButton.onPointerClickObservable.add(callback);
     }

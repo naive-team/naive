@@ -19,7 +19,10 @@ export abstract class Dialog {
         this.dialogueUI = new LineUi(this.uiGlobale);
         while(this.currentLine.hasNext()){
             this.dialogueUI.setText(this.currentLine.getText());
-            await this.currentLine.getNextLine();
+            this.currentLine.display();
+            let nextLine:AbstractLine = await this.currentLine.getNextLine();
+            this.currentLine.hide();
+            this.currentLine = nextLine;
         }
 }
     lines(): void {
@@ -29,15 +32,15 @@ export abstract class Dialog {
             new ChoiceLine(
                 [
                "oui, s'il te plait",
-                "je prefere faire par moi meme"
+                "je préfère faire par moi même"
                 ],
                 [
-                    new Line("d'acc je fais ça", null),
-                    new Line ("Je suis là si tu as besoin de moi", null)
+                    new Line("d'acc je fais ça", null, this.uiGlobale),
+                    new Line ("Je suis là si tu as besoin de moi", null, this.uiGlobale),
                 ],
             this.uiGlobale
+                ), this.uiGlobale
             )
-            )
-        );
+        , this.uiGlobale);
     }
 }

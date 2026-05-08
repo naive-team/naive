@@ -7,12 +7,14 @@ export class Line extends AbstractLine {
     ui: SimpleLineUi;
     private resolveNext: ((line: AbstractLine | null) => void) | null = null;
 
-    constructor(text: string, nextLine: AbstractLine | null, private uiGlobale:  GUI.AdvancedDynamicTexture) {
+    constructor(text: string, nextLine: AbstractLine | null) {
         super(text);
         this.nextLine = nextLine;
+
+    }
+    public createUi(uiGlobale:  GUI.AdvancedDynamicTexture): void {
         this.ui = new SimpleLineUi(uiGlobale)
     }
-
     public display(): void {
         this.ui.show();
         this.ui.onNextClicked(() => this.onNextButtonPressed());

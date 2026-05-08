@@ -1,42 +1,92 @@
 import * as GUI from "@babylonjs/gui";
 
 export class LineUi {
-    protected panel: GUI.Rectangle;
+    protected panel:GUI.Container;
     private textBlock: GUI.TextBlock;
+    private nameBlock: GUI.TextBlock;
 
     constructor(
         ui: GUI.AdvancedDynamicTexture,
     ) {
         this.createPanel();
-
-        // Création du texte
+        this.createNamePanel()
         this.createTextBlock();
 
-        // Ajout du texte dans le panel
-        this.panel.addControl(this.textBlock);
+        //this.panel.addControl(this.textBlock);
 
-        // Ajout du panel dans l'UI
         ui.addControl(this.panel);
     }
 
     public setText(text: string): void {
         this.textBlock.text = text;
     }
-    protected createPanel(): void {
-        this.panel = new GUI.Rectangle();
+    public setSpeakerName(name: string): void {
+        if (this.nameBlock){
+            this.nameBlock.text = name;
+        }
 
-        this.panel.width = 300;
-        this.panel.height = 100;
-        this.panel.cornerRadius = 20;
-        this.panel.color = "white";
-        this.panel.thickness = 2;
-        this.panel.background = "black"; // todo remplacer par une image
+    }
+    protected createNamePanel(): void {
+
+        this.nameBlock = new GUI.TextBlock();
+        this.nameBlock.color = "white";
+        this.nameBlock.fontSize = 24;
+        this.nameBlock.fontFamily = "Courier New";
+        this.nameBlock.fontStyle = "bold";
+
+        const container = new GUI.Container();
+        container.width = "15%";
+        container.height = "25%";
+        container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        container.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+        container.adaptHeightToChildren = true;
+        container.adaptWidthToChildren = true;
+        container.left = "24%";
+        container.top = "4%";
+
+        const bg = new GUI.Image("bg", "src/data/bg_speaker.png");
+        bg.width = "222px";
+        bg.height = "92px";
+        bg.stretch = GUI.Image.STRETCH_FILL;
+        container.addControl(bg);
+        container.addControl(this.nameBlock);
+
+        this.panel.addControl(container);
+    }
+    protected createPanel(): void {
+
+        const container = new GUI.Container();
+        container.width = "100%";
+        container.height = "35%";
+        container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+        container.top = "-5%";
+        container.clipChildren = false;
+
+        const bg = new GUI.Image("bg", "src/data/bg_dialog.png");
+        bg.width = "100%";
+        bg.height = "100%";
+        bg.stretch = GUI.Image.STRETCH_FILL;
+
+        container.addControl(bg);
+        this.panel = container;
     }
     protected createTextBlock(): void {
+        const container = new GUI.Container();
+        container.width = "100%";
+        container.height = "35%";
+        container.paddingBottom = "2%";
+        container.paddingLeft = "25%";
+        container.paddingRight = "25%";
+        container.paddingTop = "2%";
+        container.top = "2%";
+
         this.textBlock = new GUI.TextBlock();
-        //TODO remplqcer style
-        this.textBlock.color = "white";
-        this.textBlock.fontSize = 24;
+        this.textBlock.color = "black";
+        this.textBlock.fontSize = 30;
+        this.textBlock.fontFamily = "Courier New";
+        this.textBlock.textWrapping = true;
+        container.addControl(this.textBlock);
+        this.panel.addControl(container);
     }
 
     public show(): void {

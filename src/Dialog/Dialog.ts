@@ -4,43 +4,42 @@ import {LineUi} from "./LineUi";
 import {Line} from "./Line";
 import {ChoiceLine} from "./ChoiceLine";
 
-export abstract class Dialog {
-    // TODO stoquer line 1
-    // definir toutes les lines
-    // afficher
-    firstLine: AbstractLine;
+export class Dialog {
     currentLine: AbstractLine;
-    Lines: AbstractLine[];
     uiGlobale : GUI.AdvancedDynamicTexture;
     dialogueUI : LineUi;
 
-
+    constructor(uiGlobale : GUI.AdvancedDynamicTexture, firstLine: AbstractLine) {
+        this.uiGlobale = uiGlobale;
+        this.currentLine = firstLine;
+    }
     async play(): Promise<void> {
+        console.log("entre dans dialogue play")
         this.dialogueUI = new LineUi(this.uiGlobale);
-        while(this.currentLine.hasNext()){
+       /* while(this.currentLine.hasNext()){
+            this.currentLine.createUi(this.uiGlobale);
             this.dialogueUI.setText(this.currentLine.getText());
             this.currentLine.display();
             let nextLine:AbstractLine = await this.currentLine.getNextLine();
             this.currentLine.hide();
             this.currentLine = nextLine;
-        }
+        }*/
+        do {
+            this.currentLine.createUi(this.uiGlobale);
+            this.dialogueUI.setSpeakerName("C.A.L.I.");
+            if (this.currentLine.getText() !== ""){
+                this.dialogueUI.setText(this.currentLine.getText());
+            }
+            this.currentLine.display();
+
+            if (!this.currentLine.hasNext()) break;
+
+            const nextLine = await this.currentLine.getNextLine();
+            this.currentLine.hide();
+            //this.currentLine.dispose();
+            this.currentLine = nextLine;
+        } while (true);
+        this.currentLine.hide();
+        this.dialogueUI.hide();
 }
-    lines(): void {
-        let welcome: Line = new Line("Bonjour, je m'appelle C.A.L.I. Ravie de faire ta connaissance !",
-            new Line (
-            "mais on dirait qu'on est coincées ici... si tu veux je peux ouvir la porte.",
-            new ChoiceLine(
-                [
-               "oui, s'il te plait",
-                "je préfère faire par moi même"
-                ],
-                [
-                    new Line("d'acc je fais ça", null, this.uiGlobale),
-                    new Line ("Je suis là si tu as besoin de moi", null, this.uiGlobale),
-                ],
-            this.uiGlobale
-                ), this.uiGlobale
-            )
-        , this.uiGlobale);
-    }
 }

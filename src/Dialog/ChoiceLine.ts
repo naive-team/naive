@@ -1,6 +1,7 @@
 import {AbstractLine} from "./AbstractLine";
 import {ChoiceUI} from "./ChoiceUI";
 import * as GUI from "@babylonjs/gui";
+import {AdvancedDynamicTexture} from "@babylonjs/gui";
 
 export class ChoiceLine extends AbstractLine {
     choices : string[];
@@ -8,14 +9,17 @@ export class ChoiceLine extends AbstractLine {
     uiChoice : ChoiceUI;
 
     constructor(choices : string[],
-                possibleLines : AbstractLine[],
-                ui: GUI.AdvancedDynamicTexture)
+                possibleLines : AbstractLine[])
     {
-        super(" ");
+        super("");
         this.possibleLines = possibleLines;
         this.choices = choices;
-        this.uiChoice = new ChoiceUI(ui, choices)
+
     }
+    public createUi(uiGlobale: AdvancedDynamicTexture) {
+        this.uiChoice = new ChoiceUI(uiGlobale, this.choices);
+    }
+
     public display(): void {
         this.uiChoice.show();
     }

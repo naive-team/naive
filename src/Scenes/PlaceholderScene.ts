@@ -1,8 +1,8 @@
 import {AsyncScene} from "./AsyncScene";
 import {Engine, Scene, HemisphericLight, Vector3, AbstractMesh, AnimationGroup, MeshBuilder, GroundMesh} from "@babylonjs/core";
-import {MeshLoader} from "../MeshLoader";
-import {Input} from "../Input";
-import {Player} from "../Player";
+import {Player} from "../Entities/Player";
+import {Input} from "../Input/Input";
+import {MeshLoader} from "../util/MeshLoader";
 
 export class PlaceholderScene extends Scene implements AsyncScene {
     private player_: Player;

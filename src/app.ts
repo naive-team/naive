@@ -1,8 +1,6 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
-import {Engine, Scene, FreeCamera, Vector3} from "@babylonjs/core";
-import {Input} from "./Input";
-import {Player} from "./Player";
+import {Engine} from "@babylonjs/core";
 import {AsyncScene} from "./Scenes/AsyncScene";
 import {PlaceholderScene} from "./Scenes/PlaceholderScene";
 

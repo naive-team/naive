@@ -1,8 +1,10 @@
 import {Mesh, MeshBuilder, Scalar, Scene, Vector2, Vector3, Tools, AbstractMesh, AnimationGroup} from "@babylonjs/core";
-import {PlayerCamera} from "./PlayerCamera";
-import {Input} from "./Input";
+import {PlayerCamera} from "../util/PlayerCamera";
+import {Input} from "../Input/Input";
+import {Entity} from "./Entity";
 
-export class Player {
+
+export class Player implements Entity {
     private scene_: Scene;
     private collider_: Mesh;
     private camera_: PlayerCamera;
@@ -26,7 +28,7 @@ export class Player {
         animations[0].pause();
     }
 
-    private initCollider_(playerMesh) {
+    private initCollider_(playerMesh: AbstractMesh): void {
         const height: number = 1.3;
 
         this.collider_ = MeshBuilder.CreateBox("player_collider", {
@@ -35,11 +37,12 @@ export class Player {
             height: height
         });
 
+        this.collider_.checkCollisions = true;
+
         this.collider_.isVisible = false;
 
         this.collider_.position.y += height / 2;
         playerMesh.position.y -= height / 2;
-
         playerMesh.rotation.y += Tools.ToRadians(180);
 
         playerMesh.parent = this.collider_;

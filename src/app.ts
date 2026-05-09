@@ -3,6 +3,8 @@ import "@babylonjs/inspector";
 import {Engine, Scene, FreeCamera, Vector3} from "@babylonjs/core";
 import {Input} from "./Input";
 import {Player} from "./Player";
+import {AsyncScene} from "./Scenes/AsyncScene";
+import {PlaceholderScene} from "./Scenes/PlaceholderScene";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -14,7 +16,7 @@ function createCanvas() {
 }
 
 class App {
-	private scene_: Scene;
+	private scene_: AsyncScene;
 	private canvas_: HTMLCanvasElement;
 	private engine_: Engine;
 	
@@ -23,9 +25,9 @@ class App {
 		this.engine_ = new Engine(this.canvas_, true);
 		this.initDebugLayer_();
 
-		this.scene_ = new Scene(this.engine_);
+		this.scene_ = new PlaceholderScene(this.engine_);
 
-		const camera = new FreeCamera("cam", new Vector3(0, 0, 0), this.scene_);
+		this.start_();
 	}
 
 	private initDebugLayer_() {
@@ -42,19 +44,16 @@ class App {
 	}
 
 	private async init_(): Promise<void> {
-
+		await this.scene_.waitUntilReady();
+		this.scene_.start(this.canvas_);
 	}
 
 	private async start_(): Promise<void> {
 		await this.init_();
 
-		const input: Input = new Input();
-		const player: Player = new Player(this.scene_, input, createCanvas());
-
 		this.engine_.runRenderLoop(() => {
 			this.scene_.render();
-			player.update();
-			input.update();
+			this.scene_.update();
 		});
 	}
 }

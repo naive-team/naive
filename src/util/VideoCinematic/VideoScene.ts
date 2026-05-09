@@ -1,8 +1,8 @@
 import { Engine, HemisphericLight, Scene, UniversalCamera, Vector3 } from "@babylonjs/core";
 import { VideoMesh } from "./VideoMesh";
-import { IScene } from "../IScene";
+import {AsyncScene} from "../../Scenes/AsyncScene";
 
-export class VideoScene extends Scene implements IScene {
+export class VideoScene extends Scene implements AsyncScene {
     private video_: VideoMesh;
     private camera_: UniversalCamera;
     private isReady_: boolean;
@@ -29,5 +29,8 @@ export class VideoScene extends Scene implements IScene {
     public async waitUntilReady(): Promise<void> {
         await this.video_.waitUntilReady();
         this.isReady_ = true;
+    }
+
+    update(): void {
     }
 }   

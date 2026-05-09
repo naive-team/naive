@@ -1,4 +1,4 @@
-import {Mesh, MeshBuilder, Scalar, Scene, Vector2, Vector3, Tools} from "@babylonjs/core";
+import {Mesh, MeshBuilder, Scalar, Scene, Vector2, Vector3, Tools, AbstractMesh, AnimationGroup} from "@babylonjs/core";
 import {PlayerCamera} from "./PlayerCamera";
 import {Input} from "./Input";
 
@@ -7,22 +7,42 @@ export class Player {
     private collider_: Mesh;
     private camera_: PlayerCamera;
     private input_: Input;
-    private readonly SPEED_: number = 0.2;
+    private readonly SPEED_: number = 0.1;
 
     private targetAngle_: number;
 
-    constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement) {
+    private animations_: AnimationGroup[];
+
+    constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
         this.scene_ = scene;
         this.input_ = input;
 
         this.camera_ = new PlayerCamera(canvas, "player_camera", 0, 0, 3, new Vector3(0, 0, 0), scene);
         scene.activeCamera = this.camera_;
 
+        this.initCollider_(playerMesh);
+
+        this.animations_ = animations;
+        animations[0].pause();
+    }
+
+    private initCollider_(playerMesh) {
+        const height: number = 1.3;
+
         this.collider_ = MeshBuilder.CreateBox("player_collider", {
-            width: 1,
-            depth: 1,
-            height: 2
+            width: 0.5,
+            depth: 0.5,
+            height: height
         });
+
+        this.collider_.isVisible = false;
+
+        this.collider_.position.y += height / 2;
+        playerMesh.position.y -= height / 2;
+
+        playerMesh.rotation.y += Tools.ToRadians(180);
+
+        playerMesh.parent = this.collider_;
     }
 
     move(inputVector: Vector2): void {

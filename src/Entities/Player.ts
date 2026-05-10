@@ -2,6 +2,8 @@ import {Mesh, MeshBuilder, Scalar, Scene, Vector2, Vector3, Tools, AbstractMesh,
 import {PlayerCamera} from "../util/PlayerCamera";
 import {Input} from "../Input/Input";
 import {Entity} from "./Entity";
+import {PlayerIdleState} from "../States/PlayerStates/PlayerIdleState";
+import {PlayerStateMachine} from "../States/PlayerStates/PlayerStateMachine";
 
 
 export class Player implements Entity {
@@ -15,6 +17,8 @@ export class Player implements Entity {
 
     private animations_: AnimationGroup[];
 
+    private stateMachine_: PlayerStateMachine;
+
     constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
         this.scene_ = scene;
         this.input_ = input;
@@ -25,7 +29,10 @@ export class Player implements Entity {
         this.initCollider_(playerMesh);
 
         this.animations_ = animations;
+        console.log(this.animations_);
         animations[0].pause();
+
+        this.stateMachine_ = new PlayerStateMachine(new PlayerIdleState());
     }
 
     private initCollider_(playerMesh: AbstractMesh): void {
@@ -70,8 +77,9 @@ export class Player implements Entity {
     }
 
     update(): void {
-        this.move(this.input_.getInputVector());
+
         this.pointTowardTargetAngle_(this.input_.getInputVector());
+        this.stateMachine_.update(this, this.input_);
     }
 
     private pointTowardTargetAngle_(inputVector: Vector2): void {
@@ -85,5 +93,49 @@ export class Player implements Entity {
                 0.1
             )
         );
+    }
+
+    public startAnimation(name: string) {
+        switch (name) {
+            case "catch":
+                this.animations_[0].play(false);
+                this.animations_[3].play(false);
+                this.animations_[6].play(false);
+                break;
+            case "idle":
+                this.animations_[1].play(true);
+                this.animations_[4].play(true);
+                this.animations_[7].play(true);
+                break;
+            case "walk":
+                this.animations_[2].play(true);
+                this.animations_[5].play(true);
+                this.animations_[8].play(true);
+                break
+        }
+    }
+
+    public stopAnimation(name: string) {
+        switch (name) {
+            case "catch":
+                this.animations_[0].stop();
+                this.animations_[3].stop();
+                this.animations_[6].stop();
+                break;
+            case "idle":
+                this.animations_[1].stop();
+                this.animations_[4].stop();
+                this.animations_[7].stop();
+                break;
+            case "walk":
+                this.animations_[2].stop();
+                this.animations_[5].stop();
+                this.animations_[8].stop();
+                break
+        }
+    }
+
+    public getScene(): Scene {
+        return this.scene_;
     }
 }

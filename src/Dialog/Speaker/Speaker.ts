@@ -1,4 +1,5 @@
 import {Dialog} from "../Dialog";
+import {Scene} from "@babylonjs/core";
 
 export class Speaker {
     blabla: Dialog[];
@@ -9,8 +10,8 @@ export class Speaker {
         this.name = name;
         this.currentDialogIndex = 0;
     }
-    public speak():void{
-        this.blabla[this.currentDialogIndex].play();
+    public speak(scene:Scene):void{
+        this.blabla[this.currentDialogIndex].play(scene);
     }
     public setCurrentDialogIndex(index:number):void{
         this.currentDialogIndex = index;

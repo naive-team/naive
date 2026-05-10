@@ -1,10 +1,17 @@
 import {AbstractLine} from "./AbstractLine";
+import { LineUi } from "./LineUi";
 import {SimpleLineUi} from "./SimpleLineUi";
 import * as GUI from "@babylonjs/gui";
 
 export class Line extends AbstractLine {
+
     nextLine: AbstractLine | null;
     ui: SimpleLineUi;
+    lineUi: LineUi;
+
+    public setLineUi(lineUI: LineUi): void {
+        this.lineUi = lineUI;
+    }
     private resolveNext: ((line: AbstractLine | null) => void) | null = null;
 
     constructor(text: string, nextLine: AbstractLine | null) {
@@ -36,6 +43,12 @@ export class Line extends AbstractLine {
 
     // À appeler quand le joueur clique sur "Next"
     public onNextButtonPressed(): void {
+        if (this.lineUi.skipAnimation(this.texteLine)) {
+            console.log("onNextButtonPressed, skip anim");
+            return;
+        }
+
+        // Sinon : passer à la ligne suivante
         if (this.resolveNext) {
             this.resolveNext(this.nextLine);
             this.resolveNext = null;

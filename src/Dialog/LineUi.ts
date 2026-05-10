@@ -1,9 +1,12 @@
 import * as GUI from "@babylonjs/gui";
+import {Scene} from "@babylonjs/core";
+import {typewriterEffect} from "../util/typewriterEffect";
 
 export class LineUi {
     protected panel:GUI.Container;
     private textBlock: GUI.TextBlock;
     private nameBlock: GUI.TextBlock;
+    private animHandle: { cancel: () => void; isComplete: () => boolean } | null = null;
 
     constructor(
         ui: GUI.AdvancedDynamicTexture,
@@ -16,7 +19,18 @@ export class LineUi {
 
         ui.addControl(this.panel);
     }
-
+    public skipAnimation(fullText: string): boolean {
+        if (!this.animHandle){
+            console.log("anil handle est pas def domage");
+        }
+        if (this.animHandle && !this.animHandle.isComplete()) {
+            this.animHandle.cancel();
+            this.animHandle = null;
+            this.textBlock.text = fullText; // affiche tout le texte immédiatement
+            return true;
+        }
+        return false;
+    }
     public setText(text: string): void {
         this.textBlock.text = text;
     }
@@ -25,6 +39,11 @@ export class LineUi {
             this.nameBlock.text = name;
         }
 
+    }
+    public animation(scene:Scene, text: string): void{
+        this.animHandle = typewriterEffect(scene, this.textBlock, text);
+        /*const cancel = typewriterEffect(scene, this.textBlock, text);
+        scene.onPointerObservable.add(()=>cancel);*/
     }
     protected createNamePanel(): void {
 
@@ -85,6 +104,7 @@ export class LineUi {
         this.textBlock.fontSize = 30;
         this.textBlock.fontFamily = "Courier New";
         this.textBlock.textWrapping = true;
+        this.textBlock.textHorizontalAlignment = GUI.TextBlock.HORIZONTAL_ALIGNMENT_LEFT;
         container.addControl(this.textBlock);
         this.panel.addControl(container);
     }

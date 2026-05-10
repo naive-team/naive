@@ -19,4 +19,5 @@ export abstract class AbstractLine {
     public getText(): string{
         return this.texteLine;
     };
+    public abstract setLineUi(lineUI : LineUi): void;
 }

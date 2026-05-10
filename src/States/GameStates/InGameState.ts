@@ -1,17 +1,27 @@
 import {GameState} from "./GameState";
 import {
-    ArcRotateCamera, AssetsManager, HavokPlugin,
-    HemisphericLight, HingeConstraint, Mesh,
-    PBRMaterial, PhysicsAggregate, PhysicsShapeType, Texture,
+    ArcRotateCamera,
+    AssetsManager,
+    HavokPlugin,
+    HemisphericLight,
+    HingeConstraint,
+    Mesh,
+    PBRMaterial,
+    PhysicsAggregate,
+    PhysicsShapeType,
+    Texture,
     Vector3
 } from "@babylonjs/core";
-import {BabylonManager} from "../util/BabylonManager";
-import {Printer} from "../util/Printer";
-import {Game} from "../Game";
+import {BabylonManager} from "../../util/BabylonManager";
+import {Game} from "../../Game";
 import HavokPhysics from "@babylonjs/havok";
+import {Printer} from "../../util/Printer/Printer";
+import {PrinterTag} from "../../util/Printer/PrinterTag";
+import {Player} from "../../Player";
 
 
 export class InGameState extends GameState {
+    private player: Player;
 
     constructor(game: Game) {
         super(game);
@@ -21,7 +31,10 @@ export class InGameState extends GameState {
     }
 
     public handle(): void {
-        this.initScene().then(() => {});
+
+        this.initScene().then(() => {
+            this.player = new Player();
+        });
 
         // hide/show the Inspector
         window.addEventListener("keydown", (ev) => {
@@ -46,14 +59,15 @@ export class InGameState extends GameState {
         light.intensity = 0.7;
 
         //Adding an Arc Rotate Camera
-        let camera = new ArcRotateCamera("Camera", 0, 0.8, 100, Vector3.Zero(), this.scene_);
-        camera.attachControl(babylonManager.canvas, false);
+        //let camera = new ArcRotateCamera("Camera", 0, 0.8, 100, Vector3.Zero(), this.scene_);
+        //camera.attachControl(babylonManager.canvas, false);
 
         let havokInstance = await HavokPhysics();
         let hk = new HavokPlugin(true, havokInstance);
 
         // Enable physics in the scene with a gravity
         this.scene_.enablePhysics(new Vector3(0, -9.8, 0), hk);
+        Printer.print(PrinterTag.INPUT, "Scene physics enabled");
 
         let assetsManager = new AssetsManager(this.scene_);
         let assetContainerTask = assetsManager.addContainerTask("container", "", "https://raw.githubusercontent.com/CedricGuillemet/dump/master/CharController/", "levelTest.glb");
@@ -61,7 +75,7 @@ export class InGameState extends GameState {
         assetContainerTask.onSuccess = (task) => {
             task.loadedContainer.addAllToScene();
             task.loadedMeshes[0].position = Vector3.Zero();
-            Printer.print("assetContainer success");
+            Printer.print(PrinterTag.INPUT, "assetContainer success");
         }
 
         assetsManager.onFinish = () => {
@@ -75,7 +89,7 @@ export class InGameState extends GameState {
         let textTask = assetsManager.addTextureTask("lightmap", "https://raw.githubusercontent.com/CedricGuillemet/dump/master/CharController/lightmap.jpg");
         textTask.onSuccess = (task) => {
             lightmap = task.texture;
-            Printer.print("texture success");
+            Printer.print(PrinterTag.INPUT, "texture success");
         }
 
         await assetsManager.loadAsync().then(() => {

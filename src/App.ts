@@ -1,7 +1,6 @@
-import "@babylonjs/core/Debug/debugLayer";
-import "@babylonjs/inspector";
 import {Game} from "./Game";
-import {SoundScreenState} from "./States/SoundScreenState";
+import {SoundScreenState} from "./States/GameStates/SoundScreenState";
+import "@babylonjs/loaders/glTF";
 
 export class App {
     private readonly game_: Game;

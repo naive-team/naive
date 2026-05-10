@@ -28,26 +28,25 @@ export class Input {
     }
 
     public update(): void {
+        this.updateInputVector_();
+    }
+
+    private updateInputVector_() {
         const sensitivity = 0.1;
 
         if (this.getPressed(KEY_UP)) {
             this.inputVector_.y = Scalar.Lerp(this.inputVector_.y, 1, sensitivity);
-        }
-        else if (this.getPressed(KEY_DOWN)) {
+        } else if (this.getPressed(KEY_DOWN)) {
             this.inputVector_.y = Scalar.Lerp(this.inputVector_.y, -1, sensitivity);
-        }
-        else {
+        } else {
             this.inputVector_.y = 0;
         }
 
-
         if (this.getPressed(KEY_RIGHT)) {
             this.inputVector_.x = Scalar.Lerp(this.inputVector_.x, 1, sensitivity);
-        }
-        else if (this.getPressed(KEY_LEFT)) {
+        } else if (this.getPressed(KEY_LEFT)) {
             this.inputVector_.x = Scalar.Lerp(this.inputVector_.x, -1, sensitivity);
-        }
-        else {
+        } else {
             this.inputVector_.x = 0;
         }
     }

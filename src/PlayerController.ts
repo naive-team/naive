@@ -1,8 +1,6 @@
-import {InputManager} from "./Input/InputManager";
-import {PlayerState} from "./States/PlayerStates/PlayerState";
+
 import {PlayerPhysics} from "./PlayerPhysics";
 import {
-    Camera,
     FreeCamera,
     KeyboardEventTypes,
     MeshBuilder,
@@ -11,12 +9,14 @@ import {
     Vector3
 } from "@babylonjs/core";
 import {BabylonManager} from "./util/BabylonManager";
-import {InAirState} from "./States/PlayerStates/InAirState";
+import {InputManager} from "./Input/ControllerSupport/InputManager";
+import {InAirState} from "./States/PlayerStates/Physics/InAirState";
+import {PlayerPhysicsState} from "./States/PlayerStates/Physics/PlayerPhysicsState";
 
 export class PlayerController {
 
     private inputManager_: InputManager
-    private playerState_: PlayerState;
+    private playerState_: PlayerPhysicsState;
     private playerPhysics_: PlayerPhysics;
     private readonly characterController_: PhysicsCharacterController
     private camera_: FreeCamera;

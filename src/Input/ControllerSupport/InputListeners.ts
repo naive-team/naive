@@ -1,7 +1,7 @@
 import {DualShockPad, GenericPad, Xbox360Pad} from "@babylonjs/core"
 import { Button } from "./Button";
-import { Printer } from "../util/Printer/Printer";
-import { PrinterTag } from "../util/Printer/PrinterTag";
+import {Printer} from "../../util/Printer/Printer";
+import {PrinterTag} from "../../util/Printer/PrinterTag";
 
 export class InputListeners {
     static stopListeningGamepad(gamepad: GenericPad | Xbox360Pad | DualShockPad)  {

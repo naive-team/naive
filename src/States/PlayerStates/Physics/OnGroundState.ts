@@ -1,12 +1,12 @@
-import {PlayerState} from "./PlayerState";
 import {CharacterSupportedState, CharacterSurfaceInfo, PhysicsCharacterController, Vector3} from "@babylonjs/core";
 import {InAirState} from "./InAirState";
 import {StartJumpState} from "./StartJumpState";
-import {PlayerPhysics} from "../../PlayerPhysics";
+import {PlayerPhysicsState} from "./PlayerPhysicsState";
+import {PlayerPhysics} from "../../../PlayerPhysics";
 
-export class OnGroundState extends PlayerState {
+export class OnGroundState extends PlayerPhysicsState {
 
-    public getNextState(support: CharacterSupportedState, playerPhysics: PlayerPhysics): PlayerState {
+    public getNextState(support: CharacterSupportedState, playerPhysics: PlayerPhysics): PlayerPhysicsState {
         if (support != CharacterSupportedState.SUPPORTED) {
             return new InAirState();
         }

@@ -1,3 +1,4 @@
 export enum PrinterTag {
-    INPUT
+    INPUT,
+    VIDEO
 }

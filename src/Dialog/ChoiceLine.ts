@@ -1,6 +1,5 @@
 import {AbstractLine} from "./AbstractLine";
 import {ChoiceUI} from "./ChoiceUI";
-import * as GUI from "@babylonjs/gui";
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import { LineUi } from "./LineUi";
 

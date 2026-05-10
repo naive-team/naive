@@ -14,9 +14,6 @@ export class LineUi {
         this.createPanel();
         this.createNamePanel()
         this.createTextBlock();
-
-        //this.panel.addControl(this.textBlock);
-
         ui.addControl(this.panel);
     }
     public skipAnimation(fullText: string): boolean {
@@ -31,9 +28,7 @@ export class LineUi {
         }
         return false;
     }
-    public setText(text: string): void {
-        this.textBlock.text = text;
-    }
+
     public setSpeakerName(name: string): void {
         if (this.nameBlock){
             this.nameBlock.text = name;
@@ -42,8 +37,7 @@ export class LineUi {
     }
     public animation(scene:Scene, text: string): void{
         this.animHandle = typewriterEffect(scene, this.textBlock, text);
-        /*const cancel = typewriterEffect(scene, this.textBlock, text);
-        scene.onPointerObservable.add(()=>cancel);*/
+
     }
     protected createNamePanel(): void {
 

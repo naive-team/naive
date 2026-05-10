@@ -1,8 +1,6 @@
 import {AbstractLine} from "./AbstractLine";
 import * as GUI from "@babylonjs/gui";
 import {LineUi} from "./LineUi";
-import {Line} from "./Line";
-import {ChoiceLine} from "./ChoiceLine";
 import {Scene} from "@babylonjs/core";
 
 export class Dialog {
@@ -29,9 +27,8 @@ export class Dialog {
 
             this.currentLine.display();
 
-            // On attend toujours l'interaction utilisateur, même sur la dernière ligne
             if (!this.currentLine.hasNext()) {
-                await this.currentLine.getNextLine(); // ou getNextLine() si ça gère déjà ça
+                await this.currentLine.getNextLine();
                 break;
             }
 

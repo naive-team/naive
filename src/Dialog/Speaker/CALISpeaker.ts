@@ -1,7 +1,6 @@
 import {Speaker} from "./Speaker";
 import {Line} from "../Line";
 import {ChoiceLine} from "../ChoiceLine";
-import {AbstractLine} from "../AbstractLine";
 import {Dialog} from "../Dialog";
 import * as GUI from "@babylonjs/gui";
 
@@ -14,14 +13,14 @@ export class CALISpeaker extends Speaker {
     let welcome: Line = new Line("Bonjour, je m'appelle C.A.L.I. Ravie de faire ta connaissance !",
 
         new ChoiceLine(
-            "mais on dirait qu'on est coincées ici... si tu veux je peux ouvir la porte.",
+            "Mais on dirait qu'on est coincées ici... tu veux que j'ouvre la porte ?",
             [
-                "oui, s'il te plait",
-                "je préfère faire par moi même"
+                "Oui, s'il te plait !",
+                "Non, je préfère me débrouiller."
             ],
             [
-                new Line("d'acc je fais ça", null),
-                new Line ("Je suis là si tu as besoin de moi", null),
+                new Line("d'acc je fais ça !", null),
+                new Line ("Je suis là si tu as besoin de moi...", null),
             ],
 
         ),

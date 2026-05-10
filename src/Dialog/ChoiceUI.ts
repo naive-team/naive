@@ -25,7 +25,7 @@ export class ChoiceUI {
         button.width = "100%";
         button.height = "100px";
         button.color = "white";
-        button.background = "transparent"; // transparent pour laisser l'image apparaître
+        button.background = "transparent";
         button.thickness = 0;
         button.cornerRadius = 10;
         button.paddingBottom = "10px";
@@ -34,11 +34,10 @@ export class ChoiceUI {
         button.textBlock.textHorizontalAlignment = GUI.TextBlock.HORIZONTAL_ALIGNMENT_LEFT;
         button.textBlock.left = "80px";
 
-        // Image curseur (positionnée pour chevaucher le bord gauche du bouton)
         const cursorImage = new GUI.Image("cursor", "src/data/ladybug.png");
         cursorImage.width = "70px";
         cursorImage.height = "70px";
-        cursorImage.left = "-3px";  // ← ajuste pour contrôler le chevauchement
+        cursorImage.left = "-3px";
         cursorImage.top = "-5px";
         cursorImage.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
         cursorImage.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;

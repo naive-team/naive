@@ -7,7 +7,7 @@ export class App {
 
     constructor() {
         this.game_ = new Game();
-        this.game_.changeState(new DialogStateTest(this.game_));
+        this.game_.changeState(new SoundScreenState(this.game_));
     }
 }
 

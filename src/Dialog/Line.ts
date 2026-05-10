@@ -41,14 +41,12 @@ export class Line extends AbstractLine {
         return this.nextLine !== null;
     }
 
-    // À appeler quand le joueur clique sur "Next"
     public onNextButtonPressed(): void {
         if (this.lineUi.skipAnimation(this.texteLine)) {
             console.log("onNextButtonPressed, skip anim");
             return;
         }
 
-        // Sinon : passer à la ligne suivante
         if (this.resolveNext) {
             this.resolveNext(this.nextLine);
             this.resolveNext = null;

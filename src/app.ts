@@ -26,6 +26,7 @@ class App {
 		this.scene_ = new PlaceholderScene(this.engine_);
 
 		this.start_();
+
 	}
 
 	private initDebugLayer_() {

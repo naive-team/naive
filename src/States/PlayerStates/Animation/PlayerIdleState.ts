@@ -7,19 +7,20 @@ import {PlayerCatchState} from "./PlayerCatchState";
 import {Player} from "../../../Entities/Player";
 import {Input} from "../../../Input/Input";
 import {SPACE} from "../../../Input/Keys";
+import {EntityManager} from "../../../Entities/util/EntityManager";
 
 export class PlayerIdleState implements PlayerAnimationState {
 
     constructor() {
     }
 
-    update(player: Player, stateMachine: PlayerStateMachine, input: Input): void {
-        if (! input.getInputVector().equals(Vector3.Zero())) {
-            stateMachine.changeState(player, new PlayerWalkState());
+    update(_player: Player, _stateMachine: PlayerStateMachine, _input: Input, _entityManager: EntityManager): void {
+        if (! _input.getInputVector().equals(Vector3.Zero())) {
+            _stateMachine.changeState(_player, new PlayerWalkState());
         }
 
-        if (input.getPressed(SPACE)) {
-            stateMachine.changeState(player, new PlayerCatchState());
+        if (_input.getPressed(SPACE)) {
+            _stateMachine.changeState(_player, new PlayerCatchState());
         }
     }
 

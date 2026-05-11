@@ -4,6 +4,7 @@ import {Player} from "../Entities/Player";
 import {Input} from "../Input/Input";
 import {MeshLoader} from "../util/MeshLoader";
 import {Beetle} from "../Entities/Beetle";
+import {EntityManager} from "../Entities/util/EntityManager";
 
 export class PlaceholderScene extends Scene implements AsyncScene {
     private player_: Player;
@@ -11,7 +12,7 @@ export class PlaceholderScene extends Scene implements AsyncScene {
     private playerMesh_: AbstractMesh;
     private playerAnimations_: AnimationGroup[];
 
-    private beetle: Beetle;
+    private beetle_: Beetle;
 
 
 
@@ -31,10 +32,14 @@ export class PlaceholderScene extends Scene implements AsyncScene {
         const ground: GroundMesh = MeshBuilder.CreateGround("ground", {width: 6, height: 6}, this);
         ground.checkCollisions = true;
 
-        this.input_ = new Input();
-        this.player_ = new Player(this, this.input_, canvas, this.playerMesh_, this.playerAnimations_);
+        const entityManager: EntityManager = new EntityManager();
 
-        this.beetle = new Beetle();
+        this.input_ = new Input();
+        this.player_ = new Player(this, this.input_, canvas, this.playerMesh_, this.playerAnimations_, entityManager);
+        entityManager.add(this.player_);
+
+        this.beetle_ = new Beetle();
+        entityManager.add(this.beetle_)
 
         return true;
     }

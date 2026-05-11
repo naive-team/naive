@@ -1,9 +1,22 @@
-import {Mesh, MeshBuilder, Scalar, Scene, Vector2, Vector3, Tools, AbstractMesh, AnimationGroup, TransformNode} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    AnimationGroup,
+    Mesh,
+    MeshBuilder,
+    Scalar,
+    Scene,
+    Tools,
+    TransformNode,
+    Vector2,
+    Vector3
+} from "@babylonjs/core";
 import {PlayerCamera} from "../util/PlayerCamera";
 import {Input} from "../Input/Input";
-import {Entity} from "./Entity";
 import {PlayerStateMachine} from "../States/PlayerStates/Animation/PlayerStateMachine";
 import {PlayerIdleState} from "../States/PlayerStates/Animation/PlayerIdleState";
+import {Entity} from "./util/Entity";
+import {EntityManager} from "./util/EntityManager";
+import {EntityFamily} from "./util/EntityFamily";
 
 
 export class Player implements Entity {
@@ -18,10 +31,11 @@ export class Player implements Entity {
     private animations_: AnimationGroup[];
 
     private stateMachine_: PlayerStateMachine;
+    private entityManager_: EntityManager;
 
     private netCollider_: Mesh;
 
-    constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
+    constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement, playerMesh: AbstractMesh, animations: AnimationGroup[], entityManager: EntityManager) {
         this.scene_ = scene;
         this.input_ = input;
 
@@ -35,6 +49,7 @@ export class Player implements Entity {
         animations[0].pause();
 
         this.stateMachine_ = new PlayerStateMachine(new PlayerIdleState());
+        this.entityManager_ = entityManager;
     }
 
     private initCollider_(playerMesh: AbstractMesh): void {
@@ -89,7 +104,7 @@ export class Player implements Entity {
     update(): void {
 
         this.pointTowardTargetAngle_(this.input_.getInputVector());
-        this.stateMachine_.update(this, this.input_);
+        this.stateMachine_.update(this, this.input_, this.entityManager_);
     }
 
     private pointTowardTargetAngle_(inputVector: Vector2): void {
@@ -151,5 +166,14 @@ export class Player implements Entity {
 
     public getNetCollider(): Mesh {
         return this.netCollider_;
+    }
+
+
+    getCollider() {
+        return this.collider_;
+    }
+
+    getFamily(): EntityFamily {
+        return EntityFamily.PLAYER;
     }
 }

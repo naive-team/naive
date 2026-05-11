@@ -1,9 +1,13 @@
 import {PlayerAnimationState} from "./PlayerAnimationState";
 import {PlayerStateMachine} from "./PlayerStateMachine";
-import {ITimerOptions, setAndStartTimer, Scene, Mesh, AbstractMesh, Tools} from "@babylonjs/core";
+import {ITimerOptions, Mesh, Scene, setAndStartTimer} from "@babylonjs/core";
 import {PlayerIdleState} from "./PlayerIdleState";
 import {Player} from "../../../Entities/Player";
 import {Input} from "../../../Input/Input";
+import {EntityManager} from "../../../Entities/util/EntityManager";
+import {EntityFamily} from "../../../Entities/util/EntityFamily";
+import {Bug} from "../../../Entities/util/Bug";
+import {Entity} from "../../../Entities/util/Entity";
 
 export class PlayerCatchState implements PlayerAnimationState {
 
@@ -31,15 +35,14 @@ export class PlayerCatchState implements PlayerAnimationState {
         player.stopAnimation("catch");
     }
 
-    update(_player: Player, _stateMachine: PlayerStateMachine, _input: Input): void {
+    update(_player: Player, _stateMachine: PlayerStateMachine, _input: Input, _entityManager: EntityManager): void {
         const netCollider: Mesh = _player.getNetCollider();
 
-        const candidates: AbstractMesh[] = []; // TODO
-        let collideBug: boolean = false;
+        const candidates: Entity[] = _entityManager.getEntitiesByFamily(EntityFamily.BUG);
 
         for (const candidate of candidates) {
-            if (netCollider.intersectsMesh(candidate)) {
-                collideBug = true;
+            if (netCollider.intersectsMesh(candidate.getCollider())) {
+                (candidate as Bug).captured();
             }
         }
     }

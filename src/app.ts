@@ -38,6 +38,10 @@ class App {
 					this.scene_.debugLayer.show();
 				}
 			}
+
+			if (ev.code === "Space") {
+				ev.preventDefault();
+			}
 		});
 	}
 

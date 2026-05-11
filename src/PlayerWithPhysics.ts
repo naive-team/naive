@@ -1,7 +1,7 @@
 import {Mesh, TransformNode} from "@babylonjs/core";
 import {PlayerController} from "./PlayerController";
 
-export class Player {
+export class PlayerWithPhysics {
 
     private _mesh_: Mesh;
     private playerController_: PlayerController;

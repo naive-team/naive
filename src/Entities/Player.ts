@@ -1,9 +1,22 @@
-import {Mesh, MeshBuilder, Scalar, Scene, Vector2, Vector3, Tools, AbstractMesh, AnimationGroup} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    AnimationGroup,
+    Mesh,
+    MeshBuilder,
+    Scalar,
+    Scene,
+    Tools,
+    TransformNode,
+    Vector2,
+    Vector3
+} from "@babylonjs/core";
 import {PlayerCamera} from "../util/PlayerCamera";
 import {Input} from "../Input/Input";
-import {Entity} from "./Entity";
 import {PlayerStateMachine} from "../States/PlayerStates/Animation/PlayerStateMachine";
 import {PlayerIdleState} from "../States/PlayerStates/Animation/PlayerIdleState";
+import {Entity} from "./util/Entity";
+import {EntityManager} from "./util/EntityManager";
+import {EntityFamily} from "./util/EntityFamily";
 
 
 export class Player implements Entity {
@@ -18,8 +31,11 @@ export class Player implements Entity {
     private animations_: AnimationGroup[];
 
     private stateMachine_: PlayerStateMachine;
+    private entityManager_: EntityManager;
 
-    constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
+    private netCollider_: Mesh;
+
+    constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement, playerMesh: AbstractMesh, animations: AnimationGroup[], entityManager: EntityManager) {
         this.scene_ = scene;
         this.input_ = input;
 
@@ -33,6 +49,7 @@ export class Player implements Entity {
         animations[0].pause();
 
         this.stateMachine_ = new PlayerStateMachine(new PlayerIdleState());
+        this.entityManager_ = entityManager;
     }
 
     private initCollider_(playerMesh: AbstractMesh): void {
@@ -53,6 +70,14 @@ export class Player implements Entity {
         playerMesh.rotation.y += Tools.ToRadians(180);
 
         playerMesh.parent = this.collider_;
+
+        const netRim: TransformNode = this.scene_.getTransformNodeByName("Armature").getChildTransformNodes(false).find((node: TransformNode): boolean=> {return node.name === "Torus"} );
+
+        this.netCollider_ = MeshBuilder.CreateBox("net_collider", {size: 2});
+        this.netCollider_.position.z = 0;
+        this.netCollider_.position.y = 1;
+        this.netCollider_.parent = netRim;
+
     }
 
     move(inputVector: Vector2): void {
@@ -79,7 +104,7 @@ export class Player implements Entity {
     update(): void {
 
         this.pointTowardTargetAngle_(this.input_.getInputVector());
-        this.stateMachine_.update(this, this.input_);
+        this.stateMachine_.update(this, this.input_, this.entityManager_);
     }
 
     private pointTowardTargetAngle_(inputVector: Vector2): void {
@@ -137,5 +162,18 @@ export class Player implements Entity {
 
     public getScene(): Scene {
         return this.scene_;
+    }
+
+    public getNetCollider(): Mesh {
+        return this.netCollider_;
+    }
+
+
+    getCollider() {
+        return this.collider_;
+    }
+
+    getFamily(): EntityFamily {
+        return EntityFamily.PLAYER;
     }
 }

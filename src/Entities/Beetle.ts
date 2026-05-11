@@ -1,7 +1,12 @@
-import {Entity} from "./Entity";
-import {AbstractMesh, MeshBuilder} from "@babylonjs/core";
 
-export class Beetle implements Entity {
+import {AbstractMesh, MeshBuilder} from "@babylonjs/core";
+import {Entity} from "./util/Entity";
+import {Bug} from "./util/Bug";
+import {EntityFamily} from "./util/EntityFamily";
+
+export class Beetle implements Entity, Bug {
+
+
     private collider_: AbstractMesh;
 
     constructor() {
@@ -15,4 +20,19 @@ export class Beetle implements Entity {
     update(): void {
 
     }
+
+
+    getCollider() {
+        return this.collider_;
+    }
+
+    captured(): void {
+        this.collider_.setEnabled(false);
+    }
+
+    getFamily(): EntityFamily {
+        return EntityFamily.BUG;
+    }
+
+
 }

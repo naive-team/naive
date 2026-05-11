@@ -17,7 +17,7 @@ class App {
 	private scene_: AsyncScene;
 	private canvas_: HTMLCanvasElement;
 	private engine_: Engine;
-	
+
 	constructor() {
 		this.canvas_ = createCanvas();
 		this.engine_ = new Engine(this.canvas_, true);

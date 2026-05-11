@@ -1,4 +1,4 @@
-import {Mesh, MeshBuilder, Scalar, Scene, Vector2, Vector3, Tools, AbstractMesh, AnimationGroup} from "@babylonjs/core";
+import {Mesh, MeshBuilder, Scalar, Scene, Vector2, Vector3, Tools, AbstractMesh, AnimationGroup, TransformNode} from "@babylonjs/core";
 import {PlayerCamera} from "../util/PlayerCamera";
 import {Input} from "../Input/Input";
 import {Entity} from "./Entity";
@@ -18,6 +18,8 @@ export class Player implements Entity {
     private animations_: AnimationGroup[];
 
     private stateMachine_: PlayerStateMachine;
+
+    private netCollider_: Mesh;
 
     constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
         this.scene_ = scene;
@@ -53,6 +55,14 @@ export class Player implements Entity {
         playerMesh.rotation.y += Tools.ToRadians(180);
 
         playerMesh.parent = this.collider_;
+
+        const netRim: TransformNode = this.scene_.getTransformNodeByName("Armature").getChildTransformNodes(false).find((node: TransformNode): boolean=> {return node.name === "Torus"} );
+
+        this.netCollider_ = MeshBuilder.CreateBox("net_collider", {size: 2});
+        this.netCollider_.position.z = 0;
+        this.netCollider_.position.y = 1;
+        this.netCollider_.parent = netRim;
+
     }
 
     move(inputVector: Vector2): void {
@@ -137,5 +147,9 @@ export class Player implements Entity {
 
     public getScene(): Scene {
         return this.scene_;
+    }
+
+    public getNetCollider(): Mesh {
+        return this.netCollider_;
     }
 }

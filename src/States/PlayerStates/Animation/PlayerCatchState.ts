@@ -1,6 +1,6 @@
 import {PlayerAnimationState} from "./PlayerAnimationState";
 import {PlayerStateMachine} from "./PlayerStateMachine";
-import {ITimerOptions, setAndStartTimer, Scene} from "@babylonjs/core";
+import {ITimerOptions, setAndStartTimer, Scene, Mesh, AbstractMesh, Tools} from "@babylonjs/core";
 import {PlayerIdleState} from "./PlayerIdleState";
 import {Player} from "../../../Entities/Player";
 import {Input} from "../../../Input/Input";
@@ -32,7 +32,16 @@ export class PlayerCatchState implements PlayerAnimationState {
     }
 
     update(_player: Player, _stateMachine: PlayerStateMachine, _input: Input): void {
+        const netCollider: Mesh = _player.getNetCollider();
 
+        const candidates: AbstractMesh[] = []; // TODO
+        let collideBug: boolean = false;
+
+        for (const candidate of candidates) {
+            if (netCollider.intersectsMesh(candidate)) {
+                collideBug = true;
+            }
+        }
     }
 
 }

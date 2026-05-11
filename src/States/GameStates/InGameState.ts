@@ -17,11 +17,11 @@ import {Game} from "../../Game";
 import HavokPhysics from "@babylonjs/havok";
 import {Printer} from "../../util/Printer/Printer";
 import {PrinterTag} from "../../util/Printer/PrinterTag";
-import {Player} from "../../Player";
+import {PlayerWithPhysics} from "../../PlayerWithPhysics";
 
 
 export class InGameState extends GameState {
-    private player: Player;
+    private player: PlayerWithPhysics;
 
     constructor(game: Game) {
         super(game);
@@ -33,7 +33,7 @@ export class InGameState extends GameState {
     public handle(): void {
 
         this.initScene().then(() => {
-            this.player = new Player();
+            this.player = new PlayerWithPhysics();
         });
 
         // hide/show the Inspector

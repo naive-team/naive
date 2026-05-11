@@ -5,7 +5,7 @@ import {
     TransformNode,
     Vector3
 } from "@babylonjs/core";
-import { Player } from "./Player";
+import { PlayerWithPhysics } from "./PlayerWithPhysics";
 import { Lerp } from "@babylonjs/core/Maths/math.scalar.functions";
 import { CameraRadiusFunction } from "./Functions/CameraRadiusFunction";
 
@@ -16,7 +16,7 @@ export class PlayerCamera {
     private _originalCameraRadius: number;
     private _scene;
     private _camera;
-    private _player: Player;
+    private _player: PlayerWithPhysics;
     private _cameraRadiusFunction: CameraRadiusFunction;
     private _raycastCollision: boolean = false;
     private _groundDetectionRadius: number;
@@ -25,7 +25,7 @@ export class PlayerCamera {
     private _isActive: boolean = true;
     private _canvas: HTMLCanvasElement;
 
-    constructor(player: Player, scene: Scene, canvas: HTMLCanvasElement) {
+    constructor(player: PlayerWithPhysics, scene: Scene, canvas: HTMLCanvasElement) {
         this._player = player;
         this._scene = scene;
         this._cameraRadiusFunction = new CameraRadiusFunction();

@@ -2,7 +2,7 @@ import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import {Engine} from "@babylonjs/core";
 import {AsyncScene} from "./Scenes/AsyncScene";
-import {PlaceholderScene} from "./Scenes/PlaceholderScene";
+import {PCTestScene} from "./Scenes/PCTestScene";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -23,7 +23,7 @@ class App {
 		this.engine_ = new Engine(this.canvas_, true);
 		this.initDebugLayer_();
 
-		this.scene_ = new PlaceholderScene(this.engine_);
+		this.scene_ = new PCTestScene(this.engine_);
 
 		this.start_();
 

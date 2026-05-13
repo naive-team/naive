@@ -1,4 +1,5 @@
 export enum EntityFamily {
     PLAYER,
-    BUG
+    BUG,
+    PC
 }

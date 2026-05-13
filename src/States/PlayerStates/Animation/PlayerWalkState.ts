@@ -5,7 +5,7 @@ import {PlayerIdleState} from "./PlayerIdleState";
 import {PlayerCatchState} from "./PlayerCatchState";
 import {Player} from "../../../Entities/Player";
 import {Input} from "../../../Input/Input";
-import {SPACE} from "../../../Input/Keys";
+import {ACTION_BUTTON} from "../../../Input/Keys";
 import {EntityManager} from "../../../Entities/util/EntityManager";
 
 export class PlayerWalkState implements PlayerAnimationState {
@@ -22,7 +22,7 @@ export class PlayerWalkState implements PlayerAnimationState {
             _stateMachine.changeState(_player, new PlayerIdleState());
         }
 
-        if (_input.getPressed(SPACE)) {
+        if (_input.getPressed(ACTION_BUTTON)) {
             _stateMachine.changeState(_player, new PlayerCatchState());
         }
 

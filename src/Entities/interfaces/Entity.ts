@@ -1,5 +1,5 @@
-import {EntityFamily} from "./EntityFamily";
 import {AbstractMesh} from "@babylonjs/core";
+import {EntityFamily} from "../util/EntityFamily";
 
 export interface Entity {
     update(): void;

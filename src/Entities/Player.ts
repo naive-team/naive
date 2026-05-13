@@ -14,9 +14,9 @@ import {PlayerCamera} from "../util/PlayerCamera";
 import {Input} from "../Input/Input";
 import {PlayerStateMachine} from "../States/PlayerStates/Animation/PlayerStateMachine";
 import {PlayerIdleState} from "../States/PlayerStates/Animation/PlayerIdleState";
-import {Entity} from "./util/Entity";
 import {EntityManager} from "./util/EntityManager";
 import {EntityFamily} from "./util/EntityFamily";
+import {Entity} from "./interfaces/Entity";
 
 
 export class Player implements Entity {
@@ -175,5 +175,11 @@ export class Player implements Entity {
 
     getFamily(): EntityFamily {
         return EntityFamily.PLAYER;
+    }
+
+    isNearPC(entityManager: EntityManager): boolean {
+        const PCCollider: AbstractMesh = entityManager.getEntityByFamily(EntityFamily.PC).getCollider();
+
+        return PCCollider.intersectsMesh(this.collider_);
     }
 }

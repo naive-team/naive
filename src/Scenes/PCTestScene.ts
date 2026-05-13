@@ -3,16 +3,21 @@ import {Engine, Scene, HemisphericLight, Vector3, AbstractMesh, AnimationGroup, 
 import {Player} from "../Entities/Player";
 import {Input} from "../Input/Input";
 import {MeshLoader} from "../util/MeshLoader";
-import {Beetle} from "../Entities/Beetle";
 import {EntityManager} from "../Entities/util/EntityManager";
+import {PC} from "../Entities/PC";
+import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMachine";
+import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 
-export class PlaceholderScene extends Scene implements AsyncScene {
+export class PCTestScene extends Scene implements AsyncScene {
     private player_: Player;
     private input_: Input;
     private playerMesh_: AbstractMesh;
     private playerAnimations_: AnimationGroup[];
 
-    private beetle_: Beetle;
+    private pc_: PC;
+    private entityManager_: EntityManager;
+
+    private sceneStateMachine_: SceneStateMachine;
 
 
 
@@ -32,20 +37,20 @@ export class PlaceholderScene extends Scene implements AsyncScene {
         const ground: GroundMesh = MeshBuilder.CreateGround("ground", {width: 6, height: 6}, this);
         ground.checkCollisions = true;
 
-        const entityManager: EntityManager = new EntityManager();
+        this.entityManager_ = new EntityManager();
+        this.sceneStateMachine_ = new SceneStateMachine(new SceneStatePlaying());
 
         this.input_ = new Input();
-        this.player_ = new Player(this, this.input_, canvas, this.playerMesh_, this.playerAnimations_, entityManager);
-        entityManager.add(this.player_);
+        this.player_ = new Player(this, this.input_, canvas, this.playerMesh_, this.playerAnimations_, this.entityManager_);
+        this.entityManager_.add(this.player_);
 
-        this.beetle_ = new Beetle();
-        entityManager.add(this.beetle_)
+        this.pc_ = new PC();
+        this.entityManager_.add(this.pc_);
 
         return true;
     }
 
     update(): void {
-        this.player_.update();
-        this.input_.update();
+        this.sceneStateMachine_.update(this.entityManager_, this.input_)
     }
 }

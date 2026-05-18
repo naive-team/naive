@@ -9,7 +9,7 @@ import {GameContext} from "../../util/GameContext";
 
 export class SceneStatePlaying implements SceneState {
     update(stateMachine: SceneStateMachine, ctx: GameContext): void {
-        ctx.entityManager.updateAll();
+        ctx.entityManager.updateAll(ctx);
         ctx.input.update();
 
         this.checkPCActivation_(stateMachine, ctx);
@@ -24,5 +24,8 @@ export class SceneStatePlaying implements SceneState {
     }
 
     onEnter(_stateMachine: SceneStateMachine, _ctx: GameContext): void {
+    }
+
+    onLeave(_state: SceneStateMachine, _ctx: GameContext): void {
     }
 }

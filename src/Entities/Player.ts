@@ -17,6 +17,7 @@ import {PlayerIdleState} from "../States/PlayerStates/Animation/PlayerIdleState"
 import {EntityManager} from "./util/EntityManager";
 import {EntityFamily} from "./util/EntityFamily";
 import {Entity} from "./interfaces/Entity";
+import {GameContext} from "../util/GameContext";
 
 
 export class Player implements Entity {
@@ -101,7 +102,7 @@ export class Player implements Entity {
         this.targetAngle_ = Math.atan2(movement.x, movement.z);
     }
 
-    update(): void {
+    update(_ctx: GameContext): void {
 
         this.pointTowardTargetAngle_(this.input_.getInputVector());
         this.stateMachine_.update(this, this.input_, this.entityManager_);

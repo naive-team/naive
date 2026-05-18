@@ -23,4 +23,7 @@ export class SceneStatePlaying implements SceneState {
             stateMachine.changeState(new SceneStateUsingPC());
         }
     }
+
+    onEnter(_stateMachine: SceneStateMachine, _entityManager: EntityManager, _input: Input): void {
+    }
 }

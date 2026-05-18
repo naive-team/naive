@@ -4,11 +4,17 @@ import {KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_UP} from "./Keys";
 type JsKeyCode = KeyboardEvent["code"];
 
 export class Input {
-    private readonly keyPressed_: Record<JsKeyCode, boolean>
+    private readonly keyPressed_: Record<JsKeyCode, boolean>;
+    private keyPressedLastFrame_: Record<JsKeyCode, boolean>;
+    private readonly keyStates_: Record<JsKeyCode, KeyState>;
+
+
     private inputVector_: Vector2 = new Vector2(0, 0);
 
     constructor() {
         this.keyPressed_ = {};
+        this.keyPressedLastFrame_ = {};
+        this.keyStates_ = {};
 
         window.addEventListener("keydown", (key) =>  {
             this.keyPressed_[key.code] = true;
@@ -27,8 +33,50 @@ export class Input {
         return result;
     }
 
+    public getJustPressed(jsKeyCode: JsKeyCode): boolean {
+        const result: KeyState = this.keyStates_[jsKeyCode];
+
+        if (result === undefined) return false;
+
+        return result === KeyState.JUST_PRESSED;
+    }
+
+    public getReleased(jsKeyCode: JsKeyCode): boolean {
+        const result: KeyState = this.keyStates_[jsKeyCode];
+
+        if (result === undefined) return false;
+
+        return result === KeyState.RELEASED;
+    }
+
+
+
     public update(): void {
+        this.updateKeyStates_();
+        this.updateKeyPressedLastFrame_();
         this.updateInputVector_();
+
+        console.log(this.keyStates_);
+    }
+
+    private updateKeyPressedLastFrame_() {
+        for (const key in this.keyPressed_) {
+            this.keyPressedLastFrame_[key] = this.keyPressed_[key];
+        }
+    }
+
+    private updateKeyStates_() {
+        for (const key in this.keyPressed_) {
+            if (!this.keyPressedLastFrame_[key] && this.keyPressed_[key]) {
+                this.keyStates_[key] = KeyState.JUST_PRESSED;
+            } else if (this.keyPressedLastFrame_[key] && this.keyPressed_[key]) {
+                this.keyStates_[key] = KeyState.PRESSED;
+            } else if (this.keyPressedLastFrame_[key] && (!this.keyPressed_[key])) {
+                this.keyStates_[key] = KeyState.RELEASED;
+            } else if (!this.keyPressedLastFrame_[key] && (!this.keyPressed_[key])) {
+                this.keyStates_[key] = KeyState.NOT_PRESSED;
+            }
+        }
     }
 
     private updateInputVector_() {

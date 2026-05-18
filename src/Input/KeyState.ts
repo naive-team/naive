@@ -1,4 +1,4 @@
-enum KeyState {
+export enum KeyState {
     JUST_PRESSED,
     PRESSED,
     RELEASED,

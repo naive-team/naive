@@ -1,5 +1,6 @@
 import {Vector2, Scalar} from "@babylonjs/core";
 import {KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_UP} from "./Keys";
+import {KeyState} from "./KeyState";
 
 type JsKeyCode = KeyboardEvent["code"];
 
@@ -55,8 +56,6 @@ export class Input {
         this.updateKeyStates_();
         this.updateKeyPressedLastFrame_();
         this.updateInputVector_();
-
-        console.log(this.keyStates_);
     }
 
     private updateKeyPressedLastFrame_() {

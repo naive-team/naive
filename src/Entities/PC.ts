@@ -37,6 +37,8 @@ export class PC implements Entity {
         this.collider_.position.y = 1
 
         this.state_ = PCState.OFF;
+
+        this.content_ = "";
     }
 
 
@@ -61,7 +63,7 @@ export class PC implements Entity {
         const input: Input = ctx.input;
 
         for (const jsKeyCode of PC.jsKeyCodeToLetter_.keys()) {
-            if (input.getPressed(jsKeyCode)) {
+            if (input.getJustPressed(jsKeyCode)) {
                 this.content_ += PC.jsKeyCodeToLetter_.get(jsKeyCode);
                 console.log(this.content_);
             }

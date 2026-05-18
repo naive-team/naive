@@ -7,6 +7,8 @@ import {EntityManager} from "../Entities/util/EntityManager";
 import {PC} from "../Entities/PC";
 import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMachine";
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
+import {GameContext} from "../util/GameContext";
+import {Game} from "../Game";
 
 export class PCTestScene extends Scene implements AsyncScene {
     private player_: Player;
@@ -18,6 +20,8 @@ export class PCTestScene extends Scene implements AsyncScene {
     private entityManager_: EntityManager;
 
     private sceneStateMachine_: SceneStateMachine;
+
+    private gameContext_: GameContext;
 
 
 
@@ -47,10 +51,12 @@ export class PCTestScene extends Scene implements AsyncScene {
         this.pc_ = new PC();
         this.entityManager_.add(this.pc_);
 
+        this.gameContext_ = new GameContext(this.entityManager_, this.input_, this.player_);
+
         return true;
     }
 
     update(): void {
-        this.sceneStateMachine_.update(this.entityManager_, this.input_)
+        this.sceneStateMachine_.update(this.gameContext_)
     }
 }

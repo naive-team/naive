@@ -8,7 +8,6 @@ import {PC} from "../Entities/PC";
 import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMachine";
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 import {GameContext} from "../util/GameContext";
-import {Game} from "../Game";
 
 export class PCTestScene extends Scene implements AsyncScene {
     private player_: Player;

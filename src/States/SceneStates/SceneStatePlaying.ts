@@ -1,7 +1,5 @@
 import {SceneState} from "./interface/SceneState";
 import {SceneStateMachine} from "./StateMachine/SceneStateMachine";
-import {Input} from "../../Input/Input";
-import {EntityManager} from "../../Entities/util/EntityManager";
 import {EntityFamily} from "../../Entities/util/EntityFamily";
 import {Player} from "../../Entities/Player";
 import {DIALOG_BUTTON} from "../../Input/Keys";

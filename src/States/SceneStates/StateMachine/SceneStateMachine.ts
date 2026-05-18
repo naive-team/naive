@@ -1,6 +1,4 @@
 import {SceneState} from "../interface/SceneState";
-import {EntityManager} from "../../../Entities/util/EntityManager";
-import {Input} from "../../../Input/Input";
 import {GameContext} from "../../../util/GameContext";
 
 export class SceneStateMachine {

@@ -1,8 +1,10 @@
 import { PrinterTag } from "./PrinterTag";
 
 export class Printer {
+    // Mettre à jour cet attribut pour filtrer les tags
     private static activeTags_: Record<PrinterTag, boolean> = {
-        [PrinterTag.INPUT]: true
+        [PrinterTag.INPUT]: false,
+        [PrinterTag.VIDEO]: true
     };
 
     public static print(tag: PrinterTag, ...msg: any[]): void {

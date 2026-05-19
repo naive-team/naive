@@ -1,10 +1,10 @@
 import {InputStrategy} from "./InputStrategy";
 import {Scalar} from "@babylonjs/core";
-import {Printer} from "../../util/Printer/Printer";
 import {Button} from "../Button";
 import { AbstractInput } from "../AbstractInput";
 import { InputMappers } from "../InputMappers";
-import { PrinterTag } from "../../util/Printer/PrinterTag";
+import {Printer} from "../../../util/Printer/Printer";
+import {PrinterTag} from "../../../util/Printer/PrinterTag";
 
 
 export class KeyboardMouseInput extends AbstractInput implements InputStrategy {

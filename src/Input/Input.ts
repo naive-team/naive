@@ -112,6 +112,10 @@ export class Input {
 
     public updateTypeKeyboard(): string {
 
+        if (this.getJustPressed("Enter")) return "Enter";
+        if (this.getJustPressed("Backspace")) return "Backspace";
+        if (this.getJustPressed("Space")) return "Space";
+
         for (const key of TYPABLE_KEYS) {
             if (this.getJustPressed(key)) {
                 return this.jsKeyCodeToRealKeyStrategy_.convert(key);

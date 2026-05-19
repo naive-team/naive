@@ -47,7 +47,12 @@ export class PC implements Entity {
         const input: Input = ctx.input;
 
         const output: string = input.updateTypeKeyboard();
+
         if (output === "") return;
+
+        if (output === "Backspace") {this.content_ = this.content_.slice(0, this.content_.length - 1); console.log(this.content_); return;}
+        if (output === "Enter") {this.content_ += "\n"; console.log(this.content_); return; }
+        if (output === "Space") {this.content_ += " "; console.log(this.content_); return; }
 
         this.content_ += output;
         console.log(this.content_);

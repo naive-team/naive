@@ -15,9 +15,26 @@ export class PC implements Entity {
 
     private state_: PCState;
 
-    constructor() {
-        this.collider_ = MeshBuilder.CreateBox("PC", {size: 0.3});
+    private mesh_: AbstractMesh;
+
+    constructor(mesh: AbstractMesh) {
+        this.mesh_ = mesh;
+
+        const scaling: number = 0.2;
+
+        this.mesh_.scaling.x = scaling;
+        this.mesh_.scaling.y = scaling;
+        this.mesh_.scaling.z = scaling;
+
+        this.collider_ = MeshBuilder.CreateBox("PC", {size: 1});
         this.collider_.checkCollisions = false;
+
+
+        this.collider_.visibility = 0.5;
+
+        this.mesh_.parent = this.collider_;
+        this.mesh_.position.z = -0.8
+
         this.collider_.position.y = 1
 
         this.state_ = PCState.OFF;

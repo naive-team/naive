@@ -15,6 +15,8 @@ export class PCTestScene extends Scene implements AsyncScene {
     private playerMesh_: AbstractMesh;
     private playerAnimations_: AnimationGroup[];
 
+    private pcMesh_: AbstractMesh;
+
     private pc_: PC;
     private entityManager_: EntityManager;
 
@@ -29,10 +31,12 @@ export class PCTestScene extends Scene implements AsyncScene {
     }
 
     async waitUntilReady(): Promise<void> {
-        const playerMeshData = await MeshLoader.loadMesh("./naru.glb", this);
+        const playerMeshData = await MeshLoader.loadMesh("./naru_v2.glb", this);
         this.playerMesh_ = playerMeshData.mesh;
         this.playerAnimations_ = playerMeshData.animationGroups;
 
+        const pcMeshData = await MeshLoader.loadMesh("./pc.glb", this);
+        this.pcMesh_ = pcMeshData.mesh;
     }
 
     start(canvas: HTMLCanvasElement): boolean {
@@ -47,7 +51,7 @@ export class PCTestScene extends Scene implements AsyncScene {
         this.player_ = new Player(this, this.input_, canvas, this.playerMesh_, this.playerAnimations_, this.entityManager_);
         this.entityManager_.add(this.player_);
 
-        this.pc_ = new PC();
+        this.pc_ = new PC(this.pcMesh_);
         this.entityManager_.add(this.pc_);
 
         this.gameContext_ = new GameContext(this.entityManager_, this.input_, this.player_);

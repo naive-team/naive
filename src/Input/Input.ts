@@ -1,8 +1,13 @@
 import {Vector2, Scalar} from "@babylonjs/core";
 import {KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_UP} from "./Keys";
 import {KeyState} from "./KeyState";
+import {JsKeyCodeToRealKeyStrategy} from "./JsKeyCodeToRealKeyStrategies/JsKeyCodeToRealKeyStrategy";
+import {JsKeyCode} from "./JsKeyCode";
+import {TYPABLE_KEYS, TypableKey} from "./TypableKey";
+import {JsKeyCodeToAzerty} from "./JsKeyCodeToRealKeyStrategies/JsKeyCodeToAzerty";
+import {JsKeyCodeToQwerty} from "./JsKeyCodeToRealKeyStrategies/JsKeyCodeToQwerty";
 
-type JsKeyCode = KeyboardEvent["code"];
+
 
 export class Input {
     private readonly keyPressed_: Record<JsKeyCode, boolean>;
@@ -11,6 +16,7 @@ export class Input {
 
 
     private inputVector_: Vector2 = new Vector2(0, 0);
+    private jsKeyCodeToRealKeyStrategy_: JsKeyCodeToRealKeyStrategy;
 
     constructor() {
         this.keyPressed_ = {};
@@ -24,6 +30,8 @@ export class Input {
         window.addEventListener("keyup", (key) => {
             this.keyPressed_[key.code] = false;
         });
+
+        this.jsKeyCodeToRealKeyStrategy_ = new JsKeyCodeToAzerty();
     }
 
     public getPressed(jsKeyCode: JsKeyCode): boolean {
@@ -100,6 +108,17 @@ export class Input {
 
     public getInputVector(): Vector2 {
         return this.inputVector_;
+    }
+
+    public updateTypeKeyboard(): string {
+
+        for (const key of TYPABLE_KEYS) {
+            if (this.getJustPressed(key)) {
+                return this.jsKeyCodeToRealKeyStrategy_.convert(key);
+            }
+        }
+
+        return "";
     }
 
 }

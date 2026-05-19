@@ -7,10 +7,12 @@ export class Dialog {
     currentLine: AbstractLine;
     uiGlobale : GUI.AdvancedDynamicTexture;
     dialogueUI : LineUi;
+    private _started : boolean;
 
     constructor(uiGlobale : GUI.AdvancedDynamicTexture, firstLine: AbstractLine) {
         this.uiGlobale = uiGlobale;
         this.currentLine = firstLine;
+        this._started = false;
     }
     async play(scene:Scene): Promise<void> {
         console.log("entre dans dialogue play");
@@ -40,5 +42,13 @@ export class Dialog {
 
         this.currentLine.hide();
         this.dialogueUI.hide();
-}
+    }
+
+    get started(): boolean {
+        return this._started;
+    }
+
+    set started(value: boolean) {
+        this._started = value;
+    }
 }

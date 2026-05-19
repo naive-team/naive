@@ -1,6 +1,7 @@
+import "@babylonjs/core/Debug/debugLayer";
+import "@babylonjs/inspector";
 import {Game} from "./Game";
 import {SoundScreenState} from "./States/SoundScreenState";
-import {DialogStateTest} from "./States/Test/DialogStateTest";
 
 export class App {
     private readonly game_: Game;

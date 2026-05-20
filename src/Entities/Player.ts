@@ -40,7 +40,7 @@ export class Player implements Entity {
         this.scene_ = scene;
         this.input_ = input;
 
-        this.camera_ = new PlayerCamera(canvas, "player_camera", 0, 0, 3, new Vector3(0, 0, 0), scene);
+        this.camera_ = new PlayerCamera(canvas, "player_camera", 0, 0, 10, Vector3.Zero(), scene);
         scene.activeCamera = this.camera_;
 
         this.initCollider_(playerMesh);
@@ -71,6 +71,7 @@ export class Player implements Entity {
         playerMesh.rotation.y += Tools.ToRadians(180);
 
         playerMesh.parent = this.collider_;
+        this.camera_.lockTarget(this.collider_);
 
         const netRim: TransformNode = this.scene_.getTransformNodeByName("Armature").getChildTransformNodes(false).find((node: TransformNode): boolean=> {return node.name === "Torus"} );
 

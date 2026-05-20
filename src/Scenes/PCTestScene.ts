@@ -8,6 +8,7 @@ import {PC} from "../Entities/PC";
 import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMachine";
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 import {GameContext} from "../util/GameContext";
+import {PlayerCamera} from "../util/PlayerCamera";
 
 export class PCTestScene extends Scene implements AsyncScene {
     private player_: Player;
@@ -48,18 +49,23 @@ export class PCTestScene extends Scene implements AsyncScene {
         this.sceneStateMachine_ = new SceneStateMachine(new SceneStatePlaying());
 
         this.input_ = new Input();
-        this.player_ = new Player(this, this.input_, canvas, this.playerMesh_, this.playerAnimations_, this.entityManager_);
-        this.entityManager_.add(this.player_);
+
+        const playerCamera: PlayerCamera = new PlayerCamera(canvas, "player_camera", 0, 0, 10, Vector3.Zero(), this);
+
+
 
         this.pc_ = new PC(this.pcMesh_);
         this.entityManager_.add(this.pc_);
 
-        this.gameContext_ = new GameContext(this.entityManager_, this.input_, this.player_);
+        this.gameContext_ = new GameContext(this.entityManager_, this.input_, playerCamera, canvas);
+
+        this.player_ = new Player(this.gameContext_, this, this.playerMesh_, this.playerAnimations_);
+        this.entityManager_.add(this.player_);
 
         return true;
     }
 
     update(): void {
-        this.sceneStateMachine_.update(this.gameContext_)
+        this.sceneStateMachine_.update(this.gameContext_);
     }
 }

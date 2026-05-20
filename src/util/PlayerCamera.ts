@@ -1,4 +1,5 @@
 import {ArcRotateCamera, Vector3, Mesh} from "@babylonjs/core";
+import {GameContext} from "./GameContext";
 
 type ArcRotateCameraParams = ConstructorParameters<typeof ArcRotateCamera>;
 
@@ -7,6 +8,8 @@ export class PlayerCamera extends ArcRotateCamera {
         super(...args);
         this.attachControl(canvas);
         this.inertia = 0.4;
+
+        this._scene.activeCamera = this;
     }
 
     getForwardNormal(): Vector3 {
@@ -27,7 +30,7 @@ export class PlayerCamera extends ArcRotateCamera {
         return right;
     }
 
-    lockTarget(playerCollider: Mesh) {
+    lockOnPlayer_(playerCollider: Mesh): void {
         this.lockedTarget = playerCollider;
     }
 

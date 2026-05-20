@@ -25,6 +25,10 @@ class App {
 
 		this.scene_ = new PCTestScene(this.engine_);
 
+		this.scene_.onPointerDown = () => {
+			this.engine_.enterPointerlock();
+		};
+
 		this.start_();
 
 	}

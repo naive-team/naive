@@ -30,14 +30,13 @@ export class Player implements Entity {
     private animations_: AnimationGroup[];
     private stateMachine_: PlayerStateMachine;
 
+    private mesh_: AbstractMesh;
     private netCollider_: Mesh;
 
     constructor(ctx: GameContext, scene: Scene, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
         this.ctx_ = ctx;
         this.scene_ = scene;
-
-        //this.camera_ = new PlayerCamera(canvas, "player_camera", 0, 0, 10, Vector3.Zero(), scene);
-        //scene.activeCamera = this.camera_;
+        this.mesh_ = playerMesh;
 
         this.initCollider_(playerMesh);
 
@@ -66,7 +65,7 @@ export class Player implements Entity {
         playerMesh.rotation.y += Tools.ToRadians(180);
 
         playerMesh.parent = this.collider_;
-        this.ctx_.playerCamera.lockOnPlayer_(this.collider_);
+        this.ctx_.playerCamera.lockOnEntity(this.collider_);
 
         const netRim: TransformNode = this.scene_.getTransformNodeByName("Armature").getChildTransformNodes(false).find((node: TransformNode): boolean=> {return node.name === "Torus"} );
 
@@ -178,5 +177,9 @@ export class Player implements Entity {
         const PCCollider: AbstractMesh = entityManager.getEntityByFamily(EntityFamily.PC).getCollider();
 
         return PCCollider.intersectsMesh(this.collider_);
+    }
+
+    setVisible(value: boolean): void {
+        this.mesh_.setEnabled(value);
     }
 }

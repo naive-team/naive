@@ -1,5 +1,5 @@
 import {CharacterSupportedState, CharacterSurfaceInfo, PhysicsCharacterController, Vector3} from "@babylonjs/core";
-import {PlayerPhysics} from "../../PlayerPhysics";
+import {PlayerPhysics} from "../../../PlayerPhysics";
 
 export abstract class PlayerPhysicsState {
     public abstract getNextState(support: CharacterSupportedState, playerPhysics: PlayerPhysics): PlayerPhysicsState;

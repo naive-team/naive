@@ -1,8 +1,11 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
-import {Engine} from "@babylonjs/core";
-import {AsyncScene} from "./Scenes/AsyncScene";
-import {PlaceholderScene} from "./Scenes/PlaceholderScene";
+import { Engine } from "@babylonjs/core";
+
+import { ActivezLeSon } from "./Scenes/ActivezLeSon";
+import { PlaceholderScene } from "./Scenes/PlaceholderScene";
+import {SceneManager} from "./Scenes/SceneManager";
+import {LabScene} from "./Scenes/LabScene";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -14,29 +17,28 @@ function createCanvas() {
 }
 
 class App {
-	private scene_: AsyncScene;
 	private canvas_: HTMLCanvasElement;
 	private engine_: Engine;
+	private sceneManager_: SceneManager;
 
 	constructor() {
 		this.canvas_ = createCanvas();
 		this.engine_ = new Engine(this.canvas_, true);
+		this.sceneManager_ = new SceneManager(this.engine_, this.canvas_);
+
 		this.initDebugLayer_();
-
-		this.scene_ = new PlaceholderScene(this.engine_);
-
 		this.start_();
-
 	}
 
 	private initDebugLayer_() {
 		window.addEventListener("keydown", (ev) => {
 			// Shift+Ctrl+Alt+I
 			if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.keyCode === 73) {
-				if (this.scene_.debugLayer.isVisible()) {
-					this.scene_.debugLayer.hide();
+				const scene = this.sceneManager_.scene;
+				if (scene?.debugLayer.isVisible()) {
+					scene.debugLayer.hide();
 				} else {
-					this.scene_.debugLayer.show();
+					scene?.debugLayer.show();
 				}
 			}
 
@@ -46,18 +48,12 @@ class App {
 		});
 	}
 
-	private async init_(): Promise<void> {
-		await this.scene_.waitUntilReady();
-		this.scene_.start(this.canvas_);
-	}
-
 	private async start_(): Promise<void> {
-		await this.init_();
-
-		this.engine_.runRenderLoop(() => {
-			this.scene_.render();
-			this.scene_.update();
-		});
+		// Première scène
+		//await this.sceneManager_.switchTo(new ActivezLeSon(this.engine_, this.sceneManager_));
+		await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+		// Pour naviguer vers une autre scène depuis n'importe où,
+		// passer sceneManager_ en paramètre à la scène, ou via un event bus.
 	}
 }
 

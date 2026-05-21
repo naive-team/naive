@@ -1,4 +1,7 @@
-import { Mesh, Scene, VideoTexture, MeshCreationOptions, MeshBuilder, StandardMaterial, ITimerOptions, setAndStartTimer } from '@babylonjs/core';
+import {
+    Mesh, Scene, VideoTexture, MeshCreationOptions, MeshBuilder, StandardMaterial, ITimerOptions, setAndStartTimer,
+    Color3
+} from '@babylonjs/core';
 import { IVideoMesh } from './IVideoMesh';
 import { Printer } from '../Printer/Printer';
 import { PrinterTag } from '../Printer/PrinterTag';
@@ -44,7 +47,12 @@ export class VideoMesh extends Mesh implements IVideoMesh {
     }
     
     waitUntilReady(): Promise<void> {
-        if (this.loaded_) return Promise.resolve();
+        console.log("entre wait until ready", this.ready_)
+        if (this.loaded_) {
+            console.log("caca");
+            return Promise.resolve();
+        }
+
         return this.ready_;
     }
 
@@ -56,6 +64,9 @@ export class VideoMesh extends Mesh implements IVideoMesh {
 
         const material: StandardMaterial = new StandardMaterial("VideoMaterial", scene);
         material.diffuseTexture = videoTexture;
+
+        material.ambientColor = new Color3(1, 1, 1);
+        material.emissiveColor = new Color3(1, 1, 1);
 
         this.material = material;
         this.videoTexture_ = videoTexture;

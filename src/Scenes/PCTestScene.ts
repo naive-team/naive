@@ -36,7 +36,7 @@ export class PCTestScene extends Scene implements AsyncScene {
         this.playerMesh_ = playerMeshData.mesh;
         this.playerAnimations_ = playerMeshData.animationGroups;
 
-        const pcMeshData = await MeshLoader.loadMesh("./pc.glb", this);
+        const pcMeshData = await MeshLoader.loadMesh("./pc_v2.glb", this);
         this.pcMesh_ = pcMeshData.mesh;
     }
 

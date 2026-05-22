@@ -1,10 +1,9 @@
 import {GameState} from "./GameState";
-import {BabylonManager} from "../util/BabylonManager";
+import {BabylonManager} from "../../util/BabylonManager";
 import {Color4, FreeCamera, Vector3} from "@babylonjs/core";
 import {AdvancedDynamicTexture, Button, Control, Image, Rectangle, TextBlock} from "@babylonjs/gui";
-import {Game} from "../Game";
+import {Game} from "../../Game";
 import {InGameState} from "./InGameState";
-import {Printer} from "../util/Printer";
 
 export class SoundScreenState extends GameState {
 
@@ -13,7 +12,7 @@ export class SoundScreenState extends GameState {
     }
 
     dispose(): void {
-        Printer.print("dispose");
+        //Printer.print("dispose");
         this.scene_.dispose();
         BabylonManager.instance.engine.stopRenderLoop();
     }
@@ -84,7 +83,6 @@ export class SoundScreenState extends GameState {
         babylonManager.engine.runRenderLoop(() => {
             this.scene_.render();
         });
-        Printer.print("caca");
 
         /*
         //lastly set the current state to the start state and set the scene to the start scene

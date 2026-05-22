@@ -6,6 +6,7 @@ import { ActivezLeSon } from "./Scenes/ActivezLeSon";
 import { PlaceholderScene } from "./Scenes/PlaceholderScene";
 import {SceneManager} from "./Scenes/SceneManager";
 import {LabScene} from "./Scenes/LabScene";
+import {TitleScreenScene} from "./Scenes/TitleScreenScene";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -51,7 +52,8 @@ class App {
 	private async start_(): Promise<void> {
 		// Première scène
 		//await this.sceneManager_.switchTo(new ActivezLeSon(this.engine_, this.sceneManager_));
-		await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+		await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
+		//await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
 		// Pour naviguer vers une autre scène depuis n'importe où,
 		// passer sceneManager_ en paramètre à la scène, ou via un event bus.
 	}

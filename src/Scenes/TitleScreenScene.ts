@@ -1,32 +1,25 @@
-﻿import { Engine, Scene, Camera, FreeCamera, Vector3, Texture } from "@babylonjs/core";
+import { Engine, Scene, Camera, FreeCamera, Vector3, Texture } from "@babylonjs/core";
 import { AdvancedDynamicTexture, Image, Button, TextBlock, Control } from "@babylonjs/gui";
 import { AsyncScene } from "./AsyncScene";
 import {VideoScene} from "../util/VideoCinematic/VideoScene";
 import {SceneManager} from "./SceneManager";
 import {LabScene} from "./LabScene";
+import {ActivezLeSon} from "./ActivezLeSon";
 
-export class ActivezLeSon extends Scene implements AsyncScene {
+export class TitleScreenScene extends Scene implements AsyncScene {
     private engine_: Engine;
     private onNextScene_: () => Promise<void>;
     private imageUrl_: string;
     private sceneManager_: SceneManager;
 
-    constructor(engine: Engine, sceneManager: SceneManager, imageUrl: string = "./Pour_Une_Meilleure_Exp_Activez_Le_Son_.png") {
+    constructor(engine: Engine, sceneManager: SceneManager, imageUrl: string = "/title screen.png") {
         super(engine);
         this.engine_ = engine;
         this.imageUrl_ = imageUrl;
         this.sceneManager_ = sceneManager;
         this.onNextScene_ = async () => {
-            const videoScene = new VideoScene(engine,
-                "intro",
-                "./Naive Intro V1.mp4",
-                -1.18,
-                ()=>{ },
-                async() => {await sceneManager.switchTo(new LabScene(this.engine_, this.sceneManager_))
-               ;
-            });
 
-            await sceneManager.switchTo(videoScene);
+            await sceneManager.switchTo(new ActivezLeSon(engine, sceneManager));
 
         };
     }
@@ -49,21 +42,19 @@ export class ActivezLeSon extends Scene implements AsyncScene {
         gui.addControl(img);
 
         // Bouton "Continuer"
-        const btn = Button.CreateSimpleButton("btnNext", "OK !");
-        btn.width = "200px";
-        btn.height = "50px";
-        btn.left = "-100px"
-        btn.top = "-30px"
-        btn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_RIGHT;
+        const btn = Button.CreateSimpleButton("btnNext", "Cliquer pour commencer");
+        btn.width = "100%";
+        btn.height = "100%";
+        btn.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
         btn.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
-        btn.background = "#ee3f8d";
+        btn.textBlock.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+        btn.textBlock.top = "100px"
         btn.color = "#ffffff";
         btn.cornerRadius = 8;
         btn.fontFamily = "courier new"
         btn.fontSize = 25;
         btn.fontWeight = "bold";
         btn.onPointerClickObservable.add(async() => {
-            console.log("caca 1");
             await this.onNextScene_();
         });
         gui.addControl(btn);

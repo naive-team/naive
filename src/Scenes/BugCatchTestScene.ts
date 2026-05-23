@@ -6,6 +6,7 @@ import {MeshLoader} from "../util/MeshLoader";
 import {Beetle} from "../Entities/Beetle";
 import {EntityManager} from "../Entities/util/EntityManager";
 import {GameContext} from "../util/GameContext";
+import {PlayerCamera} from "../util/PlayerCamera";
 
 export class BugCatchTestScene extends Scene implements AsyncScene {
     private player_: Player;
@@ -38,13 +39,15 @@ export class BugCatchTestScene extends Scene implements AsyncScene {
         const entityManager: EntityManager = new EntityManager();
 
         this.input_ = new Input();
-        this.player_ = new Player(this, this.input_, canvas, this.playerMesh_, this.playerAnimations_, entityManager);
-        entityManager.add(this.player_);
 
         this.beetle_ = new Beetle();
         entityManager.add(this.beetle_)
+        const playerCamera: PlayerCamera = new PlayerCamera(canvas, "player_camera", 0, 0, 10, Vector3.Zero(), this);
 
-        this.gameContext_ = new GameContext(entityManager, this.input_, this.player_);
+        this.gameContext_ = new GameContext(entityManager, this.input_, playerCamera, canvas);
+        this.player_ = new Player(this.gameContext_, this, this.playerMesh_, this.playerAnimations_);
+        entityManager.add(this.player_);
+
 
         return true;
     }

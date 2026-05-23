@@ -6,8 +6,8 @@ import {Player} from "../../../Entities/Player";
 import {Input} from "../../../Input/Input";
 import {EntityManager} from "../../../Entities/util/EntityManager";
 import {EntityFamily} from "../../../Entities/util/EntityFamily";
-import {Bug} from "../../../Entities/util/Bug";
-import {Entity} from "../../../Entities/util/Entity";
+import {Entity} from "../../../Entities/interfaces/Entity";
+import {Bug} from "../../../Entities/interfaces/Bug";
 
 export class PlayerCatchState implements PlayerAnimationState {
 

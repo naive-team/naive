@@ -1,13 +1,13 @@
 
 import {AbstractMesh, MeshBuilder} from "@babylonjs/core";
-import {Entity} from "./util/Entity";
-import {Bug} from "./util/Bug";
 import {EntityFamily} from "./util/EntityFamily";
+import {Entity} from "./interfaces/Entity";
+import {Bug} from "./interfaces/Bug";
 
 export class Beetle implements Entity, Bug {
 
 
-    private collider_: AbstractMesh;
+    private collider_: AbstractMesh ;
 
     constructor() {
         this.collider_ = MeshBuilder.CreateBox("beetle", {size: 0.1});

@@ -1,12 +1,14 @@
-import {ArcRotateCamera, Vector3} from "@babylonjs/core";
+import {ArcRotateCamera, Vector3, AbstractMesh} from "@babylonjs/core";
 
 type ArcRotateCameraParams = ConstructorParameters<typeof ArcRotateCamera>;
 
 export class PlayerCamera extends ArcRotateCamera {
     constructor(canvas: HTMLCanvasElement, ...args: ArcRotateCameraParams) {
         super(...args);
-
         this.attachControl(canvas);
+        this.inertia = 0.4;
+
+        this._scene.activeCamera = this;
     }
 
     getForwardNormal(): Vector3 {
@@ -25,6 +27,10 @@ export class PlayerCamera extends ArcRotateCamera {
         right.normalize();
 
         return right;
+    }
+
+    lockOnEntity(entityCollider: AbstractMesh): void {
+        this.lockedTarget = entityCollider;
     }
 
 }

@@ -10,37 +10,33 @@ import {
     Vector2,
     Vector3
 } from "@babylonjs/core";
-import {PlayerCamera} from "../util/PlayerCamera";
-import {Input} from "../Input/Input";
 import {PlayerStateMachine} from "../States/PlayerStates/Animation/PlayerStateMachine";
 import {PlayerIdleState} from "../States/PlayerStates/Animation/PlayerIdleState";
-import {Entity} from "./util/Entity";
 import {EntityManager} from "./util/EntityManager";
 import {EntityFamily} from "./util/EntityFamily";
+import {Entity} from "./interfaces/Entity";
+import {GameContext} from "../util/GameContext";
 
 
 export class Player implements Entity {
+    private ctx_: GameContext;
     private scene_: Scene;
+
     private collider_: Mesh;
-    private camera_: PlayerCamera;
-    private input_: Input;
     private readonly SPEED_: number = 0.1;
 
     private targetAngle_: number;
 
     private animations_: AnimationGroup[];
-
     private stateMachine_: PlayerStateMachine;
-    private entityManager_: EntityManager;
 
+    private mesh_: AbstractMesh;
     private netCollider_: Mesh;
 
-    constructor(scene: Scene, input: Input, canvas: HTMLCanvasElement, playerMesh: AbstractMesh, animations: AnimationGroup[], entityManager: EntityManager) {
+    constructor(ctx: GameContext, scene: Scene, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
+        this.ctx_ = ctx;
         this.scene_ = scene;
-        this.input_ = input;
-
-        this.camera_ = new PlayerCamera(canvas, "player_camera", 0, 0, 3, new Vector3(0, 0, 0), scene);
-        scene.activeCamera = this.camera_;
+        this.mesh_ = playerMesh;
 
         this.initCollider_(playerMesh);
 
@@ -49,7 +45,6 @@ export class Player implements Entity {
         animations[0].pause();
 
         this.stateMachine_ = new PlayerStateMachine(new PlayerIdleState());
-        this.entityManager_ = entityManager;
     }
 
     private initCollider_(playerMesh: AbstractMesh): void {
@@ -70,6 +65,7 @@ export class Player implements Entity {
         playerMesh.rotation.y += Tools.ToRadians(180);
 
         playerMesh.parent = this.collider_;
+        this.ctx_.playerCamera.lockOnEntity(this.collider_);
 
         const netRim: TransformNode = this.scene_.getTransformNodeByName("Armature").getChildTransformNodes(false).find((node: TransformNode): boolean=> {return node.name === "Torus"} );
 
@@ -81,8 +77,8 @@ export class Player implements Entity {
     }
 
     move(inputVector: Vector2): void {
-        const R: Vector3 = this.camera_.getRightNormal();
-        const F: Vector3 = this.camera_.getForwardNormal();
+        const R: Vector3 = this.ctx_.playerCamera.getRightNormal();
+        const F: Vector3 = this.ctx_.playerCamera.getForwardNormal();
         const x: number = inputVector.x;
         const y: number = inputVector.y;
 
@@ -101,10 +97,10 @@ export class Player implements Entity {
         this.targetAngle_ = Math.atan2(movement.x, movement.z);
     }
 
-    update(): void {
+    update(_ctx: GameContext): void {
 
-        this.pointTowardTargetAngle_(this.input_.getInputVector());
-        this.stateMachine_.update(this, this.input_, this.entityManager_);
+        this.pointTowardTargetAngle_(this.ctx_.input.getInputVector());
+        this.stateMachine_.update(this, this.ctx_.input, this.ctx_.entityManager);
     }
 
     private pointTowardTargetAngle_(inputVector: Vector2): void {
@@ -175,5 +171,15 @@ export class Player implements Entity {
 
     getFamily(): EntityFamily {
         return EntityFamily.PLAYER;
+    }
+
+    isNearPC(entityManager: EntityManager): boolean {
+        const PCCollider: AbstractMesh = entityManager.getEntityByFamily(EntityFamily.PC).getCollider();
+
+        return PCCollider.intersectsMesh(this.collider_);
+    }
+
+    setVisible(value: boolean): void {
+        this.mesh_.setEnabled(value);
     }
 }

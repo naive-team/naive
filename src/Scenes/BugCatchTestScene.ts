@@ -5,14 +5,17 @@ import {Input} from "../Input/Input";
 import {MeshLoader} from "../util/MeshLoader";
 import {Beetle} from "../Entities/Beetle";
 import {EntityManager} from "../Entities/util/EntityManager";
+import {GameContext} from "../util/GameContext";
 
-export class PlaceholderScene extends Scene implements AsyncScene {
+export class BugCatchTestScene extends Scene implements AsyncScene {
     private player_: Player;
     private input_: Input;
     private playerMesh_: AbstractMesh;
     private playerAnimations_: AnimationGroup[];
 
     private beetle_: Beetle;
+
+    private gameContext_: GameContext;
 
 
 
@@ -41,11 +44,13 @@ export class PlaceholderScene extends Scene implements AsyncScene {
         this.beetle_ = new Beetle();
         entityManager.add(this.beetle_)
 
+        this.gameContext_ = new GameContext(entityManager, this.input_, this.player_);
+
         return true;
     }
 
     update(): void {
-        this.player_.update();
+        this.player_.update(this.gameContext_);
         this.input_.update();
     }
 }

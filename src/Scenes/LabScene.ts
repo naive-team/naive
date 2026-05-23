@@ -15,6 +15,8 @@ import {EntityManager} from "../Entities/util/EntityManager";
 import {Input} from "../Input/Input";
 import {Player} from "../Entities/Player";
 import {Beetle} from "../Entities/Beetle";
+import {GameContext} from "../util/GameContext";
+import {PlayerCamera} from "../util/PlayerCamera";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -23,6 +25,8 @@ export class LabScene extends Scene implements AsyncScene {
     private labMesh: AbstractMesh;
     private input_: Input;
     private player_: Player;
+    private gameContext_: GameContext;
+    private entityManager_: EntityManager;
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
         this.SceneManager = sceneManager;
@@ -32,11 +36,16 @@ export class LabScene extends Scene implements AsyncScene {
         for (const mesh of this.labMesh.getChildMeshes(false)){
             mesh.checkCollisions = true;
         }
-        const entityManager: EntityManager = new EntityManager();
+        this.entityManager_ = new EntityManager();
 
         this.input_ = new Input();
-        this.player_ = new Player(this, this.input_, canvas, this.playerMesh_, this.playerAnimations_, entityManager);
-        entityManager.add(this.player_);
+
+        const playerCamera: PlayerCamera = new PlayerCamera(canvas, "player_camera", 0, 0, 10, Vector3.Zero(), this);
+
+        this.gameContext_ = new GameContext(this.entityManager_, this.input_, playerCamera, canvas);
+
+        this.player_ = new Player(this.gameContext_, this, this.playerMesh_, this.playerAnimations_);
+        this.entityManager_.add(this.player_);
 
 
         return true;
@@ -44,12 +53,12 @@ export class LabScene extends Scene implements AsyncScene {
 
     update(): void {
         // faudra peut etre gerer l affichage des salles ici ?
-        this.player_.update();
+        this.player_.update(this.gameContext_);
         this.input_.update();
     }
 
     async waitUntilReady(): Promise<void> {
-        const playerMeshData = await MeshLoader.loadMesh("./naru.glb", this);
+        const playerMeshData = await MeshLoader.loadMesh("./naru_v2.glb", this);
         this.playerMesh_ = playerMeshData.mesh;
         this.playerAnimations_ = playerMeshData.animationGroups;
         const labMeshData = await MeshLoader.loadMesh("./Protolab.glb", this);

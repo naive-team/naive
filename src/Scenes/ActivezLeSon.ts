@@ -19,7 +19,7 @@ export class ActivezLeSon extends Scene implements AsyncScene {
         this.onNextScene_ = async () => {
             const videoScene = new VideoScene(engine,
                 "intro",
-                "./Naive Intro V1.mp4",
+                "./comprsse intro.mp4",
                 -1.18,
                 ()=>{ },
                 async() => {await sceneManager.switchTo(new LabScene(this.engine_, this.sceneManager_))

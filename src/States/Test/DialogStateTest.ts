@@ -1,9 +1,9 @@
-import {GameState} from "../GameState";
 import {CALISpeaker} from "../../Dialog/Speaker/CALISpeaker";
 import * as GUI from "@babylonjs/gui";
 import {Game} from "../../Game";
 import {BabylonManager} from "../../util/BabylonManager";
 import {Color4, FreeCamera, Vector3} from "@babylonjs/core";
+import {GameState} from "../GameStates/GameState";
 
 
 export class DialogStateTest extends GameState{

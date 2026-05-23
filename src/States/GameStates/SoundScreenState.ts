@@ -4,7 +4,6 @@ import {Color4, FreeCamera, Vector3} from "@babylonjs/core";
 import {AdvancedDynamicTexture, Button, Control, Image, Rectangle, TextBlock} from "@babylonjs/gui";
 import {Game} from "../../Game";
 import {InGameState} from "./InGameState";
-import {Printer} from "../util/Printer/Printer";
 
 export class SoundScreenState extends GameState {
 

@@ -1,7 +1,7 @@
-import { Printer } from "../util/Printer/Printer";
-import { PrinterTag } from "../util/Printer/PrinterTag";
 import { Button } from "./Button";
 import  { InputStrategy } from "./InputStrategies/InputStrategy";
+import {Printer} from "../../util/Printer/Printer";
+import {PrinterTag} from "../../util/Printer/PrinterTag";
 
 export abstract class AbstractInput implements InputStrategy {
     protected leftHorizontal_: number;

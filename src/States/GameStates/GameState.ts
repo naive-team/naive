@@ -1,6 +1,6 @@
 import {Scene} from "@babylonjs/core";
-import {BabylonManager} from "../util/BabylonManager";
-import {Game} from "../Game";
+import {BabylonManager} from "../../util/BabylonManager";
+import {Game} from "../../Game";
 
 export abstract class GameState {
     protected scene_: Scene;

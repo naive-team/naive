@@ -1,3 +1,5 @@
+<img width="1835" height="611" alt="baniere naive" src="https://github.com/user-attachments/assets/10e59c78-a0b0-4bb8-9b04-c7d6a8d57e03" />
+
 # NAIVE - Code source
 # Games On Web 2026, AI Edition
 
@@ -51,5 +53,5 @@ Malgré tous nos soins, quelques bugs de collision persistent, et peuvent affect
 
 * **Zia LAI**, M1 info GIG : Art, Scénario, UI, Développement
 
-_Étudiants à Aix-Marseille Université, sur le campus de Luminy._<img width="1835" height="611" alt="baniere naive" src="https://github.com/user-attachments/assets/10e59c78-a0b0-4bb8-9b04-c7d6a8d57e03" />
+_Étudiants à Aix-Marseille Université, sur le campus de Luminy.
 

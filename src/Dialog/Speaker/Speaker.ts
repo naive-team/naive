@@ -9,7 +9,7 @@ export class Speaker {
     mesh : AbstractMesh;
     collider_ : AbstractMesh;
 
-    constructor(name: string, mesh: AbstractMesh, scene: Scene, playermesh: AbstractMesh) {
+    constructor(name: string, mesh: AbstractMesh, _scene: Scene, _playermesh: AbstractMesh) {
         this.name = name;
         this.currentDialogIndex = 0;
         this.mesh = mesh;
@@ -24,7 +24,7 @@ export class Speaker {
         });
         this.collider_.isVisible = true;
         this.mesh.parent = this.collider_;
-        this.init(playermesh, scene);
+        //this.init(playermesh, scene);
 
         //this.setRegisterDialog(scene);
 
@@ -45,7 +45,7 @@ export class Speaker {
         this.currentDialogIndex = index;
     }
 
-    private init(playerMesh: AbstractMesh, scene: Scene): void {
+    protected init(playerMesh: AbstractMesh, scene: Scene): void {
         const targetMesh = this.collider_;
 
         console.log("ActionManager sur:", targetMesh.name, "vertices:", targetMesh.getTotalVertices());

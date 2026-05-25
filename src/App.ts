@@ -29,6 +29,7 @@ class App {
 
         this.initDebugLayer_();
         this.start_();
+
     }
 
     private initDebugLayer_() {
@@ -47,6 +48,7 @@ class App {
                 ev.preventDefault();
             }
         });
+
     }
 
     private async start_(): Promise<void> {

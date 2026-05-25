@@ -1,4 +1,5 @@
 import * as GUI from "@babylonjs/gui";
+import {Observer} from "@babylonjs/core";
 
 export class ChoiceUI {
     private panel: GUI.StackPanel;
@@ -121,23 +122,37 @@ export class ChoiceUI {
     public waitForChoice(): Promise<number> {
         this.show();
 
-        return new Promise((resolve) => {
-            const buttons = this.panel.getDescendants() as GUI.Button[];
+        return new Promise((resolve, reject) => {
+            const buttons = this.panel.children.reduce<GUI.Button[]>((acc, container) => {
+                if (!(container instanceof GUI.Container)) return acc;
+                const btns = container.children.filter(
+                    (control): control is GUI.Button => control instanceof GUI.Button
+                );
+                return [...acc, ...btns];
+            }, []);
 
-            const observers: Array<{ button: GUI.Button; observer: any }> = [];
+            if (buttons.length === 0) {
+                this.hide();
+                reject(new Error("No buttons found in panel"));
+                return;
+            }
+
+            const observers: Array<{ button: GUI.Button; observer: Observer<GUI.Vector2WithInfo> }> = [];
+
+            const cleanup = () => {
+                observers.forEach(({ button, observer }) => {
+                    button.onPointerClickObservable.remove(observer);
+                });
+            };
 
             buttons.forEach((button, index) => {
                 const observer = button.onPointerClickObservable.add(() => {
-                    // Remove all observers to prevent stale clicks
-                    observers.forEach(({ button: btn, observer: obs }) => {
-                        btn.onPointerClickObservable.remove(obs);
-                    });
-
+                    cleanup();
                     this.hide();
                     resolve(index);
                 });
 
-                observers.push({ button, observer });
+                if (observer) observers.push({ button, observer });
             });
         });
     }

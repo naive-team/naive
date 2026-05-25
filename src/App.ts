@@ -52,8 +52,8 @@ class App {
     private async start_(): Promise<void> {
         // Première scène
         //await this.sceneManager_.switchTo(new ActivezLeSon(this.engine_, this.sceneManager_));
-        await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
-        //await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+        //await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
+        await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
         // Pour naviguer vers une autre scène depuis n'importe où,
         // passer sceneManager_ en paramètre à la scène, ou via un event bus.
     }

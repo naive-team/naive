@@ -18,7 +18,7 @@ export class LineUi {
     }
     public skipAnimation(fullText: string): boolean {
         if (!this.animHandle){
-            console.log("anil handle est pas def domage");
+            console.log("anim handle est pas def");
         }
         if (this.animHandle && !this.animHandle.isComplete()) {
             this.animHandle.cancel();

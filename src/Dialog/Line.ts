@@ -43,7 +43,7 @@ export class Line extends AbstractLine {
 
     public onNextButtonPressed(): void {
         if (this.lineUi.skipAnimation(this.texteLine)) {
-            console.log("onNextButtonPressed, skip anim");
+            //console.log("onNextButtonPressed, skip anim");
             return;
         }
 

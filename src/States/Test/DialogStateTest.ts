@@ -27,8 +27,8 @@ export class DialogStateTest extends GameState{
 
         const ui = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this.scene_);
         ui.background = "black";
-        let CALI: CALISpeaker = new CALISpeaker(ui);
-        CALI.speak(this.scene_);
+        //let CALI: CALISpeaker = new CALISpeaker(ui, );
+        //CALI.speak(this.scene_);
 
         await this.scene_.whenReadyAsync();
         babylonManager.engine.hideLoadingUI();

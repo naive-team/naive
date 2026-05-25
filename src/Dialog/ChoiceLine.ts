@@ -4,13 +4,13 @@ import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import { LineUi } from "./LineUi";
 
 export class ChoiceLine extends AbstractLine {
-    public setLineUi(lineUI: LineUi): void {
-        // c est vide car on en a pas besoin pour choice
-        lineUI = lineUI;
-    }
+
+
     choices : string[];
     possibleNextLines : AbstractLine[];
     uiChoice : ChoiceUI;
+    onChoiceMade?: (choiceIndex: number) => void;
+    public lastChoiceIndex: number | undefined;
 
 
     constructor(textLine: string, choices : string[],
@@ -44,11 +44,11 @@ export class ChoiceLine extends AbstractLine {
         this.display();
         const index = await this.uiChoice.waitForChoice();
 
-
-        if (index  < 0 || index >= this.possibleNextLines.length) {// c est juste pour eviter un bug bidon
-            return this.possibleNextLines[0];
-        }
+        this.onChoiceMade?.(index); // ← notifie le NPC
+        this.lastChoiceIndex = index;
         return this.possibleNextLines[index];
     }
-
+    public setLineUi(_lineUI: LineUi): void {
+        //pas de texte de line pour un choix
+    }
 }

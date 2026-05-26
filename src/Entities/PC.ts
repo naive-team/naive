@@ -158,7 +158,15 @@ export class PC implements Entity {
         const tokens: string[] = text.split(" ");
 
         const color: Color = ColorConverter.fromString(tokens[0]);
+
+
         const command: Command = CommandConverter.fromString(tokens[1]);
+
+        if (command === null) {
+            this.writeLine_("ERROR: write a command", "red");
+            return;
+        }
+
         const args: string[] = [];
 
         for (const arg of tokens.slice(2)) {
@@ -166,7 +174,10 @@ export class PC implements Entity {
         }
 
         const target: Commandable = ctx.entityManager.getCommandableByColor(color);
-        if (target === undefined) return;
+        if (target === undefined) {
+            this.writeLine_("ERROR: Target not found");
+            return;
+        }
 
 
         const msg: string = target.execute(ctx, command, args);

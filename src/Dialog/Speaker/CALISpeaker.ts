@@ -32,6 +32,8 @@ export class CALISpeaker extends Speaker {
 
     }
     private defBlabla(uiGlobale : GUI.AdvancedDynamicTexture):void {
+
+        /// -------- LINES ------------
         let tuto1 : Line = new Line ("D'acc on fait ça !",
             new Line ("Alors d'abord, il faut aller chercher une LUCIOLE ENERGETIQUE",
                 new Line ("Tu devrais en trouver une dans un coin...",
@@ -85,13 +87,101 @@ export class CALISpeaker extends Speaker {
 
     );
 
+    let tuto2 : Line = new Line ("Besoin d'aide ?",
+        new ChoiceLine("",
+            ["Je fais quoi avec la luciole ?",
+            "Non, rien en fait."
+            ],
+            [
+                new Line("Il suffit de l'accorcher à la porte !",
+                    new ChoiceLine("",
+                        [
+                            "L'accorcher ?",
+                            "D'accord !"],
+                        [
+                            new Line("Oui pour cela il suffit d'appuyer sur le bouton []", null),
+                            new Line("Ok, à+ !", null)
+                        ]
+                    )
+                ),
+                new Line("Okidoki !", null)
+            ])
+    )
+        let howtoOpenTerminal:Line =  new Line ("Pour ouvrir le terminal, clique sur [F] quand tu es proche de l'ordi.",null);
 
+        let tuto3 : Line = new Line ("Besoin d'aide ?",
+        new ChoiceLine("",
+            [
+                "Et maintenant ?",
+                "Non, en fait."
+            ],
+            [
+                new Line("Comme la porte est de nouveau alimentée en énergie, on va pouvoir l'ouvrir !",
+                    new Line("Tu vois l'ordinateur beige contre le mur ? Il permet de contrôler les objets imprégnés d'Énergie.",
+                        new Line("Il suffit de lui dire d'ouvir la porte !",
+                           howtoOpenTerminal
+                        )
+                    )
+                ),
+                new Line("D'accodac !", null)
+                ]
+        )
+    )
+        let tuto4 : Line = new Line ("Besoin d'aide ?",
+            new ChoiceLine ("",
+                [
+                    "Comment on \"parle\" à un ordi ?",
+                    "Nope !"
+                ],
+                [
+                    new Line("Nyahaha, c'est sur que converser avec cette boite de conserve c'est plus relou qu'un adorable chaton comme moi ;)",
+                        new Line("Tu veux que je m'en charge ?",
+                            new ChoiceLine("",
+                                [
+                                    "Oui s'il te plait !",
+                                    "J'aimerais des indications pour le faire moi même.",
+                                    "Nan je me débrouille."
+                                ],
+                                [
+                                    new Line("Oki je fais ça !", null), // TODO lancer animation et unlock porte
+                                    new Line("L'ordinateur fonctionne avec des commandes simples (?). Tu trouveras les détails de syntaxe en écrivant \"help\" dans le terminal",
+                                        new ChoiceLine("",
+                                            [
+                                                "Comment on ouvre le terminal déjà ?",
+                                                "Merci C.A.L.I !"
+                                            ],
+                                            [
+                                                howtoOpenTerminal,
+                                                new Line ("Y'a pas de quoi ^u^", null)
+                                            ]
+                                        )
+                                    ),
+                                    new Line("Okidoki !", null)
+                                ]
+                            )
+                        )
+                    )
+                ]
+            )
+        )
+
+        let anotherDoor :Line = new Line("On dirait bien que la prochaine porte est bloquée aussi... Heureusement il y a encore des lucioles et un ordi dans cette salle...", null)
+
+        /// -------- Dialogs ------------
 
     let dialogWelcome: Dialog = new Dialog(uiGlobale, welcome, 0);
 
     let dialoguetuto1: Dialog = new Dialog(uiGlobale, tuto1loop, 1);
 
     let dialogNeddSommeHelp : Dialog = new Dialog(uiGlobale, needsommehelp,2);
+
+    let dialogTuto2 : Dialog = new Dialog(uiGlobale, tuto2, 4);
+
+    let dialogTuto3 :Dialog = new Dialog(uiGlobale, tuto3, 5);
+
+    let dialogTuto4 : Dialog = new Dialog(uiGlobale, tuto4, 2);
+
+        /// -------- Dialog Nodes ------------
 
     let nodewelcome : DialogNode = {
             dialog: dialogWelcome,
@@ -104,10 +194,17 @@ export class CALISpeaker extends Speaker {
         choiceTransitions: new Map([
             [0, 1]
         ]),
-        defaultNext: 2}
+        defaultNext: 2
+    }
 
-        let nodetuto1 : DialogNode = {dialog: dialoguetuto1, defaultNext: 1};
+    let nodetuto1 : DialogNode = {dialog: dialoguetuto1, defaultNext: 1};
 
-    this.dialogGraph.setNodes([nodewelcome, nodetuto1, nodeneedsommehelp]);
+    let nodeTuto2 : DialogNode = {dialog: dialogTuto2, defaultNext: 3};
+
+    let nodeTuto3 :DialogNode = {dialog: dialogTuto3, defaultNext: 4};
+
+    let nodeTuto4:DialogNode = {dialog: dialogTuto4, defaultNext: 5};
+
+    this.dialogGraph.setNodes([nodewelcome, nodetuto1, nodeneedsommehelp, nodeTuto2, nodeTuto3, nodeTuto4]);
     }
 }

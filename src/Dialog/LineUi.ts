@@ -35,7 +35,7 @@ export class LineUi {
         }
 
     }
-    public animation(scene:Scene, text: string): void{
+    public animation(scene:Scene, text: string): void {
         this.animHandle = typewriterEffect(scene, this.textBlock, text);
 
     }

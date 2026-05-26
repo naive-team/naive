@@ -71,7 +71,7 @@ export class LabScene extends Scene implements AsyncScene {
         this.playerMesh_ = playerMeshData.mesh;
         this.playerMesh_.checkCollisions = true;
         this.playerAnimations_ = playerMeshData.animationGroups;
-        const labMeshData = await MeshLoader.loadMesh("./Protolab.glb", this);
+        const labMeshData = await MeshLoader.loadMesh("./lab.glb", this);
         this.labMesh = labMeshData.mesh;
         const calimeshdata = await MeshLoader.loadMesh("./cali.glb", this);
         this.calimesh_ = calimeshdata.mesh;

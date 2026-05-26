@@ -21,6 +21,7 @@ export class SimpleLineUi {
         this.nextButton.height = "100%";
         this.nextButton.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
         this.nextButton.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+        this.nextButton.pointerDownAnimation = null;
     }
 
     public onNextClicked(callback: () => void): void {

@@ -98,7 +98,6 @@ export class Player implements Entity {
     }
 
     update(_ctx: GameContext): void {
-
         this.pointTowardTargetAngle_(this.ctx_.input.getInputVector());
         this.stateMachine_.update(this, this.ctx_.input, this.ctx_.entityManager);
     }

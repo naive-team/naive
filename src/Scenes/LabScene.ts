@@ -17,6 +17,8 @@ import {Player} from "../Entities/Player";
 import {Beetle} from "../Entities/Beetle";
 import {GameContext} from "../util/GameContext";
 import {PlayerCamera} from "../util/PlayerCamera";
+import {CALISpeaker} from "../Dialog/Speaker/CALISpeaker";
+import {AdvancedDynamicTexture} from "@babylonjs/gui";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -27,9 +29,13 @@ export class LabScene extends Scene implements AsyncScene {
     private player_: Player;
     private gameContext_: GameContext;
     private entityManager_: EntityManager;
+    private calimesh_ : AbstractMesh;
+    private cali_ : CALISpeaker;
+
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
         this.SceneManager = sceneManager;
+        this.collisionsEnabled = true;
     }
     start(canvas: HTMLCanvasElement): boolean {
         const light = new HemisphericLight("Hemilight", new Vector3(0, 1, 0));
@@ -47,7 +53,10 @@ export class LabScene extends Scene implements AsyncScene {
         this.player_ = new Player(this.gameContext_, this, this.playerMesh_, this.playerAnimations_);
         this.entityManager_.add(this.player_);
 
+        const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
+        this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
+        //this.entityManager_.add(this.cali_);
         return true;
     }
 
@@ -60,8 +69,11 @@ export class LabScene extends Scene implements AsyncScene {
     async waitUntilReady(): Promise<void> {
         const playerMeshData = await MeshLoader.loadMesh("./naru_v2.glb", this);
         this.playerMesh_ = playerMeshData.mesh;
+        this.playerMesh_.checkCollisions = true;
         this.playerAnimations_ = playerMeshData.animationGroups;
-        const labMeshData = await MeshLoader.loadMesh("./Protolab.glb", this);
+        const labMeshData = await MeshLoader.loadMesh("./lab.glb", this);
         this.labMesh = labMeshData.mesh;
+        const calimeshdata = await MeshLoader.loadMesh("./cali.glb", this);
+        this.calimesh_ = calimeshdata.mesh;
     }
 }

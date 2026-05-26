@@ -83,6 +83,7 @@ export class SoundScreenState extends GameState {
         babylonManager.engine.runRenderLoop(() => {
             this.scene_.render();
         });
+        //Printer.print("caca");
 
         /*
         //lastly set the current state to the start state and set the scene to the start scene

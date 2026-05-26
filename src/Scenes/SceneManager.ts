@@ -21,7 +21,9 @@ export class SceneManager {
         this.engine_.displayLoadingUI();
 
         this.currentScene_?.dispose();
-
+        newScene.onPointerDown = () => {
+            this.engine_.enterPointerlock();
+        };
         this.currentScene_ = newScene;
 
         await newScene.waitUntilReady();

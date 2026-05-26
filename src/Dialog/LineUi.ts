@@ -15,6 +15,7 @@ export class LineUi {
         this.createNamePanel()
         this.createTextBlock();
         ui.addControl(this.panel);
+
     }
     public skipAnimation(fullText: string): boolean {
         if (!this.animHandle){

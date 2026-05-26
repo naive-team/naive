@@ -220,6 +220,9 @@ export class PC implements Entity {
             this.writeLine_(msg, "lime");
             this.exit_();
         }
+        else if (msg.startsWith("<targ>")) {
+            this.writeLine_(msg, "yellow");
+        }
         else {
             this.writeLine_(msg, "red");
         }

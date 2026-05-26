@@ -42,7 +42,7 @@ export class Block implements Entity, Commandable {
         collider.position.y += 0.5;
 
         collider.checkCollisions = true;
-        collider.visibility = 0.5;
+        collider.visibility = 0;
 
         this.collider_ = collider;
 

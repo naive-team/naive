@@ -17,7 +17,7 @@ export class SceneStateUsingPC implements SceneState {
         ctx.input.update();
         this.pc_.update(ctx);
 
-        if (ctx.input.getPressed(EXIT_BUTTON)) {
+        if (ctx.input.getPressed(EXIT_BUTTON) || this.pc_.getExitFlag()) {
             stateMachine.changeState(new SceneStatePlaying(), ctx);
         }
     }

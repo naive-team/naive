@@ -28,6 +28,7 @@ export class PC implements Entity {
     private screen_: AbstractMesh;
     private texture_: DynamicTexture;
     private font_: string;
+    private exitFlag_: boolean = false;
 
     constructor(mesh: AbstractMesh) {
         this.mesh_ = mesh;
@@ -122,7 +123,7 @@ export class PC implements Entity {
         if (currentLine.length > Math.ceil(MAX_LINE_LENGTH / TEXT_PCT)) {
             this.content_.push({text: "", color: "white"});
             if (this.content_.length > MAX_LINE) {
-                this.content_ = [{text: "", color: "white"}];
+                this.clearScreen_();
                 lastIndex = 0;
             }
         }
@@ -148,6 +149,7 @@ export class PC implements Entity {
 
     public turnOn(): void {
         this.state_ = PCState.ON;
+        this.exitFlag_ = false;
     }
 
     public turnOff(): void {
@@ -156,6 +158,38 @@ export class PC implements Entity {
 
     private executeCommand_(ctx: GameContext, text: string): void {
         const tokens: string[] = text.split(" ");
+
+        if (tokens[0] === "help") {
+            if ( ! tokens[1] ) {
+                this.clearScreen_();
+                this.writeLine_("COMMANDS", "yellow");
+                this.writeLine_("======== ", "yellow");
+                this.writeLine_("• move ");
+                this.writeLine_("• help");
+                this.writeLine_("");
+                this.writeLine_("Try this :");
+                this.writeLine_("help move", "yellow");
+                this.writeLine_("");
+                return;
+            }
+
+            else if (tokens[1] === "move") {
+                this.clearScreen_();
+                this.writeLine_("SYNTAX", "yellow");
+                this.writeLine_("======", "yellow");
+                this.writeLine_("<targ> move <dir> <dist>");
+                this.writeLine_("");
+                this.writeLine_("EXAMPLE");
+                this.writeLine_("=======");
+                this.writeLine_("yellow move north 1", "yellow");
+                this.writeLine_("");
+                return;
+
+            }
+
+
+        }
+
 
         const color: Color = ColorConverter.fromString(tokens[0]);
 
@@ -184,6 +218,7 @@ export class PC implements Entity {
 
         if (msg === "OK") {
             this.writeLine_(msg, "lime");
+            this.exit_();
         }
         else {
             this.writeLine_(msg, "red");
@@ -192,9 +227,25 @@ export class PC implements Entity {
 
     }
 
-    private writeLine_(text: string, color?: string) {
+    private writeLine_(text: string, color: string = "white") {
         this.content_.push({text, color});
         this.updateScreen_();
     }
 
+    private exit_(): void {
+        this.exitFlag_ = true;
+    }
+
+    getExitFlag(): boolean {
+        return this.exitFlag_;
+    }
+
+    private clearScreen_(): void {
+        this.content_ = [{text: "", color: "white"}];
+
+        const context = this.texture_.getContext();
+
+        context.fillStyle = "black";
+        context.fillRect(0, 0, 512, 384);
+    }
 }

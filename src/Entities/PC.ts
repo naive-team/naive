@@ -20,7 +20,7 @@ const TEXT_PCT: number = 3/4;
 
 export class PC implements Entity {
     private collider_: AbstractMesh;
-    private content_: string[];
+    private content_: {text: string, color: string}[];
 
     private state_: PCState;
 
@@ -51,7 +51,7 @@ export class PC implements Entity {
 
         this.state_ = PCState.OFF;
 
-        this.content_ = [""];
+        this.content_ = [{text: "", color: "white"}];;
 
         this.screen_ = this.mesh_.getChildMeshes(false, (mesh: AbstractMesh) => {return mesh.name === "screen"})[0];
 
@@ -95,7 +95,7 @@ export class PC implements Entity {
         if (output === "") return;
 
         let lastIndex: number = this.content_.length - 1;
-        const currentLine: string =  this.content_[lastIndex];
+        const currentLine: string =  this.content_[lastIndex].text;
 
         if (output === "Backspace") {
             if (currentLine === "") {
@@ -105,30 +105,29 @@ export class PC implements Entity {
                 return;
             }
             else {
-                this.content_[lastIndex] = currentLine.slice(0, currentLine.length - 1);
+                this.content_[lastIndex].text = currentLine.slice(0, currentLine.length - 1);
                 this.updateScreen_();
                 return;
             }
         }
         if (output === "Enter") {
-            this.executeCommand_(ctx, this.content_[lastIndex]);
-            this.content_.push("");
+            this.executeCommand_(ctx, this.content_[lastIndex].text);
+            this.content_.push({text: "", color: "white"});
             if (this.content_.length > MAX_LINE) {
-                this.content_ = [""];
+                this.content_ = [{text: "", color: "white"}];
             }
-            this.updateScreen_();
             return; }
-        if (output === "Space") {this.content_[lastIndex] += " "; this.updateScreen_(); return; }
+        if (output === "Space") {this.content_[lastIndex].text += " "; this.updateScreen_(); return; }
 
         if (currentLine.length > Math.ceil(MAX_LINE_LENGTH / TEXT_PCT)) {
-            this.content_.push("");
+            this.content_.push({text: "", color: "white"});
             if (this.content_.length > MAX_LINE) {
-                this.content_ = [""];
+                this.content_ = [{text: "", color: "white"}];
                 lastIndex = 0;
             }
         }
 
-        this.content_[lastIndex] += output;
+        this.content_[lastIndex].text += output;
 
         this.updateScreen_();
         console.log(this.content_);
@@ -142,8 +141,9 @@ export class PC implements Entity {
         context.fillRect(0, 0, 512, 384);
 
         for (let i: number=0; i < this.content_.length; i++) {
-            this.texture_.drawText(this.content_[i], 45 * TEXT_PCT, 75 + i * 50 * TEXT_PCT, this.font_, "white", null, false, true);
+            this.texture_.drawText(this.content_[i].text, 45 * TEXT_PCT, 75 + i * 50 * TEXT_PCT, this.font_, this.content_[i].color, null, false, true);
         }
+
     }
 
     public turnOn(): void {
@@ -170,10 +170,20 @@ export class PC implements Entity {
 
 
         const msg: string = target.execute(ctx, command, args);
-        this.content_.push("");
-        const lastIndex: number = this.content_.length - 1;
-        this.content_[lastIndex] += msg;
+
+        if (msg === "OK") {
+            this.writeLine_(msg, "lime");
+        }
+        else {
+            this.writeLine_(msg, "red");
+        }
 
 
     }
+
+    private writeLine_(text: string, color?: string) {
+        this.content_.push({text, color});
+        this.updateScreen_();
+    }
+
 }

@@ -4,6 +4,8 @@ import {Engine} from "@babylonjs/core";
 import {AsyncScene} from "./Scenes/AsyncScene";
 import {PCTestScene} from "./Scenes/PCTestScene";
 
+import {CommandTestScene} from "./Scenes/CommandTestScene";
+
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
 	canvas.style.width = "100%";
@@ -23,7 +25,7 @@ class App {
 		this.engine_ = new Engine(this.canvas_, true);
 		this.initDebugLayer_();
 
-		this.scene_ = new PCTestScene(this.engine_);
+		this.scene_ = new CommandTestScene(this.engine_);
 
 		this.scene_.onPointerDown = () => {
 			this.engine_.enterPointerlock();

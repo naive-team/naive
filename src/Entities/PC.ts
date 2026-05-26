@@ -3,6 +3,11 @@ import {EntityFamily} from "./util/EntityFamily";
 import {AbstractMesh, MeshBuilder, StandardMaterial, DynamicTexture} from "@babylonjs/core";
 import {GameContext} from "../util/GameContext";
 import {Input} from "../Input/Input";
+import {Command} from "../Commands/Command";
+import {CommandConverter} from "../Commands/CommandConverter";
+import {Commandable} from "./interfaces/Commandable";
+import {Color} from "../Commands/Color";
+import {ColorConverter} from "../Commands/ColorConverter";
 
 enum PCState {
     OFF,
@@ -106,6 +111,7 @@ export class PC implements Entity {
             }
         }
         if (output === "Enter") {
+            this.executeCommand_(ctx, this.content_[lastIndex]);
             this.content_.push("");
             if (this.content_.length > MAX_LINE) {
                 this.content_ = [""];
@@ -146,5 +152,28 @@ export class PC implements Entity {
 
     public turnOff(): void {
         this.state_ = PCState.OFF;
+    }
+
+    private executeCommand_(ctx: GameContext, text: string): void {
+        const tokens: string[] = text.split(" ");
+
+        const color: Color = ColorConverter.fromString(tokens[0]);
+        const command: Command = CommandConverter.fromString(tokens[1]);
+        const args: string[] = [];
+
+        for (const arg of tokens.slice(2)) {
+            args.push(arg);
+        }
+
+        const target: Commandable = ctx.entityManager.getCommandableByColor(color);
+        if (target === undefined) return;
+
+
+        const msg: string = target.execute(ctx, command, args);
+        this.content_.push("");
+        const lastIndex: number = this.content_.length - 1;
+        this.content_[lastIndex] += msg;
+
+
     }
 }

@@ -2,12 +2,10 @@ import {InputStrategy} from "./InputStrategies/InputStrategy";
 import {KeyboardMouseInput} from "./InputStrategies/KeyboardMouseInput";
 import {GenericGamepadInput} from "./InputStrategies/GenericGamepadInput";
 import {GamepadManager, GenericPad, Xbox360Pad, DualShockPad} from '@babylonjs/core';
-
 import { Xbox360Input } from "./InputStrategies/Xbox360PadInput";
 import { DualshockPadInput } from "./InputStrategies/DualshockPadInput";
 import {PrinterTag} from "../../util/Printer/PrinterTag";
 import {Printer} from "../../util/Printer/Printer";
-
 
 export class InputManager {
     private currentInput_: InputStrategy;

@@ -72,7 +72,7 @@ export class Block implements Entity, Commandable {
 
                 return "OK";
             case Command.HELP:
-                return "move <direction> <distance>\ndirection: up right left down\ndistance: number";
+                return "<targ> move <dir> <dist>";
         }
 
 

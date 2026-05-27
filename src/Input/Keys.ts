@@ -6,3 +6,4 @@ export const ACTION_BUTTON = "Space";
 export const DIALOG_BUTTON = "KeyF";
 export const EXIT_BUTTON = "ShiftLeft"
 export const ENTER = "Enter";
+export const TAB ="Tab";

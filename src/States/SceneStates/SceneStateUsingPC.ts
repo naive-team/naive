@@ -1,6 +1,6 @@
 import {SceneState} from "./interface/SceneState";
 import {SceneStateMachine} from "./StateMachine/SceneStateMachine";
-import {EXIT_BUTTON} from "../../Input/Keys";
+import {EXIT_BUTTON, TAB} from "../../Input/Keys";
 import {SceneStatePlaying} from "./SceneStatePlaying";
 import {EntityFamily} from "../../Entities/util/EntityFamily";
 import {GameContext} from "../../util/GameContext";
@@ -8,9 +8,11 @@ import {PC} from "../../Entities/PC";
 import {Player} from "../../Entities/Player";
 
 import {FreeCamera, Tools} from "@babylonjs/core";
+import {KeyboardSwitcherUI} from "../../UI/KeyBoardSwitcherUI";
 
 export class SceneStateUsingPC implements SceneState {
     private pc_: PC;
+    private ui:KeyboardSwitcherUI = new KeyboardSwitcherUI();
 
 
     update(stateMachine: SceneStateMachine, ctx: GameContext): void {
@@ -19,6 +21,10 @@ export class SceneStateUsingPC implements SceneState {
 
         if (ctx.input.getPressed(EXIT_BUTTON) || this.pc_.getExitFlag()) {
             stateMachine.changeState(new SceneStatePlaying(), ctx);
+        }
+        if (ctx.input.getJustPressed(TAB)){
+            ctx.input.switchStrategy();
+            this.ui.switch();
         }
     }
 
@@ -34,6 +40,7 @@ export class SceneStateUsingPC implements SceneState {
         this.pc_.getCollider().getScene().activeCamera = cam;
 
         (ctx.entityManager.getEntityByFamily(EntityFamily.PLAYER) as Player).setVisible(false);
+        this.ui.show()
     }
 
     onLeave(_state: SceneStateMachine, ctx: GameContext): void {
@@ -49,5 +56,6 @@ export class SceneStateUsingPC implements SceneState {
 
         (ctx.entityManager.getEntityByFamily(EntityFamily.PLAYER) as Player).setVisible(true);
         oldCamera.dispose();
+        this.ui.hide();
     }
 }

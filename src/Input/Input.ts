@@ -125,4 +125,13 @@ export class Input {
         return "";
     }
 
+    public switchStrategy(): void {
+        if (this.jsKeyCodeToRealKeyStrategy_ instanceof JsKeyCodeToAzerty){
+            this.jsKeyCodeToRealKeyStrategy_ = new JsKeyCodeToQwerty();
+        }
+        else {
+            this.jsKeyCodeToRealKeyStrategy_ = new JsKeyCodeToAzerty();
+        }
+    }
+
 }

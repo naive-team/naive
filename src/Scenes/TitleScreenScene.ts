@@ -54,6 +54,7 @@ export class TitleScreenScene extends Scene implements AsyncScene {
         btn.fontFamily = "courier new"
         btn.fontSize = 25;
         btn.fontWeight = "bold";
+        btn.pointerDownAnimation = null;
         btn.onPointerClickObservable.add(async() => {
             await this.onNextScene_();
         });

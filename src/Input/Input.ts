@@ -1,4 +1,4 @@
-import {Vector2, Scalar} from "@babylonjs/core";
+import {Vector2, Scalar, Scene, Engine} from "@babylonjs/core";
 import {KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_UP} from "./Keys";
 import {KeyState} from "./KeyState";
 import {JsKeyCodeToRealKeyStrategy} from "./JsKeyCodeToRealKeyStrategies/JsKeyCodeToRealKeyStrategy";
@@ -18,7 +18,12 @@ export class Input {
     private inputVector_: Vector2 = new Vector2(0, 0);
     private jsKeyCodeToRealKeyStrategy_: JsKeyCodeToRealKeyStrategy;
 
-    constructor() {
+    private scene_: Scene;
+
+
+    constructor(scene: Scene) {
+        this.scene_ = scene;
+
         this.keyPressed_ = {};
         this.keyPressedLastFrame_ = {};
         this.keyStates_ = {};
@@ -123,6 +128,22 @@ export class Input {
         }
 
         return "";
+    }
+
+    public lockMousePointer(): void {
+        (this.scene_.getEngine() as Engine).enterPointerlock();
+
+        this.scene_.onPointerDown = () => {
+            (this.scene_.getEngine() as Engine).enterPointerlock();
+        };
+    }
+
+    public unlockMousePointer(): void {
+        (this.scene_.getEngine() as Engine).exitPointerlock();
+
+        this.scene_.onPointerDown = () => {
+
+        }
     }
 
 }

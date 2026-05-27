@@ -15,12 +15,17 @@ export class SceneStateDialog implements SceneState {
         player.setCanMove(false);
         player.stopAnimation("walk");
         player.startAnimation("idle");
+
+        ctx.input.unlockMousePointer();
+
     }
 
     onLeave(_state: SceneStateMachine, ctx: GameContext): void {
         const player: Player = ctx.entityManager.getPlayer();
 
         player.setCanMove(true);
+
+        ctx.input.lockMousePointer();
     }
 
     update(stateMachine: SceneStateMachine, ctx: GameContext): void {

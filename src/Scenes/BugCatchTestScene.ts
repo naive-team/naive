@@ -38,7 +38,7 @@ export class BugCatchTestScene extends Scene implements AsyncScene {
 
         const entityManager: EntityManager = new EntityManager();
 
-        this.input_ = new Input();
+        this.input_ = new Input(this);
 
         this.beetle_ = new Beetle();
         entityManager.add(this.beetle_)

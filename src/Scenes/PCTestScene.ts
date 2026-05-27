@@ -48,7 +48,7 @@ export class PCTestScene extends Scene implements AsyncScene {
         this.entityManager_ = new EntityManager();
         this.sceneStateMachine_ = new SceneStateMachine(new SceneStatePlaying());
 
-        this.input_ = new Input();
+        this.input_ = new Input(this);
 
         const playerCamera: PlayerCamera = new PlayerCamera(canvas, "player_camera", 0, 0, 10, Vector3.Zero(), this);
 

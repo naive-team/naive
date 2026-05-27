@@ -21,14 +21,14 @@ export class InteractUI {
         panel.adaptWidthToChildren = true;
         panel.isVisible = false;
 
-        // --- Icône [F] ---
         const keyBox = new Rectangle("keyBox");
-        keyBox.width = "28px";
+        keyBox.width = "40px";
         keyBox.height = "28px";
         keyBox.cornerRadius = 5;
         keyBox.color = "transparent";
         keyBox.background = "white";
         keyBox.paddingRight = "10px";
+
 
         const keyLabel = new TextBlock("keyLabel", "F");
         keyLabel.color = "black";
@@ -36,11 +36,12 @@ export class InteractUI {
         keyLabel.fontWeight = "bold";
         keyBox.addControl(keyLabel);
 
-        // --- Nom de l'interaction ---
         const nameLabel = new TextBlock("nameLabel", this.interactionName);
         nameLabel.color = "white";
         nameLabel.fontSize = 16;
         nameLabel.resizeToFit = true;
+        nameLabel.fontFamily = "Courier new";
+        nameLabel.fontStyle = "bold";
 
         panel.addControl(keyBox);
         panel.addControl(nameLabel);

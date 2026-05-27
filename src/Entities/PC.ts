@@ -8,6 +8,8 @@ import {CommandConverter} from "../Commands/CommandConverter";
 import {Commandable} from "./interfaces/Commandable";
 import {Color} from "../Commands/Color";
 import {ColorConverter} from "../Commands/ColorConverter";
+import {InteractUI} from "../UI/interactUI";
+import {InteractTrigger} from "../util/InteractTrigger";
 
 enum PCState {
     OFF,
@@ -68,6 +70,8 @@ export class PC implements Entity {
 
         const size: number = 44 * TEXT_PCT;
         this.font_ = `bold ${size}px monospace`;
+
+
     }
 
 
@@ -251,4 +255,6 @@ export class PC implements Entity {
         context.fillStyle = "black";
         context.fillRect(0, 0, 512, 384);
     }
+
+
 }

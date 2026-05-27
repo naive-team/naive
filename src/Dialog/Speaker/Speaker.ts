@@ -2,6 +2,7 @@ import {Dialog} from "../Dialog";
 import {AbstractMesh, ActionManager, ExecuteCodeAction, KeyboardEventTypes, MeshBuilder, Scene} from "@babylonjs/core";
 import {DialogGraph} from "../DialogNode";
 import {InteractUI} from "../../UI/interactUI";
+import {InteractTrigger} from "../../util/InteractTrigger";
 
 export class Speaker {
     dialogGraph: DialogGraph = new DialogGraph();
@@ -26,7 +27,8 @@ export class Speaker {
         });
         this.collider_.isVisible = true;
         this.mesh.parent = this.collider_;
-        this.ui = new InteractUI("parler");
+        this.ui = new InteractUI("Parler");
+        InteractTrigger.init(_playermesh, _scene, this.collider_, this.ui,(scene: Scene) => this.interact(scene));
         //this.init(playermesh, scene);
 
         //this.setRegisterDialog(scene);

@@ -27,7 +27,10 @@ export class Door implements Entity, Commandable {
     private actionOnAttachFirefly:()=>void;
     private actionOnUnlinkFirefly:()=>void;
 
-    constructor(leftMesh: AbstractMesh, rightMesh: AbstractMesh, actionOnAttachFirefly:()=>void = null, actionOnUnlinkFirefly:()=>void = null) {
+    constructor(leftMesh: AbstractMesh,
+                rightMesh: AbstractMesh,
+                actionOnAttachFirefly:()=>void = ()=>{},
+                actionOnUnlinkFirefly:()=>void = ()=>{}) {
         this.leftMesh_ = leftMesh;
         this.rightMesh_ = rightMesh;
 

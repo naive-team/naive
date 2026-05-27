@@ -85,7 +85,7 @@ export class LabScene extends Scene implements AsyncScene {
         this.placePC();
 
 
-        const firefly: Firefly = new Firefly(this.fireflyMesh_);
+        const firefly: Firefly = new Firefly(this.fireflyMesh_, ()=>{this.cali_.setCurrentDialogIndex(3)});
         this.entityManager_.add(firefly);
 
 

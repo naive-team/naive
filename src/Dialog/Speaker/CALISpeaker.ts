@@ -102,7 +102,7 @@ export class CALISpeaker extends Speaker implements Entity {
                             "L'accorcher ?",
                             "D'accord !"],
                         [
-                            new Line("Oui pour cela il suffit d'appuyer sur le bouton []", null),
+                            new Line("Oui pour cela il suffit d'appuyer sur le bouton [F].", null),
                             new Line("Ok, à+ !", null)
                         ]
                     )

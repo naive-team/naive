@@ -225,7 +225,8 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
     }
 
     placePC(){
-        this.pc_ = new PC(this.pcMesh_);
+        this.pc_ = new PC(this.pcMesh_, this.player_.getCollider(), this);
+        this.pc_.setPosition(1,0.68,7.4);
         this.entityManager_.add(this.pc_);
     }
 }

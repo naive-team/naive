@@ -29,7 +29,7 @@ export class SceneStateUsingPC implements SceneState {
 
         const cam = new FreeCamera("pcCam", this.pc_.getCollider().position.clone(), this.pc_.getCollider().getScene());
         cam.rotation.y = Tools.ToRadians(180);
-        cam.position.z = 0.5;
+        cam.position.z = 7.8;
         cam.position.y = 1.2;
         this.pc_.getCollider().getScene().activeCamera = cam;
 

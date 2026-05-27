@@ -1,6 +1,14 @@
 import {Entity} from "./interfaces/Entity";
 import {EntityFamily} from "./util/EntityFamily";
-import {AbstractMesh, MeshBuilder, StandardMaterial, DynamicTexture} from "@babylonjs/core";
+import {
+    AbstractMesh,
+    MeshBuilder,
+    StandardMaterial,
+    DynamicTexture,
+    Scene,
+    ActionManager,
+    ExecuteCodeAction, Vector3
+} from "@babylonjs/core";
 import {GameContext} from "../util/GameContext";
 import {Input} from "../Input/Input";
 import {Command} from "../Commands/Command";
@@ -31,8 +39,9 @@ export class PC implements Entity {
     private texture_: DynamicTexture;
     private font_: string;
     private exitFlag_: boolean = false;
+    private ui: InteractUI;
 
-    constructor(mesh: AbstractMesh) {
+    constructor(mesh: AbstractMesh, playercollider: AbstractMesh = MeshBuilder.CreateBox("defaut collider", {size: 0}), scene:Scene) {
         this.mesh_ = mesh;
 
         const scaling: number = 0.2;
@@ -52,6 +61,12 @@ export class PC implements Entity {
 
         this.collider_.position.y = 1
 
+        const scaling2: number = 2;
+
+        this.collider_.scaling.x = scaling2;
+        this.collider_.scaling.y = scaling2;
+        this.collider_.scaling.z = scaling2;
+
         this.state_ = PCState.OFF;
 
         this.content_ = [{text: "", color: "white"}];;
@@ -70,10 +85,39 @@ export class PC implements Entity {
 
         const size: number = 44 * TEXT_PCT;
         this.font_ = `bold ${size}px monospace`;
-
+        //InteractTrigger.init(playercollider, scene, this.collider_,new InteractUI("Démarrer"), async (scene) => this.turnOn() )
+        this.ui = new InteractUI("Démarrer")
+        this.initTriger(playercollider, scene, this.ui);
 
     }
+    initTriger(playerMesh: AbstractMesh, scene:Scene, ui:InteractUI) {
+        const targetMesh = this.collider_;
+        let isInside = false;
 
+        targetMesh.actionManager = new ActionManager(scene);
+
+        // Entrée
+        targetMesh.actionManager.registerAction(
+            new ExecuteCodeAction(
+                {trigger: ActionManager.OnIntersectionEnterTrigger, parameter: playerMesh},
+                (): void => {
+                    isInside = true;
+                    ui.show();
+                }
+            )
+        );
+
+        // Sortie
+        targetMesh.actionManager.registerAction(
+            new ExecuteCodeAction(
+                {trigger: ActionManager.OnIntersectionExitTrigger, parameter: playerMesh},
+                (): void => {
+                    isInside = false;
+                    ui.hide();
+                }
+            )
+        );
+    }
 
     getCollider(): AbstractMesh {
         return this.collider_;
@@ -154,10 +198,12 @@ export class PC implements Entity {
     public turnOn(): void {
         this.state_ = PCState.ON;
         this.exitFlag_ = false;
+        this.ui.hide();
     }
 
     public turnOff(): void {
         this.state_ = PCState.OFF;
+        this.ui.show();
     }
 
     private executeCommand_(ctx: GameContext, text: string): void {
@@ -256,5 +302,8 @@ export class PC implements Entity {
         context.fillRect(0, 0, 512, 384);
     }
 
+    public setPosition(x, y,z){
+        this.collider_.position = new Vector3(x, y, z);
+    }
 
 }

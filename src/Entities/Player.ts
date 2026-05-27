@@ -33,6 +33,8 @@ export class Player implements Entity {
     private mesh_: AbstractMesh;
     private netCollider_: Mesh;
 
+    private canMove_: boolean;
+
     constructor(ctx: GameContext, scene: Scene, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
         this.ctx_ = ctx;
         this.scene_ = scene;
@@ -45,6 +47,7 @@ export class Player implements Entity {
         animations[0].pause();
 
         this.stateMachine_ = new PlayerStateMachine(new PlayerIdleState());
+        this.canMove_ = true;
     }
 
     private initCollider_(playerMesh: AbstractMesh): void {
@@ -99,6 +102,9 @@ export class Player implements Entity {
 
     update(_ctx: GameContext): void {
         this.pointTowardTargetAngle_(this.ctx_.input.getInputVector());
+
+        if (! this.canMove_) return;
+
         this.stateMachine_.update(this, this.ctx_.input, this.ctx_.entityManager);
     }
 
@@ -173,12 +179,23 @@ export class Player implements Entity {
     }
 
     isNearPC(entityManager: EntityManager): boolean {
-        const PCCollider: AbstractMesh = entityManager.getEntityByFamily(EntityFamily.PC).getCollider();
+        const pc: Entity = entityManager.getEntityByFamily(EntityFamily.PC);
 
-        return PCCollider.intersectsMesh(this.collider_);
+        if (pc === undefined) return false;
+
+        const pcCollider: AbstractMesh = pc.getCollider();
+        return pcCollider.intersectsMesh(this.collider_);
     }
 
     setVisible(value: boolean): void {
         this.mesh_.setEnabled(value);
+    }
+
+    public canMove(): boolean {
+        return this.canMove_;
+    }
+
+    public setCanMove(value: boolean): void {
+        this.canMove_ = value;
     }
 }

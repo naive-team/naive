@@ -19,6 +19,8 @@ import {GameContext} from "../util/GameContext";
 import {PlayerCamera} from "../util/PlayerCamera";
 import {CALISpeaker} from "../Dialog/Speaker/CALISpeaker";
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
+import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMachine";
+import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -32,6 +34,8 @@ export class LabScene extends Scene implements AsyncScene {
     private calimesh_ : AbstractMesh;
     private cali_ : CALISpeaker;
 
+    private sceneStateMachine_: SceneStateMachine;
+
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
         this.SceneManager = sceneManager;
@@ -43,6 +47,7 @@ export class LabScene extends Scene implements AsyncScene {
             mesh.checkCollisions = true;
         }
         this.entityManager_ = new EntityManager();
+        this.sceneStateMachine_ = new SceneStateMachine(new SceneStatePlaying());
 
         this.input_ = new Input();
 
@@ -56,14 +61,14 @@ export class LabScene extends Scene implements AsyncScene {
         const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
-        //this.entityManager_.add(this.cali_);
+        this.entityManager_.add(this.cali_);
+
         return true;
     }
 
     update(): void {
         // faudra peut etre gerer l affichage des salles ici ?
-        this.player_.update(this.gameContext_);
-        this.input_.update();
+        this.sceneStateMachine_.update(this.gameContext_);
     }
 
     async waitUntilReady(): Promise<void> {

@@ -8,6 +8,7 @@ export class Speaker {
     currentDialogIndex: number;
     mesh : AbstractMesh;
     collider_ : AbstractMesh;
+    private wantsToSpeak_: boolean = false;
 
     constructor(name: string, mesh: AbstractMesh, _scene: Scene, _playermesh: AbstractMesh) {
         this.name = name;
@@ -30,11 +31,15 @@ export class Speaker {
 
     }
     async interact(scene: Scene) {
+
         const dialog = this.dialogGraph.getCurrentDialog();
         if (!dialog.started) {
+            console.log("starting dialog");
             dialog.started = true;
+            this.wantsToSpeak_ = true;
             const choiceIndex = await dialog.play(scene);
             dialog.started = false;
+            this.wantsToSpeak_ = false;
             this.dialogGraph.transitionTo(choiceIndex);
         }
     }
@@ -64,4 +69,7 @@ export class Speaker {
         );
     }
 
+    public wantsToSpeak(): boolean {
+        return this.wantsToSpeak_;
+    }Lo
 }

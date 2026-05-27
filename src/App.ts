@@ -3,6 +3,8 @@ import "@babylonjs/inspector";
 import { Engine } from "@babylonjs/core";
 import {SceneManager} from "./Scenes/SceneManager";
 import {TitleScreenScene} from "./Scenes/TitleScreenScene";
+import {CommandTestScene} from "./Scenes/CommandTestScene";
+import {LabScene} from "./Scenes/LabScene";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -10,7 +12,7 @@ function createCanvas() {
 	canvas.style.height = "100%";
 	canvas.id = "gameCanvas";
 	document.body.appendChild(canvas);
-	return canvas;
+return canvas;
 }
 
 class App {
@@ -49,8 +51,8 @@ class App {
 
 	private async start_(): Promise<void> {
 		// Première scène
-		await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
-		//await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+		//await this.sceneManager_.switchTo(new CommandTestScene(this.engine_, this.sceneManager_));
+		await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
 	}
 }
 

@@ -11,6 +11,7 @@ import {PlayerCamera} from "../util/PlayerCamera";
 
 import {Engine, Scene, HemisphericLight, Vector3, AbstractMesh, AnimationGroup, MeshBuilder, GroundMesh} from "@babylonjs/core";
 import {Block} from "../Entities/Block";
+import {SceneManager} from "./SceneManager";
 
 export class CommandTestScene extends Scene implements AsyncScene {
     private player_: Player;
@@ -31,7 +32,7 @@ export class CommandTestScene extends Scene implements AsyncScene {
 
 
 
-    constructor(engine: Engine) {
+    constructor(engine: Engine, _sceneManager: SceneManager) {
         super(engine);
     }
 

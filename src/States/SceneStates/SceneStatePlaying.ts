@@ -5,6 +5,8 @@ import {Player} from "../../Entities/Player";
 import {DIALOG_BUTTON} from "../../Input/Keys";
 import {SceneStateUsingPC} from "./SceneStateUsingPC";
 import {GameContext} from "../../util/GameContext";
+import {CALISpeaker} from "../../Dialog/Speaker/CALISpeaker";
+import {SceneStateDialog} from "./SceneStateDialog";
 
 
 export class SceneStatePlaying implements SceneState {
@@ -13,13 +15,33 @@ export class SceneStatePlaying implements SceneState {
         ctx.input.update();
 
         this.checkPCActivation_(stateMachine, ctx);
+        this.checkCALIDialog_(stateMachine, ctx);
     }
 
     private checkPCActivation_(stateMachine: SceneStateMachine, ctx: GameContext): void {
         const player: Player = ctx.entityManager.getEntityByFamily(EntityFamily.PLAYER) as Player;
 
+        if (player === undefined) {
+            console.log("player undefined");
+            return;
+        }
+
         if (player.isNearPC(ctx.entityManager) && ctx.input.getPressed(DIALOG_BUTTON)) {
             stateMachine.changeState(new SceneStateUsingPC(), ctx);
+        }
+    }
+
+    private checkCALIDialog_(stateMachine: SceneStateMachine, ctx: GameContext): void {
+        const cali: CALISpeaker = ctx.entityManager.getEntityByFamily(EntityFamily.CALI) as CALISpeaker;
+
+
+        if (cali === undefined) {
+            console.log("cali undefined");
+            return;
+        }
+
+        if (cali.wantsToSpeak()) {
+            stateMachine.changeState(new SceneStateDialog(cali), ctx);
         }
     }
 

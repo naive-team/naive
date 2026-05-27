@@ -20,6 +20,8 @@ export class SceneStateUsingPC implements SceneState {
         if (ctx.input.getPressed(EXIT_BUTTON) || this.pc_.getExitFlag()) {
             stateMachine.changeState(new SceneStatePlaying(), ctx);
         }
+
+
     }
 
     onEnter(_stateMachine: SceneStateMachine, ctx: GameContext): void {

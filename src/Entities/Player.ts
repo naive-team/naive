@@ -34,6 +34,7 @@ export class Player implements Entity {
     private netCollider_: Mesh;
 
     private canMove_: boolean;
+    private targetPosY_: number;
 
     constructor(ctx: GameContext, scene: Scene, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
         this.ctx_ = ctx;
@@ -62,9 +63,10 @@ export class Player implements Entity {
 
         this.collider_.checkCollisions = true;
 
-        this.collider_.isVisible = false;
+        this.collider_.visibility = 0;
 
         this.collider_.position.y += height / 2;
+        this.targetPosY_ = this.collider_.position.y;
         playerMesh.position.y -= height / 2;
         playerMesh.rotation.y += Tools.ToRadians(180);
 
@@ -94,7 +96,8 @@ export class Player implements Entity {
 
         this.updateTargetAngle_(movement);
 
-        this.collider_.moveWithCollisions(movement);
+        this.collider_.moveWithCollisions(movement, false);
+        this.collider_.position.y = this.targetPosY_;
     }
 
     private updateTargetAngle_(movement: Vector3): void {

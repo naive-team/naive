@@ -45,7 +45,13 @@ export class LabScene extends Scene implements AsyncScene {
         const light = new HemisphericLight("Hemilight", new Vector3(0, 1, 0));
         for (const mesh of this.labMesh.getChildMeshes(false)){
             mesh.checkCollisions = true;
+
+            if (mesh.name === "sol") {
+                mesh.checkCollisions = false;
+            }
         }
+
+
         this.entityManager_ = new EntityManager();
         this.sceneStateMachine_ = new SceneStateMachine(new SceneStatePlaying());
 

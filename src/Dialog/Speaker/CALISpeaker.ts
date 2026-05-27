@@ -5,8 +5,11 @@ import {Dialog} from "../Dialog";
 import * as GUI from "@babylonjs/gui";
 import {AbstractMesh, Scene, Vector3} from "@babylonjs/core";
 import {DialogGraph, DialogNode} from "../DialogNode";
+import {Entity} from "../../Entities/interfaces/Entity";
+import {EntityFamily} from "../../Entities/util/EntityFamily";
+import {GameContext} from "../../util/GameContext";
 
-export class CALISpeaker extends Speaker {
+export class CALISpeaker extends Speaker implements Entity {
     // TODO changer expression ?
     // vaut le coup seulment si cam est bien centree
     //  bloquer inputs
@@ -206,5 +209,16 @@ export class CALISpeaker extends Speaker {
     let nodeTuto4:DialogNode = {dialog: dialogTuto4, defaultNext: 5};
 
     this.dialogGraph.setNodes([nodewelcome, nodetuto1, nodeneedsommehelp, nodeTuto2, nodeTuto3, nodeTuto4]);
+    }
+
+    getCollider(): AbstractMesh {
+        return this.collider_;
+    }
+
+    getFamily(): EntityFamily {
+        return EntityFamily.CALI;
+    }
+
+    update(_ctx: GameContext): void {
     }
 }

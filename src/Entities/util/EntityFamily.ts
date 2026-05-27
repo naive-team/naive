@@ -2,5 +2,7 @@ export enum EntityFamily {
     PLAYER,
     BUG,
     PC,
-    BLOCK
+    BLOCK,
+    CALI,
+    DOOR
 }

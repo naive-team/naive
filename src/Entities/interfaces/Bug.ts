@@ -1,5 +1,6 @@
 import {Entity} from "./Entity";
+import {EntityManager} from "../util/EntityManager";
 
 export interface Bug extends Entity {
-    captured(): void;
+    captured(entityManager: EntityManager): void;
 }

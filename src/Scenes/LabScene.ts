@@ -21,6 +21,8 @@ import {CALISpeaker} from "../Dialog/Speaker/CALISpeaker";
 import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMachine";
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
+import {Firefly} from "../Entities/Firefly";
+import {Door} from "../Entities/Door";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -35,6 +37,7 @@ export class LabScene extends Scene implements AsyncScene {
     private cali_ : CALISpeaker;
 
     private sceneStateMachine_: SceneStateMachine;
+    private fireflyMesh_: AbstractMesh;
 
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
@@ -49,6 +52,7 @@ export class LabScene extends Scene implements AsyncScene {
             if (mesh.name === "sol") {
                 mesh.checkCollisions = false;
             }
+
         }
 
 
@@ -69,6 +73,17 @@ export class LabScene extends Scene implements AsyncScene {
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
         this.entityManager_.add(this.cali_);
 
+
+        const firefly: Firefly = new Firefly(this.fireflyMesh_);
+        this.entityManager_.add(firefly);
+
+
+        const rightDoor: AbstractMesh = this.getMeshByName("DOOR");
+        const leftDoor: AbstractMesh = this.getMeshByName("DOOR.001");
+
+        const door: Door = new Door(leftDoor, rightDoor);
+        this.entityManager_.add(door);
+
         return true;
     }
 
@@ -86,5 +101,9 @@ export class LabScene extends Scene implements AsyncScene {
         this.labMesh = labMeshData.mesh;
         const calimeshdata = await MeshLoader.loadMesh("./cali.glb", this);
         this.calimesh_ = calimeshdata.mesh;
+
+        const fireflyMeshData = await MeshLoader.loadMesh("./luluciole.glb", this);
+        this.fireflyMesh_ = fireflyMeshData.mesh;
+
     }
 }

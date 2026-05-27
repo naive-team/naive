@@ -16,6 +16,8 @@ import {EntityManager} from "./util/EntityManager";
 import {EntityFamily} from "./util/EntityFamily";
 import {Entity} from "./interfaces/Entity";
 import {GameContext} from "../util/GameContext";
+import {Firefly} from "./Firefly";
+import {Commandable} from "./interfaces/Commandable";
 
 
 export class Player implements Entity {
@@ -35,6 +37,7 @@ export class Player implements Entity {
 
     private canMove_: boolean;
     private targetPosY_: number;
+    private fireflies: Firefly[] = [];
 
     constructor(ctx: GameContext, scene: Scene, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
         this.ctx_ = ctx;
@@ -193,6 +196,18 @@ export class Player implements Entity {
         return pcCollider.intersectsMesh(this.collider_);
     }
 
+    getNearbyCommandables(entityManager: EntityManager): Commandable[] {
+        const result: Commandable[] = [];
+
+        const commandables: Commandable[] = entityManager.getCommandables();
+
+        for (const commandable of commandables) {
+            if (commandable.getProximityZone().intersectsMesh(this.collider_)) result.push(commandable);
+        }
+
+        return result;
+    }
+
     setVisible(value: boolean): void {
         this.mesh_.setEnabled(value);
     }
@@ -203,5 +218,15 @@ export class Player implements Entity {
 
     public setCanMove(value: boolean): void {
         this.canMove_ = value;
+    }
+
+    public addFirefly(firefly: Firefly): void {
+        this.fireflies.push(firefly);
+    }
+
+    public popFirefly(): Firefly {
+        if (this.fireflies.length === 0) return null;
+
+        return this.fireflies.pop();
     }
 }

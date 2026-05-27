@@ -3,5 +3,6 @@ export enum EntityFamily {
     BUG,
     PC,
     BLOCK,
-    CALI
+    CALI,
+    DOOR
 }

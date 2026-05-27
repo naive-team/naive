@@ -26,7 +26,7 @@ export class EntityManager {
     }
 
     public getCommandableByColor(color: Color): Commandable {
-        const commandables: Commandable[] = this.getCommandables_();
+        const commandables: Commandable[] = this.getCommandables();
 
         return commandables.find((c) => {return c.getColor() === color});
     }
@@ -37,7 +37,7 @@ export class EntityManager {
         }
     }
 
-    private getCommandables_(): Commandable[] {
+    getCommandables(): Commandable[] {
         return this.entities_.filter((e) => {return "execute" in e && "getColor" in e}) as Commandable[];
     }
 

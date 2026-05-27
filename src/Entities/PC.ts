@@ -52,7 +52,7 @@ export class PC implements Entity {
 
         this.state_ = PCState.OFF;
 
-        this.content_ = [{text: "", color: "white"}];;
+        this.content_ = [{text: "", color: "white"}];
 
         this.screen_ = this.mesh_.getChildMeshes(false, (mesh: AbstractMesh) => {return mesh.name === "screen"})[0];
 

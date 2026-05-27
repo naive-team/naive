@@ -3,6 +3,7 @@ import {AbstractMesh, MeshBuilder} from "@babylonjs/core";
 import {EntityFamily} from "./util/EntityFamily";
 import {Entity} from "./interfaces/Entity";
 import {Bug} from "./interfaces/Bug";
+import {EntityManager} from "./util/EntityManager";
 
 export class Beetle implements Entity, Bug {
 
@@ -26,7 +27,7 @@ export class Beetle implements Entity, Bug {
         return this.collider_;
     }
 
-    captured(): void {
+    captured(_entityManager: EntityManager): void {
         this.collider_.setEnabled(false);
     }
 

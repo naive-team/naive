@@ -46,7 +46,8 @@ export class Player implements Entity {
         console.log(this.animations_);
         animations[0].pause();
 
-        this.stateMachine_ = new PlayerStateMachine(new PlayerIdleState());
+        this.stateMachine_ = new PlayerStateMachine();
+        this.stateMachine_.changeState(this, new PlayerIdleState());
         this.canMove_ = true;
     }
 

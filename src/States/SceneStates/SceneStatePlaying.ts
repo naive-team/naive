@@ -2,7 +2,7 @@ import {SceneState} from "./interface/SceneState";
 import {SceneStateMachine} from "./StateMachine/SceneStateMachine";
 import {EntityFamily} from "../../Entities/util/EntityFamily";
 import {Player} from "../../Entities/Player";
-import {ACTION_BUTTON, DIALOG_BUTTON} from "../../Input/Keys";
+import {DIALOG_BUTTON} from "../../Input/Keys";
 import {SceneStateUsingPC} from "./SceneStateUsingPC";
 import {GameContext} from "../../util/GameContext";
 import {CALISpeaker} from "../../Dialog/Speaker/CALISpeaker";
@@ -67,7 +67,8 @@ export class SceneStatePlaying implements SceneState {
             if (ctx.input.getJustPressed(DIALOG_BUTTON)) {
 
                 const firefly: Firefly = player.popFirefly();
-                commandable.attachFirefly(firefly, ctx.entityManager)
+                commandable.attachFirefly(firefly, ctx.entityManager);
+                return;
             }
         }
     }

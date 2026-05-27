@@ -3,6 +3,7 @@ import "@babylonjs/inspector";
 import { Engine } from "@babylonjs/core";
 import {SceneManager} from "./Scenes/SceneManager";
 import {TitleScreenScene} from "./Scenes/TitleScreenScene";
+import {LabScene} from "./Scenes/LabScene";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");

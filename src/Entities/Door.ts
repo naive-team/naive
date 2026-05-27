@@ -24,8 +24,10 @@ export class Door implements Entity, Commandable {
     private color_: Color;
     private distanceTraveled_: number = 0;
     private proximityZone_: AbstractMesh;
+    private actionOnAttachFirefly:()=>void;
+    private actionOnUnlinkFirefly:()=>void;
 
-    constructor(leftMesh: AbstractMesh, rightMesh: AbstractMesh) {
+    constructor(leftMesh: AbstractMesh, rightMesh: AbstractMesh, actionOnAttachFirefly:()=>void = null, actionOnUnlinkFirefly:()=>void = null) {
         this.leftMesh_ = leftMesh;
         this.rightMesh_ = rightMesh;
 
@@ -47,6 +49,10 @@ export class Door implements Entity, Commandable {
         proximityZone.position = new Vector3(2, 0, -1.5);
 
         this.proximityZone_ = proximityZone;
+
+        this.actionOnUnlinkFirefly = actionOnUnlinkFirefly;
+        this.actionOnAttachFirefly = actionOnAttachFirefly;
+
     }
 
     execute(_ctx: GameContext, _command: Command, _args: string[]): string {
@@ -91,6 +97,7 @@ export class Door implements Entity, Commandable {
         targetPosition.z += 0.3;
 
         firefly.attachToCommandable(this, targetPosition, entityManager)
+        this.actionOnAttachFirefly();
     }
 
     getProximityZone(): AbstractMesh {
@@ -99,6 +106,7 @@ export class Door implements Entity, Commandable {
 
     uncolor(): void {
         this.color_ = null;
+        this.actionOnUnlinkFirefly();
     }
 
 }

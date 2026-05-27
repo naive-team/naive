@@ -137,17 +137,17 @@ export class CALISpeaker extends Speaker implements Entity {
                     "Nope !"
                 ],
                 [
-                    new Line("Nyahaha, c'est sur que converser avec cette boite de conserve c'est plus relou qu'un adorable chaton comme moi ;)",
+                    new Line("Nyahaha, c'est sûr, converser avec cette boite de conserve c'est plus relou qu'un adorable chaton comme moi ;)",
                         new Line("Tu veux que je m'en charge ?",
                             new ChoiceLine("",
                                 [
                                     "Oui s'il te plait !",
-                                    "J'aimerais des indications pour le faire moi même.",
+                                    "Comment le faire par moi-même ?",
                                     "Nan je me débrouille."
                                 ],
                                 [
                                     new Line("Oki je fais ça !", null), // TODO lancer animation et unlock porte
-                                    new Line("L'ordinateur fonctionne avec des commandes simples (?). Tu trouveras les détails de syntaxe en écrivant \"help\" dans le terminal",
+                                    new Line("L'ordinateur fonctionne avec des commandes simples(?). Tu trouveras les détails de syntaxe en écrivant \"help\" dans le terminal",
                                         new ChoiceLine("",
                                             [
                                                 "Comment on ouvre le terminal déjà ?",
@@ -166,9 +166,8 @@ export class CALISpeaker extends Speaker implements Entity {
                     )
                 ]
             )
-        )
-
-        let anotherDoor :Line = new Line("On dirait bien que la prochaine porte est bloquée aussi... Heureusement il y a encore des lucioles et un ordi dans cette salle...", null)
+        );
+    let anotherDoor :Line = new Line("On dirait bien que la prochaine porte est bloquée aussi... Heureusement il y a encore des lucioles et un ordi dans cette salle...", null)
 
         /// -------- Dialogs ------------
 
@@ -204,7 +203,7 @@ export class CALISpeaker extends Speaker implements Entity {
 
     let nodeTuto2 : DialogNode = {dialog: dialogTuto2, defaultNext: 3};
 
-    let nodeTuto3 :DialogNode = {dialog: dialogTuto3, defaultNext: 4};
+    let nodeTuto3 :DialogNode = {dialog: dialogTuto3, defaultNext: 5};
 
     let nodeTuto4:DialogNode = {dialog: dialogTuto4, defaultNext: 5};
 

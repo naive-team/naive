@@ -92,7 +92,11 @@ export class LabScene extends Scene implements AsyncScene {
         const rightDoor: AbstractMesh = this.getMeshByName("DOOR");
         const leftDoor: AbstractMesh = this.getMeshByName("DOOR.001");
 
-        const door: Door = new Door(leftDoor, rightDoor);
+        const door: Door = new Door(
+            leftDoor,
+            rightDoor,
+            ()=>{this.cali_.setCurrentDialogIndex(4)},
+            ()=>{this.cali_.conditionalSetCurrentNode(3,4)});
         this.entityManager_.add(door);
 
         return true;

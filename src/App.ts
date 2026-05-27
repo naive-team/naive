@@ -2,9 +2,8 @@ import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
 import { Engine } from "@babylonjs/core";
 import {SceneManager} from "./Scenes/SceneManager";
-import {LabScene} from "./Scenes/LabScene";
 import {TitleScreenScene} from "./Scenes/TitleScreenScene";
-import {CommandTestScene} from "./Scenes/CommandTestScene";
+import {LabScene} from "./Scenes/LabScene";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -53,7 +52,6 @@ class App {
 		// Première scène
 		await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
 		//await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
-		//await this.sceneManager_.switchTo(new CommandTestScene(this.engine_));
 	}
 }
 

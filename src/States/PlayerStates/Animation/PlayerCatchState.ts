@@ -35,14 +35,14 @@ export class PlayerCatchState implements PlayerAnimationState {
         player.stopAnimation("catch");
     }
 
-    update(_player: Player, _stateMachine: PlayerStateMachine, _input: Input, _entityManager: EntityManager): void {
-        const netCollider: Mesh = _player.getNetCollider();
+    update(player: Player, _stateMachine: PlayerStateMachine, _input: Input, entityManager: EntityManager): void {
+        const netCollider: Mesh = player.getNetCollider();
 
-        const candidates: Entity[] = _entityManager.getEntitiesByFamily(EntityFamily.BUG);
+        const candidates: Bug[] = entityManager.getEntitiesByFamily(EntityFamily.BUG) as Bug[];
 
         for (const candidate of candidates) {
             if (netCollider.intersectsMesh(candidate.getCollider())) {
-                (candidate as Bug).captured();
+                candidate.captured(entityManager);
             }
         }
     }

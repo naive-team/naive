@@ -6,12 +6,9 @@ import {EntityManager} from "../../../Entities/util/EntityManager";
 export class PlayerStateMachine {
     private currentState_: PlayerAnimationState;
 
-    constructor(state: PlayerAnimationState) {
-        this.currentState_ = state;
-    }
-
     changeState(player: Player, state: PlayerAnimationState): void {
-        this.currentState_.onLeave(player, this);
+        if (this.currentState_) this.currentState_.onLeave(player, this);
+
         this.currentState_ = state;
         this.currentState_.onEnter(player, this);
     };

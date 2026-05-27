@@ -16,6 +16,8 @@ import {EntityManager} from "./util/EntityManager";
 import {EntityFamily} from "./util/EntityFamily";
 import {Entity} from "./interfaces/Entity";
 import {GameContext} from "../util/GameContext";
+import {Firefly} from "./Firefly";
+import {Commandable} from "./interfaces/Commandable";
 
 
 export class Player implements Entity {
@@ -33,6 +35,10 @@ export class Player implements Entity {
     private mesh_: AbstractMesh;
     private netCollider_: Mesh;
 
+    private canMove_: boolean;
+    private targetPosY_: number;
+    private fireflies: Firefly[] = [];
+
     constructor(ctx: GameContext, scene: Scene, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
         this.ctx_ = ctx;
         this.scene_ = scene;
@@ -44,7 +50,9 @@ export class Player implements Entity {
         console.log(this.animations_);
         animations[0].pause();
 
-        this.stateMachine_ = new PlayerStateMachine(new PlayerIdleState());
+        this.stateMachine_ = new PlayerStateMachine();
+        this.stateMachine_.changeState(this, new PlayerIdleState());
+        this.canMove_ = true;
     }
 
     private initCollider_(playerMesh: AbstractMesh): void {
@@ -58,9 +66,10 @@ export class Player implements Entity {
 
         this.collider_.checkCollisions = true;
 
-        this.collider_.isVisible = false;
+        this.collider_.visibility = 0;
 
         this.collider_.position.y += height / 2;
+        this.targetPosY_ = this.collider_.position.y;
         playerMesh.position.y -= height / 2;
         playerMesh.rotation.y += Tools.ToRadians(180);
 
@@ -73,6 +82,8 @@ export class Player implements Entity {
         this.netCollider_.position.z = 0;
         this.netCollider_.position.y = 1;
         this.netCollider_.parent = netRim;
+
+        this.netCollider_.visibility = 0;
 
     }
 
@@ -88,7 +99,8 @@ export class Player implements Entity {
 
         this.updateTargetAngle_(movement);
 
-        this.collider_.moveWithCollisions(movement);
+        this.collider_.moveWithCollisions(movement, false);
+        this.collider_.position.y = this.targetPosY_;
     }
 
     private updateTargetAngle_(movement: Vector3): void {
@@ -99,6 +111,9 @@ export class Player implements Entity {
 
     update(_ctx: GameContext): void {
         this.pointTowardTargetAngle_(this.ctx_.input.getInputVector());
+
+        if (! this.canMove_) return;
+
         this.stateMachine_.update(this, this.ctx_.input, this.ctx_.entityManager);
     }
 
@@ -173,12 +188,45 @@ export class Player implements Entity {
     }
 
     isNearPC(entityManager: EntityManager): boolean {
-        const PCCollider: AbstractMesh = entityManager.getEntityByFamily(EntityFamily.PC).getCollider();
+        const pc: Entity = entityManager.getEntityByFamily(EntityFamily.PC);
 
-        return PCCollider.intersectsMesh(this.collider_);
+        if (pc === undefined) return false;
+
+        const pcCollider: AbstractMesh = pc.getCollider();
+        return pcCollider.intersectsMesh(this.collider_);
+    }
+
+    getNearbyCommandables(entityManager: EntityManager): Commandable[] {
+        const result: Commandable[] = [];
+
+        const commandables: Commandable[] = entityManager.getCommandables();
+
+        for (const commandable of commandables) {
+            if (commandable.getProximityZone().intersectsMesh(this.collider_)) result.push(commandable);
+        }
+
+        return result;
     }
 
     setVisible(value: boolean): void {
         this.mesh_.setEnabled(value);
+    }
+
+    public canMove(): boolean {
+        return this.canMove_;
+    }
+
+    public setCanMove(value: boolean): void {
+        this.canMove_ = value;
+    }
+
+    public addFirefly(firefly: Firefly): void {
+        this.fireflies.push(firefly);
+    }
+
+    public popFirefly(): Firefly {
+        if (this.fireflies.length === 0) return null;
+
+        return this.fireflies.pop();
     }
 }

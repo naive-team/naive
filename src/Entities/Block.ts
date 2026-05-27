@@ -6,6 +6,8 @@ import {GameContext} from "../util/GameContext";
 import {Color} from "../Commands/Color";
 
 import {AbstractMesh, MeshBuilder, Vector3} from '@babylonjs/core';
+import {Firefly} from "./Firefly";
+import {EntityManager} from "./util/EntityManager";
 
 enum BlockState {
     MOVING,
@@ -22,8 +24,10 @@ export class Block implements Entity, Commandable {
     private remainingDistance_: number;
     private colliderOffset_: Vector3 = new Vector3(0, 0.5, 0);
 
+    private proximityZone_: AbstractMesh;
+
     constructor(blockMesh: AbstractMesh) {
-        this.color_ = Color.YELLOW; // En attendant pour tester (devrait être à null normalement)
+        this.color_ = null;
         this.mesh_ = blockMesh;
 
         const boundingInfo = this.mesh_.getBoundingInfo();
@@ -48,6 +52,19 @@ export class Block implements Entity, Commandable {
 
         this.collider_.position.z = 2;
         this.mesh_.position.z = 2;
+
+        const proximitySize = 2;
+
+        const proximityZone = MeshBuilder.CreateBox("blockProximityZone", {
+            width: proximitySize,
+            height: proximitySize,
+            depth: proximitySize
+        });
+
+        proximityZone.checkCollisions = false;
+        proximityZone.visibility = 0.5;
+
+        this.proximityZone_ = proximityZone;
     }
 
     execute(_ctx: GameContext, command: Command, args: string[]): string {
@@ -95,6 +112,8 @@ export class Block implements Entity, Commandable {
     updateCollider_(): void {
         this.collider_.position = new Vector3().copyFrom(this.mesh_.position).addInPlace(this.colliderOffset_);
         this.collider_.rotation = this.mesh_.rotation;
+        this.proximityZone_.position = this.collider_.position.clone();
+        this.proximityZone_.rotation = this.collider_.rotation.clone();
     }
 
     getColor(): Color {
@@ -134,4 +153,20 @@ export class Block implements Entity, Commandable {
 
         this.remainingDistance_ -= 0.1;
     }
+
+    attachFirefly(firefly: Firefly, entityManager: EntityManager): void {
+        this.color_ = firefly.getColor();
+
+        firefly.attachToCommandable(this, this.collider_.position, entityManager);
+    }
+
+    getProximityZone(): AbstractMesh {
+        return this.proximityZone_;
+    }
+
+    uncolor(): void {
+        this.color_ = null;
+    }
+
+
 }

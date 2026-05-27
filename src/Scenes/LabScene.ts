@@ -22,6 +22,8 @@ import {AdvancedDynamicTexture} from "@babylonjs/gui";
 import {PC} from "../Entities/PC";
 import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMachine";
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
+import {Firefly} from "../Entities/Firefly";
+import {Door} from "../Entities/Door";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -38,6 +40,9 @@ export class LabScene extends Scene implements AsyncScene {
     private pc_: PC;
     private sceneStateMachine_: SceneStateMachine;
 
+
+    private fireflyMesh_: AbstractMesh;
+
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
         this.SceneManager = sceneManager;
@@ -46,9 +51,17 @@ export class LabScene extends Scene implements AsyncScene {
     start(canvas: HTMLCanvasElement): boolean {
         for (const mesh of this.labMesh.getChildMeshes(false)){
             mesh.checkCollisions = true;
+
+            if (mesh.name === "sol") {
+                mesh.checkCollisions = false;
+            }
+
         }
+
+
         this.entityManager_ = new EntityManager();
-        this.input_ = new Input();
+
+        this.input_ = new Input(this);
 
         const playerCamera: PlayerCamera = new PlayerCamera(
             canvas, "player_camera", 0, 0, 10, Vector3.Zero(), this
@@ -61,6 +74,7 @@ export class LabScene extends Scene implements AsyncScene {
         const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
+        this.entityManager_.add(this.cali_);
 
         this.createSkydome();
         this.setLight();
@@ -71,13 +85,21 @@ export class LabScene extends Scene implements AsyncScene {
         this.placePC();
 
 
+        const firefly: Firefly = new Firefly(this.fireflyMesh_);
+        this.entityManager_.add(firefly);
+
+
+        const rightDoor: AbstractMesh = this.getMeshByName("DOOR");
+        const leftDoor: AbstractMesh = this.getMeshByName("DOOR.001");
+
+        const door: Door = new Door(leftDoor, rightDoor);
+        this.entityManager_.add(door);
+
         return true;
     }
 
     update(): void {
         // faudra peut etre gerer l affichage des salles ici ?
-        /*this.player_.update(this.gameContext_);
-        this.input_.update();*/
         this.sceneStateMachine_.update(this.gameContext_);
     }
 
@@ -91,6 +113,10 @@ export class LabScene extends Scene implements AsyncScene {
 
         const calimeshdata = await MeshLoader.loadMesh("./cali.glb", this);
         this.calimesh_ = calimeshdata.mesh;
+
+        const fireflyMeshData = await MeshLoader.loadMesh("./luluciole.glb", this);
+        this.fireflyMesh_ = fireflyMeshData.mesh;
+
 
         const pcMeshData = await MeshLoader.loadMesh("./pc_v2.glb", this);
         this.pcMesh_ = pcMeshData.mesh;

@@ -61,13 +61,15 @@ export class CommandTestScene extends Scene implements AsyncScene {
 
 
 
-        this.pc_ = new PC(this.pcMesh_);
-        this.entityManager_.add(this.pc_);
 
         this.gameContext_ = new GameContext(this.entityManager_, this.input_, playerCamera, canvas);
 
         this.player_ = new Player(this.gameContext_, this, this.playerMesh_, this.playerAnimations_);
         this.entityManager_.add(this.player_);
+
+        this.pc_ = new PC(this.pcMesh_, this.player_.getCollider(), this);
+        this.entityManager_.add(this.pc_);
+
 
         const block = new Block(this.blockMesh_);
         this.entityManager_.add(block);

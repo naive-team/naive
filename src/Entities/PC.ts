@@ -40,6 +40,7 @@ export class PC implements Entity {
     private font_: string;
     private exitFlag_: boolean = false;
     private ui: InteractUI;
+    private exitUi: InteractUI;
 
     constructor(mesh: AbstractMesh, playercollider: AbstractMesh = MeshBuilder.CreateBox("defaut collider", {size: 0}), scene:Scene) {
         this.mesh_ = mesh;
@@ -81,6 +82,8 @@ export class PC implements Entity {
 
         screenMaterial.diffuseTexture = texture;
         screenMaterial.backFaceCulling = false;
+        screenMaterial.emissiveTexture = texture;
+
         this.screen_.material = screenMaterial;
 
         const size: number = 44 * TEXT_PCT;
@@ -88,6 +91,7 @@ export class PC implements Entity {
         //InteractTrigger.init(playercollider, scene, this.collider_,new InteractUI("Démarrer"), async (scene) => this.turnOn() )
         this.ui = new InteractUI("Démarrer")
         this.initTriger(playercollider, scene, this.ui);
+        this.exitUi = new InteractUI("Partir", "⇧");
 
     }
     initTriger(playerMesh: AbstractMesh, scene:Scene, ui:InteractUI) {
@@ -191,6 +195,7 @@ export class PC implements Entity {
 
         for (let i: number=0; i < this.content_.length; i++) {
             this.texture_.drawText(this.content_[i].text, 45 * TEXT_PCT, 75 + i * 50 * TEXT_PCT, this.font_, this.content_[i].color, null, false, true);
+
         }
 
     }
@@ -199,11 +204,13 @@ export class PC implements Entity {
         this.state_ = PCState.ON;
         this.exitFlag_ = false;
         this.ui.hide();
+        this.exitUi.show();
     }
 
     public turnOff(): void {
         this.state_ = PCState.OFF;
         this.ui.show();
+        this.exitUi.hide();
     }
 
     private executeCommand_(ctx: GameContext, text: string): void {

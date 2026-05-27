@@ -58,17 +58,16 @@ export class LabScene extends Scene implements AsyncScene {
         this.player_ = new Player(this.gameContext_, this, this.playerMesh_, this.playerAnimations_);
         this.entityManager_.add(this.player_);
 
-        // Crée l'UI et force son layerMask
         const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
 
         this.createSkydome();
         this.setLight();
-        // Bloom seulement sur playerCamera, pas sur uiCamera
-        this.setBloom(playerCamera);
+
 
         this.sceneStateMachine_ = new SceneStateMachine(new SceneStatePlaying());
+
         this.placePC();
 
 
@@ -77,8 +76,8 @@ export class LabScene extends Scene implements AsyncScene {
 
     update(): void {
         // faudra peut etre gerer l affichage des salles ici ?
-        this.player_.update(this.gameContext_);
-        this.input_.update();
+        /*this.player_.update(this.gameContext_);
+        this.input_.update();*/
         this.sceneStateMachine_.update(this.gameContext_);
     }
 

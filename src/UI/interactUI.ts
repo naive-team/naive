@@ -4,8 +4,10 @@ export class InteractUI {
     interactionName: string;
     private advancedTexture: AdvancedDynamicTexture;
     private container: StackPanel;
+    private key:string;
 
-    constructor(interactionName: string) {
+    constructor(interactionName: string, keyLabel:string = "F") {
+        this.key = keyLabel;
         this.interactionName = interactionName;
         this.advancedTexture = AdvancedDynamicTexture.CreateFullscreenUI("InteractUI");
         this.container = this.createUI();
@@ -30,7 +32,7 @@ export class InteractUI {
         keyBox.paddingRight = "10px";
 
 
-        const keyLabel = new TextBlock("keyLabel", "F");
+        const keyLabel = new TextBlock("keyLabel", this.key);
         keyLabel.color = "black";
         keyLabel.fontSize = 14;
         keyLabel.fontWeight = "bold";

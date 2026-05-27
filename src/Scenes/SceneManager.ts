@@ -10,7 +10,7 @@ export class SceneManager {
     constructor(engine: Engine, canvas: HTMLCanvasElement) {
         this.engine_ = engine;
         this.canvas_ = canvas;
-        //this.engine_.loadingScreen = new CustomLoadingScreen(this.canvas_);
+        this.engine_.loadingScreen = new CustomLoadingScreen(this.canvas_);
     }
 
     get scene(): AsyncScene | null {

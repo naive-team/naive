@@ -51,8 +51,8 @@ class App {
 
 	private async start_(): Promise<void> {
 		// Première scène
-		//await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
-		await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+		await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
+		//await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
 		//await this.sceneManager_.switchTo(new CommandTestScene(this.engine_));
 	}
 }

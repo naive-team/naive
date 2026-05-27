@@ -77,6 +77,8 @@ export class Player implements Entity {
         this.netCollider_.position.y = 1;
         this.netCollider_.parent = netRim;
 
+        this.netCollider_.visibility = 0;
+
     }
 
     move(inputVector: Vector2): void {

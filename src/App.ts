@@ -4,6 +4,7 @@ import { Engine } from "@babylonjs/core";
 import {SceneManager} from "./Scenes/SceneManager";
 import {TitleScreenScene} from "./Scenes/TitleScreenScene";
 import {LabScene} from "./Scenes/LabScene";
+import {CaliFaces} from "./util/CaliFaces";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -26,7 +27,7 @@ class App {
 
 		this.initDebugLayer_();
 		this.loadFont_().then(() => this.start_()); // ← attendre la police
-		this.start_();
+		//this.start_();
 
 	}
 

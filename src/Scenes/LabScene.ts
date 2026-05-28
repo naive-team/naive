@@ -27,6 +27,8 @@ import {Door} from "../Entities/Door";
 import {MatrixTextureEffect} from "../UI/MatrixTextureEffect";
 import {BugCounter} from "../UI/BugCounter";
 import {BugCounterFabric} from "../util/bugCounterFabric";
+import {TextureSwitcher} from "../util/TextureSwitcher";
+import {CaliFaces} from "../util/CaliFaces";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -107,6 +109,12 @@ export class LabScene extends Scene implements AsyncScene {
             ()=>{this.cali_.conditionalSetCurrentNode(3,4)});
         this.entityManager_.add(door);
         BugCounterFabric.initialize();
+
+        CaliFaces.initialize(this);
+        console.log("Mesh array:", this.calimesh_);
+        //console.log("Mesh length:", this.calimesh_?.length);
+        TextureSwitcher.switch(CaliFaces.normalFace, this.calimesh_.getChildMeshes()[1]);
+
         return true;
     }
 
@@ -124,6 +132,8 @@ export class LabScene extends Scene implements AsyncScene {
         this.labMesh = labMeshData.mesh;
 
         const calimeshdata = await MeshLoader.loadMesh("./cali.glb", this);
+        console.log("Mesh data:", calimeshdata);
+
         this.calimesh_ = calimeshdata.mesh;
 
         const fireflyMeshData = await MeshLoader.loadMesh("./luluciole.glb", this);

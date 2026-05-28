@@ -7,6 +7,8 @@ export class CommandConverter {
                 return Command.MOVE;
             case "help":
                 return Command.HELP;
+            case "open":
+                return Command.OPEN;
             default:
                 return null;
         }

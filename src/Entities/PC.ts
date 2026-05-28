@@ -244,7 +244,8 @@ export class PC implements Entity {
 
             }
 
-
+            this.writeLine_(`ERROR: ${tokens[1]} undefined`, "red");
+            return;
         }
 
 
@@ -266,7 +267,7 @@ export class PC implements Entity {
 
         const target: Commandable = ctx.entityManager.getCommandableByColor(color);
         if (target === undefined) {
-            this.writeLine_("ERROR: Target not found");
+            this.writeLine_("ERROR: Target not found", "red");
             return;
         }
 
@@ -280,6 +281,11 @@ export class PC implements Entity {
         else if (msg.startsWith("<targ>")) {
             this.writeLine_(msg, "yellow");
         }
+        else if (msg.startsWith("<targ> open")) {
+            this.writeLine_(msg, "yellow");
+            this.writeLine_("use this to open a door");
+        }
+
         else {
             this.writeLine_(msg, "red");
         }

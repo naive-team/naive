@@ -49,8 +49,21 @@ export class Door implements Entity, Commandable {
         this.proximityZone_ = proximityZone;
     }
 
-    execute(_ctx: GameContext, _command: Command, _args: string[]): string {
-        return "";
+    execute(_ctx: GameContext, command: Command, _args: string[]): string {
+        switch (command) {
+            case Command.OPEN:
+                if (this.state_ !== DoorState.CLOSED) return "ERROR: Door not closed";
+
+                this.state_ = DoorState.OPENING;
+                break;
+
+            case Command.HELP:
+                return "<targ> open"
+                break;
+        }
+
+
+        return "OK";
     }
 
     getCollider(): AbstractMesh {
@@ -66,6 +79,8 @@ export class Door implements Entity, Commandable {
     }
 
     update(_ctx: GameContext): void {
+        console.log(this.color_);
+
         switch (this.state_) {
             case DoorState.CLOSED:
                 break;
@@ -89,6 +104,8 @@ export class Door implements Entity, Commandable {
     attachFirefly(firefly: Firefly, entityManager: EntityManager): void {
         const targetPosition: Vector3 = new Vector3().copyFrom(this.proximityZone_.position);
         targetPosition.z += 0.3;
+
+        this.color_ = firefly.getColor();
 
         firefly.attachToCommandable(this, targetPosition, entityManager)
     }

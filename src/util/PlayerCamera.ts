@@ -9,6 +9,16 @@ export class PlayerCamera extends ArcRotateCamera {
         this.inertia = 0.4;
 
         this._scene.activeCamera = this;
+
+        this.radius = 6;
+        this.alpha = 0.9821;
+        this.beta = 1.19;
+
+        this.lowerBetaLimit = 0.2;
+        this.upperBetaLimit = 1.6;
+
+        this.lowerRadiusLimit = this.radius;
+        this.upperRadiusLimit = this.radius;
     }
 
     getForwardNormal(): Vector3 {

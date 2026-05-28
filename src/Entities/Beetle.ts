@@ -4,6 +4,7 @@ import {EntityFamily} from "./util/EntityFamily";
 import {Entity} from "./interfaces/Entity";
 import {Bug} from "./interfaces/Bug";
 import {EntityManager} from "./util/EntityManager";
+import {BugCounter} from "../UI/BugCounter";
 
 export class Beetle implements Entity, Bug {
 
@@ -27,8 +28,9 @@ export class Beetle implements Entity, Bug {
         return this.collider_;
     }
 
-    captured(_entityManager: EntityManager): void {
+    captured(_entityManager: EntityManager, ui:BugCounter): void {
         this.collider_.setEnabled(false);
+        ui.increment();
     }
 
     getFamily(): EntityFamily {

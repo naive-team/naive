@@ -7,6 +7,7 @@ import {EntityManager} from "./util/EntityManager";
 import {Player} from "./Player";
 import {Color} from "../Commands/Color";
 import {Commandable} from "./interfaces/Commandable";
+import {BugCounter} from "../UI/BugCounter";
 
 export class Firefly implements Entity, Bug {
     private mesh_;
@@ -19,6 +20,7 @@ export class Firefly implements Entity, Bug {
     private baseY_: number;
     private commandedObject_: Commandable = null;
     private actionOnCatch:()=>void;
+    private coun
 
     constructor(mesh: AbstractMesh, actionOnCatch:()=>void=()=>{}) {
         this.mesh_ = mesh;
@@ -58,7 +60,7 @@ export class Firefly implements Entity, Bug {
         this.collider_.position.y = this.baseY_ + Math.sin(this.time_ * Firefly.HOVER_SPEED) * Firefly.HOVER_AMPLITUDE;
     }
 
-    captured(entityManager: EntityManager): void {
+    captured(entityManager: EntityManager, ui:BugCounter): void {
         this.collider_.setEnabled(false);
         entityManager.remove(this);
 
@@ -69,6 +71,7 @@ export class Firefly implements Entity, Bug {
             this.commandedObject_.uncolor();
         }
         this.actionOnCatch();
+        ui.increment();
     }
 
     attachToCommandable(commandable: Commandable, position: Vector3, entityManager: EntityManager): void {

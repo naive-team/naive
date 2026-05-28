@@ -9,6 +9,8 @@ import {CALISpeaker} from "../../Dialog/Speaker/CALISpeaker";
 import {SceneStateDialog} from "./SceneStateDialog";
 import {Commandable} from "../../Entities/interfaces/Commandable";
 import {Firefly} from "../../Entities/Firefly";
+import {BugCounter} from "../../UI/BugCounter";
+import {BugCounterFabric} from "../../util/bugCounterFabric";
 
 
 export class SceneStatePlaying implements SceneState {
@@ -68,6 +70,7 @@ export class SceneStatePlaying implements SceneState {
 
                 const firefly: Firefly = player.popFirefly();
                 commandable.attachFirefly(firefly, ctx.entityManager);
+                BugCounterFabric.getFireflyCounter().increment(-1);
                 return;
             }
         }

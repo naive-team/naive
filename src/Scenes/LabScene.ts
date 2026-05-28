@@ -25,6 +25,8 @@ import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 import {Firefly} from "../Entities/Firefly";
 import {Door} from "../Entities/Door";
 import {MatrixTextureEffect} from "../UI/MatrixTextureEffect";
+import {BugCounter} from "../UI/BugCounter";
+import {BugCounterFabric} from "../util/bugCounterFabric";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -77,14 +79,10 @@ export class LabScene extends Scene implements AsyncScene {
         const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
-
+//MATRIX TEST-----------------------------------------
         const matrixFx = new MatrixTextureEffect(this);
-        const box = MeshBuilder.CreateBox("box", { size: 2 }, this);
-        box.material = new StandardMaterial("boxMat", this);
-        matrixFx.applyToTextureSlot(box, "diffuse");
-
         matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");
-
+// -----------------------------------------------------
         this.entityManager_.add(this.cali_);
 
         this.createSkydome();
@@ -99,7 +97,6 @@ export class LabScene extends Scene implements AsyncScene {
         const firefly: Firefly = new Firefly(this.fireflyMesh_, ()=>{this.cali_.setCurrentDialogIndex(3)});
         this.entityManager_.add(firefly);
 
-
         const rightDoor: AbstractMesh = this.getMeshByName("DOOR");
         const leftDoor: AbstractMesh = this.getMeshByName("DOOR.001");
 
@@ -109,7 +106,7 @@ export class LabScene extends Scene implements AsyncScene {
             ()=>{this.cali_.setCurrentDialogIndex(4)},
             ()=>{this.cali_.conditionalSetCurrentNode(3,4)});
         this.entityManager_.add(door);
-
+        BugCounterFabric.initialize();
         return true;
     }
 

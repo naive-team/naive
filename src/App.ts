@@ -25,6 +25,7 @@ class App {
 		this.sceneManager_ = new SceneManager(this.engine_, this.canvas_);
 
 		this.initDebugLayer_();
+		this.loadFont_().then(() => this.start_()); // ← attendre la police
 		this.start_();
 
 	}
@@ -50,8 +51,11 @@ class App {
 
 	private async start_(): Promise<void> {
 		// Première scène
-		await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
-		//await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+		//await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
+		await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+	}
+	private async loadFont_(): Promise<void> {
+		await document.fonts.load("16px 'Press Start 2P'");
 	}
 }
 

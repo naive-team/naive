@@ -79,7 +79,6 @@ export class Door implements Entity, Commandable {
     }
 
     update(_ctx: GameContext): void {
-        console.log(this.color_);
 
         switch (this.state_) {
             case DoorState.CLOSED:

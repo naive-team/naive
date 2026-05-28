@@ -21,7 +21,7 @@ class App {
 
 	constructor() {
 		this.canvas_ = createCanvas();
-		this.engine_ = new Engine(this.canvas_, true);
+		this.engine_ = new Engine(this.canvas_, true, {audioEngine: true});
 		this.sceneManager_ = new SceneManager(this.engine_, this.canvas_);
 
 		this.initDebugLayer_();

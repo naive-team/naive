@@ -5,7 +5,7 @@
     GroundMesh,
     HemisphericLight, Mesh,
     MeshBuilder, PBRMaterial,
-    Scene, ShaderMaterial,
+    Scene, ShaderMaterial, Sound,
     Vector3
 } from "@babylonjs/core";
 import {AsyncScene} from "./AsyncScene";
@@ -42,6 +42,11 @@ export class LabScene extends Scene implements AsyncScene {
 
 
     private fireflyMesh_: AbstractMesh;
+    private bgm_: Sound;
+
+    private bgmReady_: boolean = false;
+    private sceneStarted_: boolean = false;
+    private bgmPlaying_: boolean = false;
 
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
@@ -49,6 +54,8 @@ export class LabScene extends Scene implements AsyncScene {
         this.collisionsEnabled = true;
     }
     start(canvas: HTMLCanvasElement): boolean {
+        this.sceneStarted_ = true;
+
         for (const mesh of this.labMesh.getChildMeshes(false)){
             mesh.checkCollisions = true;
 
@@ -106,6 +113,7 @@ export class LabScene extends Scene implements AsyncScene {
     }
 
     async waitUntilReady(): Promise<void> {
+
         const playerMeshData = await MeshLoader.loadMesh("./naru_v2.glb", this);
         this.playerMesh_ = playerMeshData.mesh;
         this.playerMesh_.checkCollisions = true;
@@ -119,6 +127,8 @@ export class LabScene extends Scene implements AsyncScene {
         const fireflyMeshData = await MeshLoader.loadMesh("./luluciole.glb", this);
         this.fireflyMesh_ = fireflyMeshData.mesh;
 
+        const bgm: Sound = new Sound("LabBGM", "./old_lab.ogg", this, () => {this.bgm_.play()}, {loop: true, autoplay: false});
+        this.bgm_ = bgm;
 
         const pcMeshData = await MeshLoader.loadMesh("./pc_v2.glb", this);
         this.pcMesh_ = pcMeshData.mesh;

@@ -11,12 +11,14 @@ export class Dialog {
     dialogueUI : LineUi;
     public nextDialogIndex: number;
     private _started : boolean;
+    private actionOnFinish : (choiceIndex: number)=>void;
 
-    constructor(uiGlobale : GUI.AdvancedDynamicTexture, firstLine: AbstractLine,  nextDialogIndex :number) {
+    constructor(uiGlobale : GUI.AdvancedDynamicTexture, firstLine: AbstractLine,  nextDialogIndex :number, actionOnFinish:(choiceIndex: number)=>void = (_choiceIndex: number)=>{}) {
         this.uiGlobale = uiGlobale;
         this.firstLine = firstLine;
         this._started = false;
         this.nextDialogIndex = nextDialogIndex;
+        this.actionOnFinish = actionOnFinish;
     }
     async play(scene: Scene): Promise<number | undefined> {
         this.dialogueUI = new LineUi(this.uiGlobale);
@@ -53,6 +55,7 @@ export class Dialog {
 
         this.dialogueUI.hide();
         this._started = false;
+        this.actionOnFinish(lastChoiceIndex);
         return lastChoiceIndex;
     }
 

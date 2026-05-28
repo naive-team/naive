@@ -181,7 +181,12 @@ export class CALISpeaker extends Speaker implements Entity {
 
     let dialogTuto3 :Dialog = new Dialog(uiGlobale, tuto3, 5);
 
-    let dialogTuto4 : Dialog = new Dialog(uiGlobale, tuto4, 2);
+    let dialogTuto4 : Dialog = new Dialog(uiGlobale, tuto4, 4,
+        (choiceIndex:number)=>{
+        if(choiceIndex === 0){
+            console.log("cali big brain OPEN THE DOOOR !")
+        }
+        });
 
         /// -------- Dialog Nodes ------------
 

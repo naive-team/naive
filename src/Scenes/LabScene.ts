@@ -5,7 +5,7 @@
     GroundMesh,
     HemisphericLight, Mesh,
     MeshBuilder, PBRMaterial,
-    Scene, ShaderMaterial,
+    Scene, ShaderMaterial, StandardMaterial,
     Vector3
 } from "@babylonjs/core";
 import {AsyncScene} from "./AsyncScene";
@@ -24,6 +24,7 @@ import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMa
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 import {Firefly} from "../Entities/Firefly";
 import {Door} from "../Entities/Door";
+import {MatrixTextureEffect} from "../UI/MatrixTextureEffect";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -49,6 +50,8 @@ export class LabScene extends Scene implements AsyncScene {
         this.collisionsEnabled = true;
     }
     start(canvas: HTMLCanvasElement): boolean {
+
+
         for (const mesh of this.labMesh.getChildMeshes(false)){
             mesh.checkCollisions = true;
 
@@ -74,6 +77,14 @@ export class LabScene extends Scene implements AsyncScene {
         const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
+
+        const matrixFx = new MatrixTextureEffect(this);
+        const box = MeshBuilder.CreateBox("box", { size: 2 }, this);
+        box.material = new StandardMaterial("boxMat", this);
+        matrixFx.applyToTextureSlot(box, "diffuse");
+
+        matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");
+
         this.entityManager_.add(this.cali_);
 
         this.createSkydome();

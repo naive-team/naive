@@ -1,4 +1,4 @@
-import {AbstractLine} from "./AbstractLine";
+ import {AbstractLine} from "./AbstractLine";
 import * as GUI from "@babylonjs/gui";
 import {LineUi} from "./LineUi";
 import {Scene} from "@babylonjs/core";

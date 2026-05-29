@@ -43,7 +43,8 @@ export class MatrixTextureEffect {
             "matrixDynTex",
             { width: this.canvasSize, height: this.canvasSize },
             this.scene,
-            false // generateMipMaps
+            false,
+
         );
 
         // 3. Matériau Standard
@@ -55,7 +56,9 @@ export class MatrixTextureEffect {
         // 4. Boucle de rendu
         this.scene.registerBeforeRender(() => this.update());
     }
-
+    getDynTexture(){
+        return this.dynTexture;
+    }
     // ── Dessin d'une frame Matrix ────────────────
     private drawFrame(): void {
         const ctx  = this.matrixCtx;
@@ -118,8 +121,7 @@ export class MatrixTextureEffect {
         slot: TextureSlot = "diffuse",
         matName?: string
     ): void {
-        // Si le mesh n'a pas de matériau (ex: nœud racine __root__),
-        // on descend récursivement dans ses enfants jusqu'à trouver le bon matériau.
+
         const target = this.findMeshWithMaterial(mesh, matName);
         if (!target) {
             console.warn(`[MatrixEffect] Aucun matériau "${matName ?? "(quelconque)"}" trouvé sur "${mesh.name}" ni ses enfants.`);
@@ -129,59 +131,6 @@ export class MatrixTextureEffect {
         if (!mat) return;
         console.log(`[MatrixEffect] Slot "${slot}" appliqué sur mesh "${target.name}", mat "${mat.name}"`);
         this.patchTextureSlot(mat, slot);
-    }
-
-    /**
-     * Charge un modèle 3D et remplace UNE texture sur un mesh et un slot précis.
-     *
-     * @param rootUrl   Dossier du modèle (ex: "./assets/")
-     * @param filename  Nom du fichier   (ex: "robot.glb")
-     * @param meshName  Nom du mesh à cibler (ex: "Screen_Mesh"). Si omis → 1er mesh.
-     * @param slot      Slot de texture à remplacer (défaut: "diffuse")
-     * @param matName   Nom du sous-matériau si MultiMaterial (optionnel)
-     */
-    public loadAndApplyToSlot(
-        rootUrl: string,
-        filename: string,
-        meshName?: string,
-        slot: TextureSlot = "diffuse",
-        matName?: string
-    ): Promise<BABYLON.AbstractMesh[]> {
-        return new Promise((resolve, reject) => {
-            BABYLON.SceneLoader.ImportMesh(
-                "",
-                rootUrl,
-                filename,
-                this.scene,
-                (meshes: BABYLON.AbstractMesh[]) => {
-                    // Log de debug : liste tous les meshes et matériaux disponibles
-                    console.log("[MatrixEffect] Meshes importés :",
-                        meshes.map(m => ({ name: m.name, mat: m.material?.name ?? "(aucun)" }))
-                    );
-
-                    const target = this.findTarget(meshes, meshName, matName);
-
-                    if (!target) {
-                        console.warn(
-                            `[MatrixEffect] Impossible de trouver un mesh correspondant.`,
-                            { meshName, matName }
-                        );
-                    } else {
-                        this.applyToTextureSlot(target, slot, matName);
-                        console.log(
-                            `[MatrixEffect] Slot "${slot}" remplacé sur "${target.name}"` +
-                            (matName ? ` (mat: ${matName})` : "")
-                        );
-                    }
-                    resolve(meshes);
-                },
-                null,
-                (_scene, message, exception) => {
-                    console.error("[MatrixEffect] Erreur import :", message, exception);
-                    reject(new Error(message));
-                }
-            );
-        });
     }
 
     // ── Helpers privés ───────────────────────────

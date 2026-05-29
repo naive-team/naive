@@ -5,7 +5,7 @@
     GroundMesh,
     HemisphericLight, Mesh,
     MeshBuilder, PBRMaterial,
-    Scene, ShaderMaterial, StandardMaterial,
+    Scene, ShaderMaterial, StandardMaterial, Texture,
     Vector3
 } from "@babylonjs/core";
 import {AsyncScene} from "./AsyncScene";
@@ -24,7 +24,7 @@ import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMa
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 import {Firefly} from "../Entities/Firefly";
 import {Door} from "../Entities/Door";
-import {MatrixTextureEffect} from "../UI/MatrixTextureEffect";
+import {MatrixTextureEffect} from "../util/MatrixTextureEffect";
 import {BugCounter} from "../UI/BugCounter";
 import {BugCounterFabric} from "../util/bugCounterFabric";
 import {TextureSwitcher} from "../util/TextureSwitcher";
@@ -82,8 +82,8 @@ export class LabScene extends Scene implements AsyncScene {
 
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
 //MATRIX TEST-----------------------------------------
-        const matrixFx = new MatrixTextureEffect(this);
-        matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");
+      /*  const matrixFx = new MatrixTextureEffect(this);
+        matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
 // -----------------------------------------------------
         this.entityManager_.add(this.cali_);
 
@@ -110,11 +110,10 @@ export class LabScene extends Scene implements AsyncScene {
         this.entityManager_.add(door);
         BugCounterFabric.initialize();
 
-        CaliFaces.initialize(this);
-        console.log("Mesh array:", this.calimesh_);
-        //console.log("Mesh length:", this.calimesh_?.length);
-        TextureSwitcher.switch(CaliFaces.normalFace, this.calimesh_.getChildMeshes()[1]);
-
+        //CaliFaces.initialize(this);
+        TextureSwitcher.switch(new Texture("./starFace.png", this, false, false), this.calimesh_.getChildMeshes()[1]);
+        const matrixFx = new MatrixTextureEffect(this);
+        //matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");
         return true;
     }
 

@@ -29,6 +29,8 @@ import {BugCounter} from "../UI/BugCounter";
 import {BugCounterFabric} from "../util/bugCounterFabric";
 import {TextureSwitcher} from "../util/TextureSwitcher";
 import {CaliFaces} from "../util/CaliFaces";
+import {RailFadeSequence} from "../util/RailFadeSequence";
+import {TitleScreenScene} from "./TitleScreenScene";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -44,14 +46,17 @@ export class LabScene extends Scene implements AsyncScene {
     private pcMesh_: AbstractMesh;
     private pc_: PC;
     private sceneStateMachine_: SceneStateMachine;
+    private engine: Engine
 
 
     private fireflyMesh_: AbstractMesh;
+    private railFade_: RailFadeSequence;
 
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
         this.SceneManager = sceneManager;
         this.collisionsEnabled = true;
+        this.engine = engine;
     }
     start(canvas: HTMLCanvasElement): boolean {
 
@@ -116,12 +121,25 @@ export class LabScene extends Scene implements AsyncScene {
         TextureSwitcher.switch(new Texture("./starFace.png", this, false, false), this.calimesh_.getChildMeshes()[1]);
         const matrixFx = new MatrixTextureEffect(this);
         matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
+
+        //TODO changer next scene qd on aura cinematique fin
+        // TODO tester...
+        const MeshStart = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_TO_SERVER_ROOM");
+        const MeshEnd = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_END");
+
+        this.railFade_ = new RailFadeSequence(this, this.SceneManager, new TitleScreenScene(this.engine, this.SceneManager), this.player_, this.gameContext_, {
+            startTrigger: MeshStart,
+            endPlane:     MeshEnd,
+        });
+
         return true;
     }
 
     update(): void {
         // faudra peut etre gerer l affichage des salles ici ?
         this.sceneStateMachine_.update(this.gameContext_);
+        //TODO on a peut etre pas besoin de l'update depuis le debut...
+        this.railFade_.update();
     }
 
     async waitUntilReady(): Promise<void> {
@@ -129,6 +147,7 @@ export class LabScene extends Scene implements AsyncScene {
         this.playerMesh_ = playerMeshData.mesh;
         this.playerMesh_.checkCollisions = true;
         this.playerAnimations_ = playerMeshData.animationGroups;
+
         const labMeshData = await MeshLoader.loadMesh("./lab-2.glb", this);
         this.labMesh = labMeshData.mesh;
 

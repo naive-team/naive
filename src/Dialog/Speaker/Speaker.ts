@@ -30,10 +30,6 @@ export class Speaker {
         this.mesh.parent = this.collider_;
         this.ui = new InteractUI("Parler");
         InteractTrigger.init(_playermesh, _scene, this.collider_, this.ui,(scene: Scene) => this.interact(scene));
-        //this.init(playermesh, scene);
-
-        //this.setRegisterDialog(scene);
-
     }
 
     async interact(scene: Scene) {
@@ -48,12 +44,11 @@ export class Speaker {
         }
     }
 
-    public speak(_scene: Scene): void {
-        //this.dialogGraph[this.currentDialogIndex].play(scene);
-    }
-
     public setCurrentDialogIndex(index:number):void{
-        this.currentDialogIndex = index;
+        this.dialogGraph.safeSetCurrentCurrentNode(index);
+    }
+    public conditionalSetCurrentNode(index:number, currentIndex:number):void{
+       this.dialogGraph.conditionalSetCurrentNode(index, currentIndex);
     }
 
     public wantsToSpeak(): boolean {

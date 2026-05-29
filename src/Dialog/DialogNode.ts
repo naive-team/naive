@@ -41,4 +41,21 @@ export class DialogGraph {
     public setNodes(nodes: DialogNode[]) {
         this.nodes = nodes;
     }
+
+    public setCurrentNodeIndex(index: number) {
+        this.currentNodeIndex = index;
+    }
+    public safeSetCurrentCurrentNode(index: number) {
+        if (this.currentNodeIndex < index) {
+            this.currentNodeIndex = index;
+        }
+        else{
+            console.log("index inferieur, current dialog index inchangé" );
+        }
+    }
+    public conditionalSetCurrentNode(wantedIndex: number, currentIndex:number) {
+        if (this.currentNodeIndex >= currentIndex) {
+            this.currentNodeIndex = wantedIndex;
+        }
+    }
 }

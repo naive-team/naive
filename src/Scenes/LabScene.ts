@@ -1,10 +1,9 @@
 ﻿import {
     AbstractMesh, ActionManager,
-    AnimationGroup, BloomEffect, Camera, Color3, Color4, DefaultRenderingPipeline, Effect,
-    Engine, ExecuteCodeAction, FreeCamera,
-    GroundMesh,
+    AnimationGroup, Color3, Effect,
+    Engine, ExecuteCodeAction,
     HemisphericLight, Mesh,
-    MeshBuilder, PBRMaterial,
+    MeshBuilder,
     Scene, ShaderMaterial, Sound, Tools, TransformNode,
     Vector3
 } from "@babylonjs/core";
@@ -14,7 +13,6 @@ import {MeshLoader} from "../util/MeshLoader";
 import {EntityManager} from "../Entities/util/EntityManager";
 import {Input} from "../Input/Input";
 import {Player} from "../Entities/Player";
-import {Beetle} from "../Entities/Beetle";
 import {GameContext} from "../util/GameContext";
 import {PlayerCamera} from "../util/PlayerCamera";
 import {CALISpeaker} from "../Dialog/Speaker/CALISpeaker";
@@ -24,6 +22,9 @@ import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMa
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 import {Firefly} from "../Entities/Firefly";
 import {Door} from "../Entities/Door";
+import {BugCounterFabric} from "../util/bugCounterFabric";
+import {RailFadeSequence} from "../util/RailFadeSequence";
+import {TitleScreenScene} from "./TitleScreenScene";
 import {Block} from "../Entities/Block";
 import {Button} from "../Entities/Button";
 import {SecureDoor} from "../Entities/SecureDoor";
@@ -42,9 +43,11 @@ export class LabScene extends Scene implements AsyncScene {
     private pcMesh_: AbstractMesh;
     private pc_: PC;
     private sceneStateMachine_: SceneStateMachine;
+    private engine: Engine
 
 
     private fireflyMesh_: AbstractMesh;
+    private railFade_: RailFadeSequence;
     private bgm_: Sound;
 
     private bgmReady_: boolean = false;
@@ -57,8 +60,11 @@ export class LabScene extends Scene implements AsyncScene {
         super(engine);
         this.SceneManager = sceneManager;
         this.collisionsEnabled = true;
+        this.engine = engine;
     }
     start(canvas: HTMLCanvasElement): boolean {
+
+
         this.sceneStarted_ = true;
 
         const collisionIgnored = ["sol", "Cylinder.004", "Cylinder.009", "sol.001", "sol.003"];
@@ -96,6 +102,7 @@ export class LabScene extends Scene implements AsyncScene {
         const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
+
         this.entityManager_.add(this.cali_);
 
         this.createSkydome();
@@ -107,15 +114,44 @@ export class LabScene extends Scene implements AsyncScene {
         this.placePC();
 
 
-        const firefly: Firefly = new Firefly(this.fireflyMesh_);
+        const firefly: Firefly = new Firefly(this.fireflyMesh_, "firefly", ()=>{this.cali_.setCurrentDialogIndex(3)});
         this.entityManager_.add(firefly);
-
 
         const rightDoor: AbstractMesh = this.getMeshByName("DOOR");
         const leftDoor: AbstractMesh = this.getMeshByName("DOOR.001");
 
-        const door: Door = new Door(leftDoor, rightDoor);
+        const door: Door = new Door(
+            leftDoor,
+            rightDoor,
+            "door",
+            ()=>{this.cali_.setCurrentDialogIndex(4)},
+            ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
+            ()=>{this.cali_.setCurrentDialogIndex(6)}
+        );
         this.entityManager_.add(door);
+        BugCounterFabric.initialize();
+
+
+        // Test califaces
+        /*CaliFaces.initialize(this);
+        TextureSwitcher.switch(CaliFaces.starFace, this.calimesh_.getChildMeshes()[1]);*/
+        /*const matrixFx = new MatrixTextureEffect(this);
+        matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
+
+        //MATRIX TEST-----------------------------------------
+        /*  const matrixFx = new MatrixTextureEffect(this);
+          matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
+// -----------------------------------------------------
+
+        //TODO changer next scene qd on aura cinematique fin
+        // TODO tester...
+        const MeshStart = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_TO_SERVER_ROOM");
+        const MeshEnd = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_END");
+
+        this.railFade_ = new RailFadeSequence(this, this.SceneManager, new TitleScreenScene(this.engine, this.SceneManager), this.player_, this.gameContext_, {
+            startTrigger: MeshStart,
+            endPlane:     MeshEnd,
+        });
 
         const toDevRoomTrigger = this.labMesh.getChildMeshes(false).filter(mesh => mesh.name === "#TRIGGER_TO_DEV_ROOM")[0];
 
@@ -177,6 +213,8 @@ export class LabScene extends Scene implements AsyncScene {
     update(): void {
         // faudra peut etre gerer l affichage des salles ici ?
         this.sceneStateMachine_.update(this.gameContext_);
+        //TODO on a peut etre pas besoin de l'update depuis le debut...
+        this.railFade_.update();
     }
 
     async waitUntilReady(): Promise<void> {
@@ -185,6 +223,7 @@ export class LabScene extends Scene implements AsyncScene {
         this.playerMesh_ = playerMeshData.mesh;
         this.playerMesh_.checkCollisions = true;
         this.playerAnimations_ = playerMeshData.animationGroups;
+
         const labMeshData = await MeshLoader.loadMesh("./lab-2.glb", this);
         this.labMesh = labMeshData.mesh;
 

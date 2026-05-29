@@ -17,8 +17,11 @@ export class SceneManager {
         return this.currentScene_;
     }
 
-    async switchTo(newScene: AsyncScene): Promise<void> {
-        this.engine_.displayLoadingUI();
+    async switchTo(newScene: AsyncScene, _showLoadingUI = true): Promise<void> {
+        //if(showLoadingUI) {
+            //TODO quand montre pas ca a l air degeu...
+            this.engine_.displayLoadingUI();
+        //}
 
         this.currentScene_?.dispose();
         newScene.onPointerDown = () => {
@@ -34,7 +37,9 @@ export class SceneManager {
             this.currentScene_?.render();
             this.currentScene_?.update();
         });
-        this.engine_.hideLoadingUI();
+        //if (showLoadingUI) {
+            this.engine_.hideLoadingUI();
+        //}
 
     }
 

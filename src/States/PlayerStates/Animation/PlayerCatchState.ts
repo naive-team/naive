@@ -8,6 +8,10 @@ import {EntityManager} from "../../../Entities/util/EntityManager";
 import {EntityFamily} from "../../../Entities/util/EntityFamily";
 import {Entity} from "../../../Entities/interfaces/Entity";
 import {Bug} from "../../../Entities/interfaces/Bug";
+import {Firefly} from "../../../Entities/Firefly";
+import {BugCounter} from "../../../UI/BugCounter";
+import {Fireflycounter} from "../../../UI/Fireflycounter";
+import {BugCounterFabric} from "../../../util/bugCounterFabric";
 
 export class PlayerCatchState implements PlayerAnimationState {
 
@@ -42,7 +46,14 @@ export class PlayerCatchState implements PlayerAnimationState {
 
         for (const candidate of candidates) {
             if (netCollider.intersectsMesh(candidate.getCollider())) {
-                candidate.captured(entityManager);
+                let bugcounter:BugCounter;
+                if (candidate instanceof Firefly) {
+                    bugcounter = BugCounterFabric.getFireflyCounter();
+                }
+                else{
+                    bugcounter = BugCounterFabric.getBugCounter();
+                }
+                    candidate.captured(entityManager, bugcounter);
             }
         }
     }

@@ -19,14 +19,21 @@ export class Door implements Entity, Commandable {
     private rightMesh_: AbstractMesh;
 
     private collider_: AbstractMesh;
-    private state_: DoorState = DoorState.OPENING;
+    private state_: DoorState = DoorState.CLOSED;
 
     private color_: Color;
     private distanceTraveled_: number = 0;
     private proximityZone_: AbstractMesh;
+    private actionOnAttachFirefly:()=>void;
+    private actionOnUnlinkFirefly:()=>void;
+    private actionOnOpened:()=>void;
     private id_: string;
 
-    constructor(leftMesh: AbstractMesh, rightMesh: AbstractMesh, id: string = "door") {
+    constructor(leftMesh: AbstractMesh, rightMesh: AbstractMesh, id: string = "door",
+                actionOnAttachFirefly:()=>void = ()=>{},
+                actionOnUnlinkFirefly:()=>void = ()=>{},
+                actionOnOpened:()=>void = ()=>{}) {
+
         this.id_ = id;
 
         this.leftMesh_ = leftMesh;
@@ -50,6 +57,11 @@ export class Door implements Entity, Commandable {
         proximityZone.position = new Vector3(2, 0, -1.5);
 
         this.proximityZone_ = proximityZone;
+
+        this.actionOnUnlinkFirefly = actionOnUnlinkFirefly;
+        this.actionOnAttachFirefly = actionOnAttachFirefly;
+        this.actionOnOpened = actionOnOpened;
+
     }
 
     execute(_ctx: GameContext, command: Command, _args: string[]): string {
@@ -99,6 +111,7 @@ export class Door implements Entity, Commandable {
                 break;
 
             case DoorState.OPENED:
+                this.actionOnOpened();
                 break;
         }
     }
@@ -110,6 +123,7 @@ export class Door implements Entity, Commandable {
         this.color_ = firefly.getColor();
 
         firefly.attachToCommandable(this, targetPosition, entityManager)
+        this.actionOnAttachFirefly();
     }
 
     getProximityZone(): AbstractMesh {
@@ -118,6 +132,7 @@ export class Door implements Entity, Commandable {
 
     uncolor(): void {
         this.color_ = null;
+        this.actionOnUnlinkFirefly();
     }
 
     getId(): string {

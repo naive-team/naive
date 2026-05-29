@@ -10,7 +10,7 @@ import {EntityFamily} from "../../Entities/util/EntityFamily";
 import {GameContext} from "../../util/GameContext";
 
 export class CALISpeaker extends Speaker implements Entity {
-    // TODO changer expression ?
+    // TODO changer expression
     // vaut le coup seulment si cam est bien centree
     //  bloquer inputs
 
@@ -167,7 +167,7 @@ export class CALISpeaker extends Speaker implements Entity {
                 ]
             )
         );
-    let anotherDoor :Line = new Line("On dirait bien que la prochaine porte est bloquée aussi... Heureusement il y a encore des lucioles et un ordi dans cette salle...", null)
+    let anotherDoor :Line = new Line("On dirait bien que la prochaine porte est bloquée aussi... Heureusement il y a encore un ordi dans cette salle... et on a toujours la luciole", null)
 
         /// -------- Dialogs ------------
 
@@ -187,6 +187,7 @@ export class CALISpeaker extends Speaker implements Entity {
             console.log("cali big brain OPEN THE DOOOR !")
         }
         });
+    let dialogAnotherDoor = new Dialog(uiGlobale, anotherDoor, 6);
 
         /// -------- Dialog Nodes ------------
 
@@ -212,7 +213,9 @@ export class CALISpeaker extends Speaker implements Entity {
 
     let nodeTuto4:DialogNode = {dialog: dialogTuto4, defaultNext: 5};
 
-    this.dialogGraph.setNodes([nodewelcome, nodetuto1, nodeneedsommehelp, nodeTuto2, nodeTuto3, nodeTuto4]);
+    let nodeAnotherDoor : DialogNode = {dialog: dialogAnotherDoor, defaultNext:6};
+
+    this.dialogGraph.setNodes([nodewelcome, nodetuto1, nodeneedsommehelp, nodeTuto2, nodeTuto3, nodeTuto4, nodeAnotherDoor]);
     }
 
     getCollider(): AbstractMesh {

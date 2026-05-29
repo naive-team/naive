@@ -26,11 +26,14 @@ export class Door implements Entity, Commandable {
     private proximityZone_: AbstractMesh;
     private actionOnAttachFirefly:()=>void;
     private actionOnUnlinkFirefly:()=>void;
+    private actionOnOpened:()=>void;
+
 
     constructor(leftMesh: AbstractMesh,
                 rightMesh: AbstractMesh,
                 actionOnAttachFirefly:()=>void = ()=>{},
-                actionOnUnlinkFirefly:()=>void = ()=>{}) {
+                actionOnUnlinkFirefly:()=>void = ()=>{},
+                actionOnOpened:()=>void = ()=>{}) {
         this.leftMesh_ = leftMesh;
         this.rightMesh_ = rightMesh;
 
@@ -55,6 +58,7 @@ export class Door implements Entity, Commandable {
 
         this.actionOnUnlinkFirefly = actionOnUnlinkFirefly;
         this.actionOnAttachFirefly = actionOnAttachFirefly;
+        this.actionOnOpened = actionOnOpened;
 
     }
 
@@ -91,6 +95,7 @@ export class Door implements Entity, Commandable {
                 break;
 
             case DoorState.OPENED:
+                this.actionOnOpened();
                 break;
         }
     }

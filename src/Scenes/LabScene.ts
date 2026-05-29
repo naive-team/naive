@@ -86,10 +86,7 @@ export class LabScene extends Scene implements AsyncScene {
         const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
         this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
-//MATRIX TEST-----------------------------------------
-      /*  const matrixFx = new MatrixTextureEffect(this);
-        matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
-// -----------------------------------------------------
+
         this.entityManager_.add(this.cali_);
 
         this.createSkydome();
@@ -111,7 +108,9 @@ export class LabScene extends Scene implements AsyncScene {
             leftDoor,
             rightDoor,
             ()=>{this.cali_.setCurrentDialogIndex(4)},
-            ()=>{this.cali_.conditionalSetCurrentNode(3,4)});
+            ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
+            ()=>{this.cali_.setCurrentDialogIndex(6)}
+        );
         this.entityManager_.add(door);
         BugCounterFabric.initialize();
 
@@ -121,6 +120,11 @@ export class LabScene extends Scene implements AsyncScene {
         TextureSwitcher.switch(new Texture("./starFace.png", this, false, false), this.calimesh_.getChildMeshes()[1]);
         const matrixFx = new MatrixTextureEffect(this);
         matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
+
+        //MATRIX TEST-----------------------------------------
+        /*  const matrixFx = new MatrixTextureEffect(this);
+          matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
+// -----------------------------------------------------
 
         //TODO changer next scene qd on aura cinematique fin
         // TODO tester...

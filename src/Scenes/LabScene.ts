@@ -116,9 +116,9 @@ export class LabScene extends Scene implements AsyncScene {
 
 
         // Test califaces
-        /*//CaliFaces.initialize(this);
-        TextureSwitcher.switch(new Texture("./starFace.png", this, false, false), this.calimesh_.getChildMeshes()[1]);
-        const matrixFx = new MatrixTextureEffect(this);
+        /*CaliFaces.initialize(this);
+        TextureSwitcher.switch(CaliFaces.starFace, this.calimesh_.getChildMeshes()[1]);*/
+        /*const matrixFx = new MatrixTextureEffect(this);
         matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
 
         //MATRIX TEST-----------------------------------------

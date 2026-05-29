@@ -110,10 +110,12 @@ export class LabScene extends Scene implements AsyncScene {
         this.entityManager_.add(door);
         BugCounterFabric.initialize();
 
-        //CaliFaces.initialize(this);
+
+        // Test califaces
+        /*//CaliFaces.initialize(this);
         TextureSwitcher.switch(new Texture("./starFace.png", this, false, false), this.calimesh_.getChildMeshes()[1]);
         const matrixFx = new MatrixTextureEffect(this);
-        //matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");
+        matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
         return true;
     }
 

@@ -41,8 +41,11 @@ export class PC implements Entity {
     private exitFlag_: boolean = false;
     private ui: InteractUI;
     private exitUi: InteractUI;
+    private id_: string;
 
-    constructor(mesh: AbstractMesh, playercollider: AbstractMesh = MeshBuilder.CreateBox("defaut collider", {size: 0}), scene:Scene) {
+    constructor(mesh: AbstractMesh, playercollider: AbstractMesh = MeshBuilder.CreateBox("defaut collider", {size: 0}), scene:Scene, id: string = "pc") {
+        this.id_ = id;
+
         this.mesh_ = mesh;
 
         const scaling: number = 0.2;
@@ -317,6 +320,10 @@ export class PC implements Entity {
 
     public setPosition(x, y,z){
         this.collider_.position = new Vector3(x, y, z);
+    }
+
+    getId(): string {
+        return this.id_;
     }
 
 }

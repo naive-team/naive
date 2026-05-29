@@ -6,4 +6,5 @@ export interface Entity {
     update(ctx: GameContext): void;
     getFamily(): EntityFamily;
     getCollider(): AbstractMesh;
+    getId(): string;
 }

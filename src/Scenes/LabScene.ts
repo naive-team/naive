@@ -1,11 +1,11 @@
 ﻿import {
-    AbstractMesh,
+    AbstractMesh, ActionManager,
     AnimationGroup, BloomEffect, Camera, Color3, Color4, DefaultRenderingPipeline, Effect,
-    Engine, FreeCamera,
+    Engine, ExecuteCodeAction, FreeCamera,
     GroundMesh,
     HemisphericLight, Mesh,
     MeshBuilder, PBRMaterial,
-    Scene, ShaderMaterial, Sound,
+    Scene, ShaderMaterial, Sound, Tools, TransformNode,
     Vector3
 } from "@babylonjs/core";
 import {AsyncScene} from "./AsyncScene";
@@ -24,6 +24,9 @@ import {SceneStateMachine} from "../States/SceneStates/StateMachine/SceneStateMa
 import {SceneStatePlaying} from "../States/SceneStates/SceneStatePlaying";
 import {Firefly} from "../Entities/Firefly";
 import {Door} from "../Entities/Door";
+import {Block} from "../Entities/Block";
+import {Button} from "../Entities/Button";
+import {SecureDoor} from "../Entities/SecureDoor";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -47,6 +50,8 @@ export class LabScene extends Scene implements AsyncScene {
     private bgmReady_: boolean = false;
     private sceneStarted_: boolean = false;
     private bgmPlaying_: boolean = false;
+    private blockMesh_: AbstractMesh;
+    private buttonMesh_: AbstractMesh;
 
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
@@ -56,17 +61,25 @@ export class LabScene extends Scene implements AsyncScene {
     start(canvas: HTMLCanvasElement): boolean {
         this.sceneStarted_ = true;
 
+        const collisionIgnored = ["sol", "Cylinder.004", "Cylinder.009", "sol.001", "sol.003"];
+
         for (const mesh of this.labMesh.getChildMeshes(false)){
             mesh.checkCollisions = true;
-
-            const collisionIgnored = ["sol", "Cylinder.004", "Cylinder.009", "sol.016", "sol.017", "sol.001"];
 
             if (collisionIgnored.includes(mesh.name)) {
                 mesh.checkCollisions = false;
             }
 
-        }
+            if (mesh.name.includes("#TRIGGER")) {
+                mesh.checkCollisions = false;
+               // mesh.visibility = 0;
+            }
 
+            if (mesh.name.includes("#collider")) {
+                mesh.isVisible = false;
+            }
+
+        }
 
         this.entityManager_ = new EntityManager();
 
@@ -104,6 +117,60 @@ export class LabScene extends Scene implements AsyncScene {
         const door: Door = new Door(leftDoor, rightDoor);
         this.entityManager_.add(door);
 
+        const toDevRoomTrigger = this.labMesh.getChildMeshes(false).filter(mesh => mesh.name === "#TRIGGER_TO_DEV_ROOM")[0];
+
+        toDevRoomTrigger.isVisible = false;
+
+        const playerCollider = this.entityManager_.getPlayer().getCollider();
+
+        toDevRoomTrigger.actionManager = new ActionManager(this);
+        toDevRoomTrigger.actionManager.registerAction(
+            new ExecuteCodeAction(
+                {trigger: ActionManager.OnIntersectionEnterTrigger, parameter: playerCollider},
+                (): void => {
+                    this.toDevRoom_();
+                    toDevRoomTrigger.actionManager.dispose();
+                }
+            )
+        );
+
+
+        const buttonMesh1: AbstractMesh = this.getMesh_("bouton");
+        const buttonMesh2: AbstractMesh = this.getMesh_("bouton.001");
+        buttonMesh1.dispose();
+        buttonMesh2.dispose();
+
+        this.getMesh_("Cylinder.011")?.dispose();
+        this.getMesh_("Cylinder.012")?.dispose();
+
+        const blockRoot1: TransformNode = this.getTransformNode_("Cube.016");
+        const blockRoot2: TransformNode = this.getTransformNode_("Cube.017");
+        blockRoot1.dispose();
+        blockRoot2.dispose();
+
+        const block: Block = new Block(this.blockMesh_);
+        const block2: Block = new Block(this.blockMesh_.clone("block2", null));
+
+        this.entityManager_.add(block);
+        this.entityManager_.add(block2);
+
+        block.setPosition(6.4, -0.3, -6.65);
+        block2.setPosition(6.52, -0.3, -15.41);
+
+        const button1 = new Button(this.buttonMesh_, "button1");
+        const button2 = new Button(this.buttonMesh_.clone("button2", null), "button2");
+
+        this.entityManager_.add(button1);
+        this.entityManager_.add(button2);
+
+        button1.setPosition(6.5, -0.25, -9.59);
+        button2.setPosition(6.5, -0.25, -12.03);
+
+        const secureDoorMesh: AbstractMesh = this.getMesh_("secureDoor");
+        const secureDoor: SecureDoor = new SecureDoor(secureDoorMesh);
+        this.entityManager_.add(secureDoor);
+
+
         return true;
     }
 
@@ -132,6 +199,12 @@ export class LabScene extends Scene implements AsyncScene {
 
         const pcMeshData = await MeshLoader.loadMesh("./pc_v2.glb", this);
         this.pcMesh_ = pcMeshData.mesh;
+
+        const blockMeshData = await MeshLoader.loadMesh("./bloc.glb", this);
+        this.blockMesh_ = blockMeshData.mesh;
+
+        const buttonMeshData = await MeshLoader.loadMesh("./button.glb", this);
+        this.buttonMesh_ = buttonMeshData.mesh;
     }
 
     createSkydome(): void {
@@ -265,5 +338,19 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
         this.pc_ = new PC(this.pcMesh_, this.player_.getCollider(), this);
         this.pc_.setPosition(1,0.68,7.4);
         this.entityManager_.add(this.pc_);
+    }
+
+    private toDevRoom_() {
+        this.pc_.setPosition(-12, 0.65, -10.5);
+        this.pc_.getCollider().rotation.y -= Tools.ToRadians(90);
+
+    }
+
+    private getMesh_(name: string): AbstractMesh {
+        return this.labMesh.getChildMeshes(false).filter((m) => m.name === name)[0];
+    }
+
+    private getTransformNode_(name: string): TransformNode {
+        return this.labMesh.getChildTransformNodes(false).filter((tn) => tn.name === name)[0];
     }
 }

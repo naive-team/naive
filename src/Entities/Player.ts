@@ -38,8 +38,11 @@ export class Player implements Entity {
     private canMove_: boolean;
     private targetPosY_: number;
     private fireflies: Firefly[] = [];
+    private id_: string;
 
-    constructor(ctx: GameContext, scene: Scene, playerMesh: AbstractMesh, animations: AnimationGroup[]) {
+    constructor(ctx: GameContext, scene: Scene, playerMesh: AbstractMesh, animations: AnimationGroup[], id: string = "player") {
+        this.id_ = id;
+
         this.ctx_ = ctx;
         this.scene_ = scene;
         this.mesh_ = playerMesh;
@@ -69,11 +72,14 @@ export class Player implements Entity {
         this.collider_.visibility = 0;
 
         this.collider_.position.y += height / 2;
+        this.collider_.position.y -= 0.25;
+
         this.targetPosY_ = this.collider_.position.y;
         playerMesh.position.y -= height / 2;
         playerMesh.rotation.y += Tools.ToRadians(180);
 
         playerMesh.parent = this.collider_;
+
         this.ctx_.playerCamera.lockOnEntity(this.collider_);
 
         const netRim: TransformNode = this.scene_.getTransformNodeByName("Armature").getChildTransformNodes(false).find((node: TransformNode): boolean=> {return node.name === "Torus"} );
@@ -228,5 +234,9 @@ export class Player implements Entity {
         if (this.fireflies.length === 0) return null;
 
         return this.fireflies.pop();
+    }
+
+    getId(): string {
+        return this.id_;
     }
 }

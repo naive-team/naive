@@ -9,13 +9,15 @@ export class Beetle implements Entity, Bug {
 
 
     private collider_: AbstractMesh ;
+    private id_: string;
 
-    constructor() {
+    constructor(id: string ="beetle") {
         this.collider_ = MeshBuilder.CreateBox("beetle", {size: 0.1});
         this.collider_.checkCollisions = true;
         this.collider_.position.y = 1
         this.collider_.position.z = 1;
 
+        this.id_ = id;
     }
 
     update(): void {
@@ -35,5 +37,7 @@ export class Beetle implements Entity, Bug {
         return EntityFamily.BUG;
     }
 
-
+    getId(): string {
+        return this.id_;
+    }
 }

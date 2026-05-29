@@ -25,8 +25,11 @@ export class Block implements Entity, Commandable {
     private colliderOffset_: Vector3 = new Vector3(0, 0.5, 0);
 
     private proximityZone_: AbstractMesh;
+    private id_: string;
 
-    constructor(blockMesh: AbstractMesh) {
+    constructor(blockMesh: AbstractMesh, id: string = "block") {
+        this.id_ = id;
+
         this.color_ = null;
         this.mesh_ = blockMesh;
 
@@ -37,7 +40,7 @@ export class Block implements Entity, Commandable {
 
         const size = max.subtract(min);
 
-        const collider = MeshBuilder.CreateBox("collider", {
+        const collider = MeshBuilder.CreateBox("blockCollider", {
             width: size.x,
             height: size.y,
             depth: size.z
@@ -62,7 +65,7 @@ export class Block implements Entity, Commandable {
         });
 
         proximityZone.checkCollisions = false;
-        proximityZone.visibility = 0.5;
+        proximityZone.visibility = 0;
 
         this.proximityZone_ = proximityZone;
     }
@@ -92,7 +95,7 @@ export class Block implements Entity, Commandable {
                 return "<targ> move <dir> <dist>";
         }
 
-
+        return "";
     }
 
     getCollider() {
@@ -168,5 +171,12 @@ export class Block implements Entity, Commandable {
         this.color_ = null;
     }
 
+    setPosition(x: number, y: number, z: number): void {
+        this.mesh_.position = new Vector3(x, y, z);
+        this.updateCollider_();
+    }
 
+    getId(): string {
+        return this.id_;
+    }
 }

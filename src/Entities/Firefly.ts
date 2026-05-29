@@ -18,8 +18,11 @@ export class Firefly implements Entity, Bug {
     private static readonly HOVER_SPEED = 2;
     private baseY_: number;
     private commandedObject_: Commandable = null;
+    private id_: string;
 
-    constructor(mesh: AbstractMesh) {
+    constructor(mesh: AbstractMesh, id: string = "firefly") {
+        this.id_ = id;
+
         this.mesh_ = mesh;
 
         const scaling: number = 0.4;
@@ -79,6 +82,10 @@ export class Firefly implements Entity, Bug {
 
     getColor(): Color {
         return this.color_;
+    }
+
+    getId(): string {
+        return this.id_;
     }
 
 }

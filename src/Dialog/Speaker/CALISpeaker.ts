@@ -221,4 +221,8 @@ export class CALISpeaker extends Speaker implements Entity {
 
     update(_ctx: GameContext): void {
     }
+
+    getId(): string {
+        return "caliSpeaker";
+    }
 }

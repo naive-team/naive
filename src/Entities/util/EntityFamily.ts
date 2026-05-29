@@ -4,5 +4,7 @@ export enum EntityFamily {
     PC,
     BLOCK,
     CALI,
-    DOOR
+    DOOR,
+    BUTTON,
+    SECURE_DOOR
 }

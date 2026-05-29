@@ -19,13 +19,16 @@ export class Door implements Entity, Commandable {
     private rightMesh_: AbstractMesh;
 
     private collider_: AbstractMesh;
-    private state_: DoorState = DoorState.CLOSED;
+    private state_: DoorState = DoorState.OPENING;
 
     private color_: Color;
     private distanceTraveled_: number = 0;
     private proximityZone_: AbstractMesh;
+    private id_: string;
 
-    constructor(leftMesh: AbstractMesh, rightMesh: AbstractMesh) {
+    constructor(leftMesh: AbstractMesh, rightMesh: AbstractMesh, id: string = "door") {
+        this.id_ = id;
+
         this.leftMesh_ = leftMesh;
         this.rightMesh_ = rightMesh;
 
@@ -115,6 +118,10 @@ export class Door implements Entity, Commandable {
 
     uncolor(): void {
         this.color_ = null;
+    }
+
+    getId(): string {
+        return this.id_;
     }
 
 }

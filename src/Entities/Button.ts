@@ -60,12 +60,12 @@ export class Button implements Entity {
 
                 this.mesh_.position.y -= 0.05;
 
-                this.checkExitCollision_();
-
                 if (this.mesh_.position.y <= this.lowerYLimit) {
                     this.mesh_.position.y = this.lowerYLimit;
                     this.state_ = ButtonState.PRESSED;
                 }
+
+                this.checkExitCollision_();
 
                 break;
             case ButtonState.BEING_RELEASED:

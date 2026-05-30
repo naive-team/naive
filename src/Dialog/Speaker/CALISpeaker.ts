@@ -8,6 +8,7 @@ import {DialogNode} from "../DialogNode";
 import {Entity} from "../../Entities/interfaces/Entity";
 import {EntityFamily} from "../../Entities/util/EntityFamily";
 import {GameContext} from "../../util/GameContext";
+import {TextureSwitcher} from "../../util/TextureSwitcher";
 import {CaliFaces} from "../../util/CaliFaces";
 import {CalifaceSwitcher} from "../../util/CalifaceSwitcher";
 import {LabScene} from "../../Scenes/LabScene";
@@ -56,9 +57,7 @@ export class CALISpeaker extends Speaker implements Entity {
         let winkThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.winkFace)};
         let starThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.starFace)};
 
-        let sadThenNormal = ()=>{
-            //TODO switch sur sad face
-        };
+        let sadThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.sadFace)};
 
         let bigbrain = ()=>{
             //TODO lancer anim matrix

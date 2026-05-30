@@ -47,18 +47,20 @@ export class Door implements Entity, Commandable {
         // this.collider_.position = this.leftMesh_.position;
 
 
-        const proximityZone = MeshBuilder.CreateBox("blockProximityZone", {
+        const proximityZone = MeshBuilder.CreateBox("doorProximityZone", {
             width: 2,
             height: 4,
             depth: 2
-        },
-            leftMesh.getScene()
-        );
+        }, leftMesh.getScene());
 
         proximityZone.checkCollisions = false;
         proximityZone.visibility = 0;
 
-        proximityZone.position = new Vector3(2, 0, -1.5);
+        //proximityZone.position = new Vector3(2, 0, -1.5);
+        proximityZone.parent = leftMesh.parent;
+        proximityZone.position = new Vector3().copyFrom(leftMesh.position);
+        //proximityZone.position.z -= 3.2;
+
 
         this.proximityZone_ = proximityZone;
 
@@ -127,8 +129,8 @@ export class Door implements Entity, Commandable {
     }
 
     attachFirefly(firefly: Firefly, entityManager: EntityManager): void {
-        const targetPosition: Vector3 = new Vector3().copyFrom(this.proximityZone_.position);
-        targetPosition.z += 0.3;
+        const targetPosition: Vector3 = new Vector3().copyFrom(this.proximityZone_.getAbsolutePosition());
+        targetPosition.z += 0.6;
 
         this.color_ = firefly.getColor();
 

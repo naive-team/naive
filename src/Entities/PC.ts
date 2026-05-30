@@ -223,11 +223,12 @@ export class PC implements Entity {
             if ( ! tokens[1] ) {
                 this.clearScreen_();
                 this.writeLine_("COMMANDS", "yellow");
-                this.writeLine_("======== ", "yellow");
-                this.writeLine_("• move ");
                 this.writeLine_("• help");
+                this.writeLine_("• open");
+                this.writeLine_("• move ");
                 this.writeLine_("");
                 this.writeLine_("Try this :");
+                this.writeLine_("help open", "yellow");
                 this.writeLine_("help move", "yellow");
                 this.writeLine_("");
                 return;
@@ -243,8 +244,23 @@ export class PC implements Entity {
                 this.writeLine_("=======");
                 this.writeLine_("yellow move north 1", "yellow");
                 this.writeLine_("");
+                this.writeLine_("");
                 return;
 
+            }
+
+            else if (tokens[1] === "open") {
+                this.clearScreen_();
+                this.writeLine_("SYNTAX", "yellow");
+                this.writeLine_("======", "yellow");
+                this.writeLine_("<targ> open");
+                this.writeLine_("");
+                this.writeLine_("Try this :");
+                this.writeLine_("yellow open", "yellow");
+                this.writeLine_("");
+                this.writeLine_("");
+                this.writeLine_("");
+                return;
             }
 
             this.writeLine_(`ERROR: ${tokens[1]} undefined`, "red");
@@ -297,7 +313,14 @@ export class PC implements Entity {
     }
 
     private writeLine_(text: string, color: string = "white") {
-        this.content_.push({text, color});
+        if (this.content_.length === 1 && this.content_[0].text === "") {
+            this.content_[0] = ({text, color});
+        }
+        else {
+            this.content_.push({text, color});
+        }
+
+
         this.updateScreen_();
     }
 

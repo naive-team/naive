@@ -50,7 +50,7 @@ export class DialogGraph {
             this.currentNodeIndex = index;
         }
         else{
-            console.log("index inferieur, current dialog index inchangé" );
+           // console.log("index inferieur, current dialog index inchangé" );
         }
     }
     public conditionalSetCurrentNode(wantedIndex: number, currentIndex:number) {

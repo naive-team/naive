@@ -49,6 +49,9 @@ export class LabScene extends Scene implements AsyncScene {
     private fireflyMesh_: AbstractMesh;
     private railFade_: RailFadeSequence;
     private bgm_: Sound;
+    private caliBgm_: Sound;
+    private currentMusic_: string = "lab";
+
 
     private bgmReady_: boolean = false;
     private sceneStarted_: boolean = false;
@@ -236,6 +239,9 @@ export class LabScene extends Scene implements AsyncScene {
         const bgm: Sound = new Sound("LabBGM", "./old_lab.ogg", this, () => {this.bgm_.play()}, {loop: true, autoplay: false});
         this.bgm_ = bgm;
 
+        const caliBgm: Sound = new Sound("CaliBGM", "./music/cali.ogg", this, null);
+        this.caliBgm_ = caliBgm;
+
         const pcMeshData = await MeshLoader.loadMesh("./pc_v2.glb", this);
         this.pcMesh_ = pcMeshData.mesh;
 
@@ -391,5 +397,20 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
 
     private getTransformNode_(name: string): TransformNode {
         return this.labMesh.getChildTransformNodes(false).filter((tn) => tn.name === name)[0];
+    }
+
+    public switchMusic(): void {
+        switch(this.currentMusic_) {
+            case "lab":
+                this.bgm_.pause();
+                this.caliBgm_.play();
+                this.currentMusic_ = "cali";
+                break;
+            case "cali":
+                this.caliBgm_.pause();
+                this.bgm_.play();
+                this.currentMusic_ = "lab";
+                break;
+        }
     }
 }

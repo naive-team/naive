@@ -4,6 +4,8 @@ import {Engine} from "@babylonjs/core";
 import {SceneManager} from "./Scenes/SceneManager";
 import {TitleScreenScene} from "./Scenes/TitleScreenScene";
 import {LabScene} from "./Scenes/LabScene";
+import {FadeTestScene} from "./Scenes/FadeTestScene";
+import {VideoScene} from "./util/VideoCinematic/VideoScene";
 
 function createCanvas() {
 	const canvas: HTMLCanvasElement = document.createElement("canvas");
@@ -53,7 +55,25 @@ class App {
 		// Première scène
 		//await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
 		await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
-		//await this.sceneManager_.switchTo(new FadeTestScene(this.engine_, this.sceneManager_, new LabScene(this.engine_, this.sceneManager_)));
+		/*await this.sceneManager_.switchTo(
+			new FadeTestScene
+			(
+				this.engine_,
+				this.sceneManager_,
+				new VideoScene(
+					this.engine_,
+					"badEnd",
+					"./badend.mp4",
+					-1.18,
+					()=>{ },
+					async() => {
+						await this.sceneManager_.switchTo(
+							new TitleScreenScene(this.engine_, this.sceneManager_)
+						)
+					}
+				),
+			)
+		);*/
 	}
 	private async loadFont_(): Promise<void> {
 		await document.fonts.load("16px 'Press Start 2P'");

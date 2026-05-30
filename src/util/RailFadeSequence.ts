@@ -78,7 +78,7 @@ export class RailFadeSequence {
         this.startTrigger_ = params.startTrigger;
         this.endPlane_     = params.endPlane;
         this.railHeight_   = params.railHeight  ?? 8;
-        this.railZOffset_  = params.railZOffset ?? -6;
+        this.railZOffset_  = params.railZOffset ?? 6;
 
         this.registerShader_();
         this.buildRailCamera_();
@@ -131,7 +131,7 @@ export class RailFadeSequence {
             new Vector3(0, this.railHeight_, this.railZOffset_),
             this.scene_
         );
-        this.railCamera_.setTarget(new Vector3(0, 0, 1000));
+        this.railCamera_.setTarget(new Vector3(0, 0, 0));
         this.railCamera_.minZ = 0.1;
 
         this.fadePostProcess_ = new PostProcess(
@@ -171,30 +171,30 @@ export class RailFadeSequence {
     private activateRailCamera_(): void {
         const pos = this.player_.getCollider().position;
         this.railCamera_.position = new Vector3(
-            pos.x,
+            1.51,
             pos.y + this.railHeight_,
             pos.z + this.railZOffset_
         );
-        this.gameContext_.playerCamera.alpha = 4.71; //TODO hardcodé...
+        this.gameContext_.playerCamera.alpha = 1.5;
         this.scene_.activeCamera = this.railCamera_;
     }
 
     private updateRailCamera_(): void {
         const pos = this.player_.getCollider().position;
         this.railCamera_.position.z = pos.z + this.railZOffset_;
-        this.railCamera_.setTarget(new Vector3(0, pos.y, pos.z));
+        this.railCamera_.setTarget(new Vector3(1.51, pos.y, pos.z));
     }
 
-    private updateFade_(): void {
+    async updateFade_(): Promise<void> {
         const playerZ = this.player_.getCollider().position.z;
-        const startZ  = this.startTrigger_.position.z;
-        const endZ    = this.endPlane_.position.z;
+        const startZ  = this.startTrigger_.getAbsolutePosition().z;
+        const endZ    = this.endPlane_.getAbsolutePosition().z;
 
         const raw = (playerZ - startZ) / (endZ - startZ);
         this.fadeAlpha_ = Math.min(1, Math.max(0, raw));
 
         if (this.fadeAlpha_ >= 1) {
-            this.sceneManager_.switchTo(this.nextScene_, false);
+            await this.sceneManager_.switchTo(this.nextScene_, false);
         }
     }
 }

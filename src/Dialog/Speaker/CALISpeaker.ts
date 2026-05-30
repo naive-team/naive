@@ -12,6 +12,7 @@ import {TextureSwitcher} from "../../util/TextureSwitcher";
 import {CaliFaces} from "../../util/CaliFaces";
 import {CalifaceSwitcher} from "../../util/CalifaceSwitcher";
 import {Door} from "../../Entities/Door";
+import {LabScene} from "../../Scenes/LabScene";
 
 export class CALISpeaker extends Speaker implements Entity {
 
@@ -33,10 +34,14 @@ export class CALISpeaker extends Speaker implements Entity {
         CaliFaces.initialize(scene);
 
     }
-    override async interact(_scene: Scene){
-        await super.interact(_scene);
+    override async interact(scene: Scene){
+        if (scene instanceof LabScene) (scene as LabScene).switchMusic();
+
+        await super.interact(scene);
         this.interactionCounter ++;
         console.log(this.interactionCounter);
+
+        if (scene instanceof LabScene) (scene as LabScene).switchMusic();
 
     }
     private defBlabla(uiGlobale : GUI.AdvancedDynamicTexture):void {

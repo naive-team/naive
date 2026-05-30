@@ -16,7 +16,6 @@ import {Commandable} from "../../Entities/interfaces/Commandable";
 import {EntityManager} from "../../Entities/util/EntityManager";
 import {Door} from "../../Entities/Door";
 import {Block} from "../../Entities/Block";
-import {TextureSwitcher} from "../../util/TextureSwitcher";
 
 export class CALISpeaker extends Speaker implements Entity {
 
@@ -321,9 +320,9 @@ export class CALISpeaker extends Speaker implements Entity {
 
     let sayonara : Line = new Line ("Mon programme ne me permet pas aller plus loin...",
         new Line("Désolé tu vas devoir continuer sans moi..." , null, sadThenNormal)
-    ),
+    );
 
-        /// -------- Dialogs ------------
+/// -------- Dialogs ------------
 
     let dialogWelcome: Dialog = new Dialog(uiGlobale, welcome, 0);
 
@@ -344,6 +343,10 @@ export class CALISpeaker extends Speaker implements Entity {
     let dialogLetsGo = new Dialog(uiGlobale, letsGO, 8);
 
     let dialogSecureDoorOpen = new Dialog(uiGlobale, secureDoorOpen, 1);
+
+    let DialogOpenTheDoor = new Dialog(uiGlobale, openTheDoor, 1);
+
+    let dialogSayonara = new Dialog(uiGlobale, sayonara,1);
 
 /// -------- Dialog Nodes ------------
 
@@ -381,10 +384,15 @@ export class CALISpeaker extends Speaker implements Entity {
 
     let nodeSecureDoorOpen : DialogNode= {dialog: dialogSecureDoorOpen, defaultNext:9};
 
+    let nodeOpentheDoor: DialogNode = {dialog:DialogOpenTheDoor, defaultNext:10};
+
+    let nodeSayonara = {dialog:dialogSayonara, defaultNext:11};
+
     this.dialogGraph.setNodes(
         [
             nodewelcome, nodetuto1, nodeneedsommehelp, nodeTuto2, nodeTuto3, nodeTuto4,
-            nodeAnotherDoor, nodeTutoBloc1, nodeLetsGo, nodeSecureDoorOpen
+            nodeAnotherDoor, nodeTutoBloc1, nodeLetsGo, nodeSecureDoorOpen, nodeOpentheDoor,
+            nodeSayonara
         ]
     );
 

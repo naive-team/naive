@@ -433,9 +433,9 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
             leftDoor2,
             rightDoor2,
             "door_to_serv",
-            ()=>{this.cali_.setCurrentDialogIndex(4)},
-            ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
-            ()=>{this.cali_.setCurrentDialogIndex(6)}
+            ()=>{this.cali_.setCurrentDialogIndex(10)},
+            ()=>{this.cali_.forceCurrentDialogIndex(9)},
+            ()=>{this.cali_.setCurrentDialogIndex(11)}
         );
         this.entityManager_.add(door2);
     }

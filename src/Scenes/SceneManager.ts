@@ -1,4 +1,4 @@
-﻿import { Engine } from "@babylonjs/core";
+﻿import {Engine, ILoadingScreen} from "@babylonjs/core";
 import {AsyncScene} from "./AsyncScene";
 import {CustomLoadingScreen} from "../util/CustomLoadingScreen";
 
@@ -18,10 +18,24 @@ export class SceneManager {
     }
 
     async switchTo(newScene: AsyncScene, _showLoadingUI = true): Promise<void> {
-        //if(showLoadingUI) {
-            //TODO quand montre pas ca a l air degeu...
+        if(_showLoadingUI) {
+            this.engine_.loadingScreen = new CustomLoadingScreen(this.canvas_);
             this.engine_.displayLoadingUI();
-        //}
+        }
+        else {
+            const blackScreen: ILoadingScreen = {
+                displayLoadingUI: () => {
+                    this.canvas_.style.visibility = "hidden";
+                },
+                hideLoadingUI: () => {
+                    this.canvas_.style.visibility = "visible";
+                },
+                loadingUIText: "",
+                loadingUIBackgroundColor: "#000000",
+            };
+            this.engine_.loadingScreen = blackScreen;
+            this.engine_.displayLoadingUI();
+        }
 
         this.currentScene_?.dispose();
         newScene.onPointerDown = () => {
@@ -37,9 +51,9 @@ export class SceneManager {
             this.currentScene_?.render();
             this.currentScene_?.update();
         });
-        //if (showLoadingUI) {
-            this.engine_.hideLoadingUI();
-        //}
+
+        this.engine_.hideLoadingUI();
+
 
     }
 

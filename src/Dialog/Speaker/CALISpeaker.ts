@@ -8,6 +8,7 @@ import {DialogNode} from "../DialogNode";
 import {Entity} from "../../Entities/interfaces/Entity";
 import {EntityFamily} from "../../Entities/util/EntityFamily";
 import {GameContext} from "../../util/GameContext";
+import {TextureSwitcher} from "../../util/TextureSwitcher";
 import {CaliFaces} from "../../util/CaliFaces";
 import {CalifaceSwitcher} from "../../util/CalifaceSwitcher";
 import {LabScene} from "../../Scenes/LabScene";
@@ -15,7 +16,6 @@ import {Commandable} from "../../Entities/interfaces/Commandable";
 import {EntityManager} from "../../Entities/util/EntityManager";
 import {Door} from "../../Entities/Door";
 import {Block} from "../../Entities/Block";
-import {TextureSwitcher} from "../../util/TextureSwitcher";
 
 export class CALISpeaker extends Speaker implements Entity {
 
@@ -139,10 +139,10 @@ export class CALISpeaker extends Speaker implements Entity {
             "Non, rien en fait."
             ],
             [
-                new Line("Il suffit de l'accorcher à la porte !",
+                new Line("Il suffit de l'accrocher à la porte !",
                     new ChoiceLine("",
                         [
-                            "L'accorcher ?",
+                            "L'accrocher ?",
                             "D'accord !"],
                         [
                             new Line("Oui pour cela il suffit d'appuyer sur le bouton [F].", null),
@@ -302,9 +302,27 @@ export class CALISpeaker extends Speaker implements Entity {
                 ]
             )
         )
-    )
+    );
+    let openTheDoor: Line = new Line("Besoin d'aide ?",
+        new ChoiceLine("",
+            [
+                "Tu peux ouvrir la porte ?",
+                "C'est quoi la commende déja ?",
+                "Non rien"
+            ],
+            [
+                new Line("D'acc je fais ça !", null, ()=>{openDoor("door_to_serv")}),
+                new Line("Une fois dans le terminal, tape `yellow open`", null),
+                new Line("Oki !", null, thxThenNormal)
+            ]
+        )
+    );
 
-        /// -------- Dialogs ------------
+    let sayonara : Line = new Line ("Mon programme ne me permet pas aller plus loin...",
+        new Line("Désolé tu vas devoir continuer sans moi..." , null, sadThenNormal)
+    );
+
+/// -------- Dialogs ------------
 
     let dialogWelcome: Dialog = new Dialog(uiGlobale, welcome, 0);
 
@@ -325,6 +343,10 @@ export class CALISpeaker extends Speaker implements Entity {
     let dialogLetsGo = new Dialog(uiGlobale, letsGO, 8);
 
     let dialogSecureDoorOpen = new Dialog(uiGlobale, secureDoorOpen, 1);
+
+    let DialogOpenTheDoor = new Dialog(uiGlobale, openTheDoor, 1);
+
+    let dialogSayonara = new Dialog(uiGlobale, sayonara,1);
 
 /// -------- Dialog Nodes ------------
 
@@ -362,10 +384,15 @@ export class CALISpeaker extends Speaker implements Entity {
 
     let nodeSecureDoorOpen : DialogNode= {dialog: dialogSecureDoorOpen, defaultNext:9};
 
+    let nodeOpentheDoor: DialogNode = {dialog:DialogOpenTheDoor, defaultNext:10};
+
+    let nodeSayonara = {dialog:dialogSayonara, defaultNext:11};
+
     this.dialogGraph.setNodes(
         [
             nodewelcome, nodetuto1, nodeneedsommehelp, nodeTuto2, nodeTuto3, nodeTuto4,
-            nodeAnotherDoor, nodeTutoBloc1, nodeLetsGo, nodeSecureDoorOpen
+            nodeAnotherDoor, nodeTutoBloc1, nodeLetsGo, nodeSecureDoorOpen, nodeOpentheDoor,
+            nodeSayonara
         ]
     );
 

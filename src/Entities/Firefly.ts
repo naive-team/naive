@@ -34,7 +34,7 @@ export class Firefly implements Entity, Bug {
         this.mesh_.scaling.z = scaling;
 
         this.collider_ = MeshBuilder.CreateBox("beetle", {size: 0.3});
-        this.collider_.checkCollisions = true;
+        this.collider_.checkCollisions = false;
 
         this.collider_.visibility = 0;
 

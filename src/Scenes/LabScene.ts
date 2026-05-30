@@ -71,7 +71,10 @@ export class LabScene extends Scene implements AsyncScene {
 
         this.sceneStarted_ = true;
 
-        const collisionIgnored = ["sol", "Cylinder.004", "Cylinder.009", "sol.001", "sol.003"];
+        const collisionIgnored = [
+            "sol", "Cylinder.004", "Cylinder.009", "sol.001", "sol.003", "sol.005",
+            "sol.005", "sol.004", "Cylinder.010", "sol.012_primitive0", "sol.012_primitive1", "Cube.011"
+        ];
 
         for (const mesh of this.labMesh.getChildMeshes(false)){
             mesh.checkCollisions = true;

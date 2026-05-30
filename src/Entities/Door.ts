@@ -13,7 +13,8 @@ enum DoorState {
     OPENING,
     OPENED,
     JUST_OPENED,
-    START_OPENING//TODO partout a l exterieur ou on passe a opening il faut mettre start opening
+    START_OPENING,//TODO partout a l exterieur ou on passe a opening il faut mettre start opening,
+    CLOSING
 }
 
 export class Door implements Entity, Commandable {
@@ -31,6 +32,9 @@ export class Door implements Entity, Commandable {
     private actionOnOpened:()=>void;
     private id_: string;
 
+    private rightMeshOriginalPosX_: number;
+    private leftMeshOriginalPosX_: number;
+
     constructor(leftMesh: AbstractMesh, rightMesh: AbstractMesh, id: string = "door",
                 actionOnAttachFirefly:()=>void = ()=>{},
                 actionOnUnlinkFirefly:()=>void = ()=>{},
@@ -40,6 +44,9 @@ export class Door implements Entity, Commandable {
 
         this.leftMesh_ = leftMesh;
         this.rightMesh_ = rightMesh;
+
+        this.rightMeshOriginalPosX_ = rightMesh.position.x;
+        this.leftMeshOriginalPosX_ = leftMesh.position.x;
 
         this.color_ = null;
 
@@ -111,7 +118,7 @@ export class Door implements Entity, Commandable {
 
                 this.distanceTraveled_ += 0.01;
 
-                if (this.distanceTraveled_ > 1) {
+                if (this.distanceTraveled_ >= 1) {
                     this.state_ = DoorState.JUST_OPENED;
                 }
                 break;
@@ -124,7 +131,21 @@ export class Door implements Entity, Commandable {
             case DoorState.START_OPENING:
                 this.actionOnOpened();
                 this.state_ = DoorState.OPENING;
-                break
+                break;
+
+            case DoorState.CLOSING:
+                this.rightMesh_.position.x += 0.1;
+                this.leftMesh_.position.x -= 0.1;
+
+                this.distanceTraveled_ += 0.1;
+
+                if (this.distanceTraveled_ >= 1) {
+                    this.state_ = DoorState.CLOSED;
+                    this.rightMesh_.position.x = this.rightMeshOriginalPosX_;
+                    this.leftMesh_.position.x = this.leftMeshOriginalPosX_;
+                }
+
+                break;
         }
     }
 
@@ -153,6 +174,14 @@ export class Door implements Entity, Commandable {
 
     open(){
         this.state_ = DoorState.START_OPENING;
+    }
+
+    close(): void {
+        if (this.state_ !== DoorState.OPENED && this.state_ !== DoorState.OPENING) return;
+
+        this.distanceTraveled_ = 0;
+
+        this.state_ = DoorState.CLOSING;
     }
 
 }

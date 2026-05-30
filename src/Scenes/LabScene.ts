@@ -172,6 +172,22 @@ export class LabScene extends Scene implements AsyncScene {
             )
         );
 
+        const toServerRoomTrigger: AbstractMesh = this.getMesh_("#TRIGGER_TO_SERVER_ROOM");
+
+        toServerRoomTrigger.actionManager = new ActionManager(this);
+        toServerRoomTrigger.actionManager.registerAction(
+            new ExecuteCodeAction(
+                {trigger: ActionManager.OnIntersectionEnterTrigger,
+                    parameter: playerCollider
+                },
+                (): void => {
+                    const door: Door = this.entityManager_.getEntityById("door_to_serv") as Door;
+
+                    door.close();
+                }
+            )
+        );
+
         this.createBlocEtButton();
 
         this.createSecureDoor();

@@ -56,9 +56,7 @@ export class CALISpeaker extends Speaker implements Entity {
         let winkThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.winkFace)};
         let starThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.starFace)};
 
-        let sadThenNormal = ()=>{
-            //TODO switch sur sad face
-        };
+        let sadThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.sadFace)};
 
         let bigbrain = ()=>{
             //TODO lancer anim matrix

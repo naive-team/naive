@@ -32,7 +32,7 @@ export class Button implements Entity {
         mesh.scaling.y = scaling;
         mesh.scaling.z = scaling;
 
-        this.intersectZone_ = MeshBuilder.CreateBox("buttonIntersectZone", {height: 0.3, width: 0.5, depth: 0.5});
+        this.intersectZone_ = MeshBuilder.CreateBox("buttonIntersectZone", {height: 0.3, width: 0.5, depth: 0.5}, mesh.getScene());
         this.intersectZone_.isVisible = false;
 
         this.mesh_ = mesh;

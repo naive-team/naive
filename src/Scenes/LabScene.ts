@@ -190,6 +190,9 @@ export class LabScene extends Scene implements AsyncScene {
             )
         );
 
+        const triggerEnd: AbstractMesh = this.getMesh_("#TRIGGER_END");
+        triggerEnd.isVisible = false;
+
         this.createBlocEtButton();
 
         this.createSecureDoor();

@@ -52,7 +52,7 @@ export class SceneStateUsingPC implements SceneState {
         this.pc_.getCollider().getScene().activeCamera = cam;
 
         (ctx.entityManager.getEntityByFamily(EntityFamily.PLAYER) as Player).setVisible(false);
-        this.ui.show()
+        this.ui.show();
     }
 
     onLeave(_state: SceneStateMachine, ctx: GameContext): void {

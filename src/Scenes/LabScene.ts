@@ -132,23 +132,12 @@ export class LabScene extends Scene implements AsyncScene {
           matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
 // -----------------------------------------------------
 
-        // TODO tester...
         const MeshStart = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_TO_SERVER_ROOM");
         const MeshEnd = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_END");
 
         this.railFade_ = new RailFadeSequence(this,
             this.SceneManager,
-            new VideoScene(this.engine,
-                "badEnd",
-                "./badend.mp4",
-                -1.18,
-                ()=>{ },
-                async() => {
-                await this.SceneManager.switchTo(
-                    new TitleScreenScene(this.engine, this.SceneManager)
-                )
-                }
-            ),
+            this,
             this.player_,
             this.gameContext_, {
             startTrigger: MeshStart,
@@ -454,9 +443,9 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
             leftDoor2,
             rightDoor2,
             "door_to_serv",
-            ()=>{this.cali_.setCurrentDialogIndex(4)},
-            ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
-            ()=>{this.cali_.setCurrentDialogIndex(6)}
+            ()=>{this.cali_.setCurrentDialogIndex(10)},
+            ()=>{this.cali_.forceCurrentDialogIndex(9)},
+            ()=>{this.cali_.setCurrentDialogIndex(11)}
         );
         this.entityManager_.add(door2);
     }

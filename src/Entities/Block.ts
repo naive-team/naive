@@ -44,7 +44,7 @@ export class Block implements Entity, Commandable {
             width: size.x,
             height: size.y,
             depth: size.z
-        });
+        }, this.mesh_.getScene());
 
         collider.position.y += 0.5;
 
@@ -62,7 +62,7 @@ export class Block implements Entity, Commandable {
             width: proximitySize,
             height: proximitySize,
             depth: proximitySize
-        });
+        }, this.mesh_.getScene());
 
         proximityZone.checkCollisions = false;
         proximityZone.visibility = 0;

@@ -22,7 +22,7 @@ export class Door implements Entity, Commandable {
     private rightMesh_: AbstractMesh;
 
     private collider_: AbstractMesh;
-    private state_: DoorState = DoorState.OPENING;
+    private state_: DoorState = DoorState.CLOSED;
 
     private color_: Color;
     private distanceTraveled_: number = 0;

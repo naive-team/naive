@@ -12,7 +12,7 @@ export interface DialogNode {
 // DialogGraph.ts
 export class DialogGraph {
     private nodes: DialogNode[];
-    private currentNodeIndex: number = 0;
+    public currentNodeIndex: number = 0;
 
     constructor() {
 

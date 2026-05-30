@@ -11,7 +11,9 @@ import {EntityManager} from "./util/EntityManager";
 enum DoorState {
     CLOSED,
     OPENING,
-    OPENED
+    OPENED,
+    JUST_OPENED,
+    START_OPENING//TODO partout a l exterieur ou on passe a opening il faut mettre start opening
 }
 
 export class Door implements Entity, Commandable {
@@ -106,13 +108,19 @@ export class Door implements Entity, Commandable {
                 this.distanceTraveled_ += 0.01;
 
                 if (this.distanceTraveled_ > 1) {
-                    this.state_ = DoorState.OPENED;
+                    this.state_ = DoorState.JUST_OPENED;
                 }
                 break;
 
             case DoorState.OPENED:
-                this.actionOnOpened();
                 break;
+            case DoorState.JUST_OPENED:
+                this.state_ = DoorState.OPENED;
+                break;
+            case DoorState.START_OPENING:
+                this.actionOnOpened();
+                this.state_ = DoorState.OPENING;
+                break
         }
     }
 
@@ -137,6 +145,10 @@ export class Door implements Entity, Commandable {
 
     getId(): string {
         return this.id_;
+    }
+
+    open(){
+        this.state_ = DoorState.START_OPENING;
     }
 
 }

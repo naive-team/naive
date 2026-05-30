@@ -92,7 +92,7 @@ export class PC implements Entity {
         const size: number = 44 * TEXT_PCT;
         this.font_ = `bold ${size}px monospace`;
         //InteractTrigger.init(playercollider, scene, this.collider_,new InteractUI("Démarrer"), async (scene) => this.turnOn() )
-        this.ui = new InteractUI("Démarrer")
+        this.ui = new InteractUI("Démarrer");
         this.initTriger(playercollider, scene, this.ui);
         this.exitUi = new InteractUI("Partir", "⇧");
 

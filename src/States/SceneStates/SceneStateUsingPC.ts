@@ -7,7 +7,7 @@ import {GameContext} from "../../util/GameContext";
 import {PC} from "../../Entities/PC";
 import {Player} from "../../Entities/Player";
 
-import {FreeCamera, Tools} from "@babylonjs/core";
+import {FreeCamera, Matrix, Tools, Vector3} from "@babylonjs/core";
 import {KeyboardSwitcherUI} from "../../UI/KeyBoardSwitcherUI";
 
 export class SceneStateUsingPC implements SceneState {
@@ -33,10 +33,22 @@ export class SceneStateUsingPC implements SceneState {
         this.pc_ = ctx.entityManager.getEntityByFamily(EntityFamily.PC) as PC;
         this.pc_.turnOn();
 
-        const cam = new FreeCamera("pcCam", this.pc_.getCollider().position.clone(), this.pc_.getCollider().getScene());
-        cam.rotation.y = Tools.ToRadians(180);
-        cam.position.z = 7.8;
-        cam.position.y = 1.2;
+        const collider = this.pc_.getCollider();
+        const angle = collider.rotation.y; // ou rotationQuaternion si tu utilises des quaternions
+
+        const localOffset = new Vector3(0, 0.5, 0.4);
+
+        const rotatedOffset = Vector3.TransformCoordinates(
+            localOffset,
+            Matrix.RotationY(angle)
+        );
+
+        const cam = new FreeCamera(
+            "pcCam",
+            collider.position.add(rotatedOffset),
+            collider.getScene()
+        );
+        cam.rotation.y = angle + Tools.ToRadians(180);
         this.pc_.getCollider().getScene().activeCamera = cam;
 
         (ctx.entityManager.getEntityByFamily(EntityFamily.PLAYER) as Player).setVisible(false);

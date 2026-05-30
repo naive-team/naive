@@ -8,38 +8,45 @@ import {DialogNode} from "../DialogNode";
 import {Entity} from "../../Entities/interfaces/Entity";
 import {EntityFamily} from "../../Entities/util/EntityFamily";
 import {GameContext} from "../../util/GameContext";
-import {TextureSwitcher} from "../../util/TextureSwitcher";
 import {CaliFaces} from "../../util/CaliFaces";
 import {CalifaceSwitcher} from "../../util/CalifaceSwitcher";
-import {Door} from "../../Entities/Door";
 import {LabScene} from "../../Scenes/LabScene";
+import {Commandable} from "../../Entities/interfaces/Commandable";
+import {EntityManager} from "../../Entities/util/EntityManager";
+import {Door} from "../../Entities/Door";
+import {Block} from "../../Entities/Block";
+import {TextureSwitcher} from "../../util/TextureSwitcher";
 
 export class CALISpeaker extends Speaker implements Entity {
 
     private interactionCounter:number = 0;
     private califaceSwitcher:CalifaceSwitcher;
+    private entityManager:EntityManager;
 
-    constructor(uiGlobale : GUI.AdvancedDynamicTexture, mesh :AbstractMesh, scene:Scene, playermesh: AbstractMesh) {
+    constructor(uiGlobale : GUI.AdvancedDynamicTexture, mesh :AbstractMesh, scene:Scene, playermesh: AbstractMesh, entityManager:EntityManager) {
 
         super("C.A.L.I", mesh, scene, playermesh);
 
         this.defBlabla(uiGlobale);
-        //this.init(playermesh, scene);
+
         this.collider_.position = new Vector3(5.5, 0.8, 2.1);
         this.collider_.rotation._y = Tools.ToRadians(149.2);
         this.collider_.scaling = new Vector3(0.4, 0.4, 0.4);
         this.collider_.isVisible = false;
+
         let faceMesh = mesh.getChildMeshes()[1];
         this.califaceSwitcher = new CalifaceSwitcher(faceMesh);
+
         CaliFaces.initialize(scene);
 
+        this.entityManager = entityManager;
     }
     override async interact(scene: Scene){
         if (scene instanceof LabScene) (scene as LabScene).switchMusic();
 
         await super.interact(scene);
         this.interactionCounter ++;
-        console.log(this.interactionCounter);
+        //console.log(this.interactionCounter);
 
         if (scene instanceof LabScene) (scene as LabScene).switchMusic();
 
@@ -48,6 +55,30 @@ export class CALISpeaker extends Speaker implements Entity {
         let thxThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.thxFace)};
         let winkThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.winkFace)};
         let starThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.starFace)};
+
+        let sadThenNormal = ()=>{
+            //TODO switch sur sad face
+        };
+
+        let bigbrain = ()=>{
+            //TODO lancer anim matrix
+        }
+
+        let openDoor = (id:string)=>{
+           let entity = this.entityManager.getEntityById(id);
+           const door:Door = entity as Door;
+            setTimeout(()=>{door.open()}, 1000);
+        }
+        let resolveDevRoomBloc = ()=>{
+            let entity1 = this.entityManager.getEntityById("block1");
+            const bloc1:Block = entity1 as Block;
+
+            let entity2 = this.entityManager.getEntityById("block2");
+            const bloc2:Block = entity2 as Block;
+
+            bloc1.setPosition(6.5,-0.3,-12.3);
+            bloc2.setPosition(6.5,-0.3,-9.6);
+        };
 
         /// -------- LINES ------------
         let tuto1 : Line = new Line ("D'acc on fait ça !",
@@ -144,44 +175,51 @@ export class CALISpeaker extends Speaker implements Entity {
                 ]
         )
     )
-        let tuto4 : Line = new Line ("Besoin d'aide ?",
-            new ChoiceLine ("",
-                [
-                    "Comment on \"parle\" à un ordi ?",
-                    "Nope !"
-                ],
-                [
-                    new Line("Nyahaha, c'est sûr, converser avec cette boite de conserve c'est plus relou qu'un adorable chaton comme moi ;)",
-                        new Line("Tu veux que je m'en charge ?",
-                            new ChoiceLine("",
-                                [
-                                    "Oui s'il te plait !",
-                                    "Comment le faire par moi-même ?",
-                                    "Nan je me débrouille."
-                                ],
-                                [
-                                    new Line("Oki je fais ça !", null), // TODO lancer animation et unlock porte
-                                    new Line("L'ordinateur fonctionne avec des commandes simples(?). Tu trouveras les détails de syntaxe en écrivant \"help\" dans le terminal",
-                                        new ChoiceLine("",
-                                            [
-                                                "Comment on ouvre le terminal déjà ?",
-                                                "Merci C.A.L.I !"
-                                            ],
-                                            [
-                                                howtoOpenTerminal,
-                                                new Line ("Y'a pas de quoi ^u^", null, thxThenNormal)
-                                            ]
-                                        )
-                                    ),
-                                    new Line("Okidoki !", null)
-                                ]
-                            )
-                        ),
-                        winkThenNormal
-                    )
-                ]
-            )
-        );
+    let tuto4 : Line = new Line ("Besoin d'aide ?",
+        new ChoiceLine ("",
+            [
+                "Comment on \"parle\" à un ordi ?",
+                "Nope !"
+            ],
+            [
+                new Line("Nyahaha, c'est sûr, parler à cette boite de conserve c'est plus relou qu'un adorable chaton comme moi ;)",
+                    new Line("Tu veux que je m'en charge ?",
+                        new ChoiceLine("",
+                            [
+                                "Oui s'il te plait !",
+                                "Comment le faire par moi-même ?",
+                                "Nan je me débrouille."
+                            ],
+                            [
+                                new Line("Oki je fais ça !", null, ()=>{
+                                    bigbrain();
+                                    openDoor("door_to_dev");
+                                }),
+                                new Line("L'ordinateur fonctionne avec des commandes simples(?). Tu trouveras les détails de syntaxe en écrivant \"help\" dans le terminal",
+                                    new ChoiceLine("",
+                                        [
+                                            "Comment on ouvre le terminal déjà ?",
+                                            "Merci C.A.L.I !"
+                                        ],
+                                        [
+                                            howtoOpenTerminal,
+                                            new Line ("Y'a pas de quoi ^u^", null, thxThenNormal)
+                                        ]
+                                    )
+                                ),
+                                new Line("Okidoki !", null)
+                            ]
+                        )
+                    ),
+                    winkThenNormal
+                ),
+                new Line("Okidoki !", null)
+            ]
+        )
+    );
+
+    let letsGO:Line = new Line ("La porte est ouverte ! On peut avancer maintenant", null, starThenNormal);
+
     let anotherDoor :Line = new Line("On dirait bien que la prochaine porte est bloquée aussi... ",
         new Line("Heureusement il y a encore un ordi dans cette salle... et on a toujours la luciole !",
             null, starThenNormal)
@@ -218,15 +256,17 @@ export class CALISpeaker extends Speaker implements Entity {
                                                     ],
                                                     [
                                                         new Line("D'acc je fais ça !", null, ()=>{
-                                                            //TODO CALI DEPLACE BLOCs ( ca ouvre la  porte de securité)
+                                                                setTimeout(resolveDevRoomBloc, 1000);
+                                                                //TODO attendre un peu avant big brain ?
+                                                                bigbrain();
                                                             }
-                                                            ),
-                                                        new Line("OK...", null)
+                                                        ),
+                                                        new Line("OK...", null, thxThenNormal)
                                                     ]
                                                 )
                                             )
                                         ),
-                                        new Line ("D'acc...",null)
+                                        new Line ("D'acc...",null, sadThenNormal)
                                     ]
                                 )
                             )
@@ -242,12 +282,27 @@ export class CALISpeaker extends Speaker implements Entity {
                     [
                         new Line("Les bloc sont déplaçables grace à l'énergie des lucioles.",null),
                         new Line ("Les boutons activent des trucs quand on appuie dessus", null),
-                        new Line ("D'acc...",null)
+                        new Line ("D'acc...",null,sadThenNormal)
 
                     ]
                 ),
-                new Line ("Je suis là si tu as besoin de moi...",null)
+                new Line ("Je suis là si tu as besoin de moi...",null, thxThenNormal)
             ]
+        ),
+        winkThenNormal
+    );
+    let secureDoorOpen:Line = new Line ("La porte de sécurité est ouverte !",
+        new Line("Plus qu'a ouvrir la porte avec la luciole !",
+            new ChoiceLine("",
+                [
+                    "Tu peux le faire ?",
+                    "YATTA !"
+                ],
+                [
+                    new Line("Il faut d'abbord accrocher la luciole à la porte pour que je puisse l'acctionner...", null, sadThenNormal),
+                    new Line("YATTA !", null, starThenNormal)
+                ]
+            )
         )
     )
 
@@ -263,18 +318,17 @@ export class CALISpeaker extends Speaker implements Entity {
 
     let dialogTuto3 :Dialog = new Dialog(uiGlobale, tuto3, 5);
 
-    let dialogTuto4 : Dialog = new Dialog(uiGlobale, tuto4, 4,
-        (choiceIndex:number)=>{
-        if(choiceIndex === 0){
-            console.log("cali big brain OPEN THE DOOOR !")
-            //TODO open the door
-            // en ft je pourrais mettre ca ds la line plutot ? sauf q u il faut le faire en fin de line et pas au debut
-        }
-        });
+    let dialogTuto4 : Dialog = new Dialog(uiGlobale, tuto4, 4);
+
     let dialogAnotherDoor = new Dialog(uiGlobale, anotherDoor, 7);
+
     let dialogBloc1 = new Dialog(uiGlobale, tutoBloc1, 7);
 
-        /// -------- Dialog Nodes ------------
+    let dialogLetsGo = new Dialog(uiGlobale, letsGO, 8);
+
+    let dialogSecureDoorOpen = new Dialog(uiGlobale, secureDoorOpen, 1);
+
+/// -------- Dialog Nodes ------------
 
     let nodewelcome : DialogNode = {
             dialog: dialogWelcome,
@@ -294,16 +348,31 @@ export class CALISpeaker extends Speaker implements Entity {
 
     let nodeTuto2 : DialogNode = {dialog: dialogTuto2, defaultNext: 3};
 
-    let nodeTuto3 :DialogNode = {dialog: dialogTuto3, defaultNext: 5};
+    let nodeTuto3 :DialogNode = {dialog: dialogTuto3,
+        choiceTransitions: new Map([
+            [1, 4]
+        ]),
+        defaultNext: 5};
 
     let nodeTuto4:DialogNode = {dialog: dialogTuto4, defaultNext: 5};
 
     let nodeAnotherDoor : DialogNode = {dialog: dialogAnotherDoor, defaultNext:7};
 
-    let nodeTutoBloc1 : DialogNode = {dialog:dialogBloc1, defaultNext:7}
+    let nodeTutoBloc1 : DialogNode = {dialog:dialogBloc1, defaultNext:7};
 
-    this.dialogGraph.setNodes([nodewelcome, nodetuto1, nodeneedsommehelp, nodeTuto2, nodeTuto3, nodeTuto4, nodeAnotherDoor, nodeTutoBloc1]);
+    let nodeLetsGo : DialogNode = {dialog: dialogLetsGo, defaultNext:8};
+
+    let nodeSecureDoorOpen : DialogNode= {dialog: dialogSecureDoorOpen, defaultNext:9};
+
+    this.dialogGraph.setNodes(
+        [
+            nodewelcome, nodetuto1, nodeneedsommehelp, nodeTuto2, nodeTuto3, nodeTuto4,
+            nodeAnotherDoor, nodeTutoBloc1, nodeLetsGo, nodeSecureDoorOpen
+        ]
+    );
+
     }
+
 
     getCollider(): AbstractMesh {
         return this.collider_;

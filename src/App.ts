@@ -51,8 +51,8 @@ class App {
 
 	private async start_(): Promise<void> {
 		// Première scène
-		await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
-		//await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+		//await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
+		await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
 		//await this.sceneManager_.switchTo(new FadeTestScene(this.engine_, this.sceneManager_, new LabScene(this.engine_, this.sceneManager_)));
 	}
 	private async loadFont_(): Promise<void> {

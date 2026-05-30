@@ -8,7 +8,8 @@ enum SecureDoorState {
     CLOSED,
     OPENING,
     OPENED,
-    CLOSING
+    CLOSING,
+    JUST_OPENED
 }
 
 export class SecureDoor implements Entity {
@@ -18,13 +19,15 @@ export class SecureDoor implements Entity {
 
     private upperYLimit: number = 4;
     private lowerYLimit_: number;
+    private action;
 
 
-    constructor(mesh: AbstractMesh, id: string = "secureDoor") {
+    constructor(mesh: AbstractMesh, id: string = "secureDoor", action:()=>void = ()=>{}) {
         this.mesh_ = mesh;
         this.id_ = id;
         
         this.lowerYLimit_ = this.mesh_.position.y;
+        this.action = action;
     }
 
 
@@ -51,12 +54,20 @@ export class SecureDoor implements Entity {
 
                 if (this.mesh_.position.y >= this.upperYLimit) {
                     this.mesh_.position.y = this.upperYLimit;
-                    this.state_ = SecureDoorState.OPENED;
+                    this.state_ = SecureDoorState.JUST_OPENED;
                 }
                 break;
+
             case SecureDoorState.OPENED:
                 this.checkButtonsReleased_(ctx);
                 break;
+
+            case SecureDoorState.JUST_OPENED:
+                this.action();
+                this.state_ = SecureDoorState.OPENED;
+                this.checkButtonsReleased_(ctx);
+                break;
+
             case SecureDoorState.CLOSING:
                 this.mesh_.position.y -= 0.2;
 

@@ -172,8 +172,12 @@ export class Block implements Entity, Commandable {
     }
 
     setPosition(x: number, y: number, z: number): void {
+        console.log("setPosition", x, y, z);
+        console.log(this.mesh_.name);
         this.mesh_.position = new Vector3(x, y, z);
+        console.log("mesh position ok");
         this.updateCollider_();
+        console.log("updTE COLLIDER OK");
     }
 
     getId(): string {

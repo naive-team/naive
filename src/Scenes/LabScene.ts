@@ -28,6 +28,7 @@ import {TitleScreenScene} from "./TitleScreenScene";
 import {Block} from "../Entities/Block";
 import {Button} from "../Entities/Button";
 import {SecureDoor} from "../Entities/SecureDoor";
+import {VideoScene} from "../util/VideoCinematic/VideoScene";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -104,8 +105,7 @@ export class LabScene extends Scene implements AsyncScene {
 
         const gui = AdvancedDynamicTexture.CreateFullscreenUI("UI", true, this);
 
-        this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider());
-
+        this.cali_ = new CALISpeaker(gui, this.calimesh_, this, this.player_.getCollider(), this.entityManager_);
         this.entityManager_.add(this.cali_);
 
         this.createSkydome();
@@ -120,38 +120,34 @@ export class LabScene extends Scene implements AsyncScene {
         const firefly: Firefly = new Firefly(this.fireflyMesh_, "firefly", ()=>{this.cali_.setCurrentDialogIndex(3)});
         this.entityManager_.add(firefly);
 
-        const rightDoor: AbstractMesh = this.getMeshByName("DOOR");
-        const leftDoor: AbstractMesh = this.getMeshByName("DOOR.001");
+        this.initDoors();
 
-        const door: Door = new Door(
-            leftDoor,
-            rightDoor,
-            "door",
-            ()=>{this.cali_.setCurrentDialogIndex(4)},
-            ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
-            ()=>{this.cali_.setCurrentDialogIndex(6)}
-        );
-        this.entityManager_.add(door);
         BugCounterFabric.initialize();
-
-
-        // Test califaces
-        /*CaliFaces.initialize(this);
-        TextureSwitcher.switch(CaliFaces.starFace, this.calimesh_.getChildMeshes()[1]);*/
-        /*const matrixFx = new MatrixTextureEffect(this);
-        matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
 
         //MATRIX TEST-----------------------------------------
         /*  const matrixFx = new MatrixTextureEffect(this);
           matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
 // -----------------------------------------------------
 
-        //TODO changer next scene qd on aura cinematique fin
         // TODO tester...
         const MeshStart = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_TO_SERVER_ROOM");
         const MeshEnd = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_END");
 
-        this.railFade_ = new RailFadeSequence(this, this.SceneManager, new TitleScreenScene(this.engine, this.SceneManager), this.player_, this.gameContext_, {
+        this.railFade_ = new RailFadeSequence(this,
+            this.SceneManager,
+            new VideoScene(this.engine,
+                "badEnd",
+                "./badend.mp4",
+                -1.18,
+                ()=>{ },
+                async() => {
+                await this.SceneManager.switchTo(
+                    new TitleScreenScene(this.engine, this.SceneManager)
+                )
+                }
+            ),
+            this.player_,
+            this.gameContext_, {
             startTrigger: MeshStart,
             endPlane:     MeshEnd,
         });
@@ -173,41 +169,9 @@ export class LabScene extends Scene implements AsyncScene {
             )
         );
 
+        this.createBlocEtButton();
 
-        const buttonMesh1: AbstractMesh = this.getMesh_("bouton");
-        const buttonMesh2: AbstractMesh = this.getMesh_("bouton.001");
-        buttonMesh1.dispose();
-        buttonMesh2.dispose();
-
-        this.getMesh_("Cylinder.011")?.dispose();
-        this.getMesh_("Cylinder.012")?.dispose();
-
-        const blockRoot1: TransformNode = this.getTransformNode_("Cube.016");
-        const blockRoot2: TransformNode = this.getTransformNode_("Cube.017");
-        blockRoot1.dispose();
-        blockRoot2.dispose();
-
-        const block: Block = new Block(this.blockMesh_);
-        const block2: Block = new Block(this.blockMesh_.clone("block2", null));
-
-        this.entityManager_.add(block);
-        this.entityManager_.add(block2);
-
-        block.setPosition(6.4, -0.3, -6.65);
-        block2.setPosition(6.52, -0.3, -15.41);
-
-        const button1 = new Button(this.buttonMesh_, "button1");
-        const button2 = new Button(this.buttonMesh_.clone("button2", null), "button2");
-
-        this.entityManager_.add(button1);
-        this.entityManager_.add(button2);
-
-        button1.setPosition(6.5, -0.25, -9.59);
-        button2.setPosition(6.5, -0.25, -12.03);
-
-        const secureDoorMesh: AbstractMesh = this.getMesh_("secureDoor");
-        const secureDoor: SecureDoor = new SecureDoor(secureDoorMesh);
-        this.entityManager_.add(secureDoor);
+        this.createSecureDoor();
 
 
         return true;
@@ -216,7 +180,6 @@ export class LabScene extends Scene implements AsyncScene {
     update(): void {
         // faudra peut etre gerer l affichage des salles ici ?
         this.sceneStateMachine_.update(this.gameContext_);
-        //TODO on a peut etre pas besoin de l'update depuis le debut...
         this.railFade_.update();
     }
 
@@ -251,7 +214,38 @@ export class LabScene extends Scene implements AsyncScene {
         const buttonMeshData = await MeshLoader.loadMesh("./button.glb", this);
         this.buttonMesh_ = buttonMeshData.mesh;
     }
+    createBlocEtButton(){
+        const buttonMesh1: AbstractMesh = this.getMesh_("bouton");
+        const buttonMesh2: AbstractMesh = this.getMesh_("bouton.001");
+        buttonMesh1.dispose();
+        buttonMesh2.dispose();
 
+        this.getMesh_("Cylinder.011")?.dispose();
+        this.getMesh_("Cylinder.012")?.dispose();
+
+        const blockRoot1: TransformNode = this.getTransformNode_("Cube.016");
+        const blockRoot2: TransformNode = this.getTransformNode_("Cube.017");
+        blockRoot1.dispose();
+        blockRoot2.dispose();
+
+        const block: Block = new Block(this.blockMesh_, "block1");
+        const block2: Block = new Block(this.blockMesh_.clone("block2", null),"block2");
+
+        this.entityManager_.add(block);
+        this.entityManager_.add(block2);
+
+        block.setPosition(6.4, -0.3, -6.65);
+        block2.setPosition(6.52, -0.3, -15.41);
+
+        const button1 = new Button(this.buttonMesh_, "button1");
+        const button2 = new Button(this.buttonMesh_.clone("button2", null), "button2");
+
+        this.entityManager_.add(button1);
+        this.entityManager_.add(button2);
+
+        button1.setPosition(6.5, -0.25, -9.59);
+        button2.setPosition(6.5, -0.25, -12.03);
+    }
     createSkydome(): void {
         // Sphère inversée couvrant toute la scène
         const skyDome = MeshBuilder.CreateSphere("skyDome", {
@@ -388,7 +382,9 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
     private toDevRoom_() {
         this.pc_.setPosition(-12, 0.65, -10.5);
         this.pc_.getCollider().rotation.y -= Tools.ToRadians(90);
-
+        this.cali_.collider_.position = new Vector3(4,0,-10);
+        this.cali_.forceCurrentDialogIndex(6);
+        console.log(this.cali_.dialogGraph.currentNodeIndex);
     }
 
     private getMesh_(name: string): AbstractMesh {
@@ -412,5 +408,38 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
                 this.currentMusic_ = "lab";
                 break;
         }
+    }
+    private initDoors(){
+        const rightDoor: AbstractMesh = this.getMeshByName("DOOR");
+        const leftDoor: AbstractMesh = this.getMeshByName("DOOR.001");
+
+        const door: Door = new Door(
+            leftDoor,
+            rightDoor,
+            "door_to_dev",
+            ()=>{this.cali_.setCurrentDialogIndex(4)},
+            ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
+            ()=>{this.cali_.setCurrentDialogIndex(8)}
+        );
+        this.entityManager_.add(door);
+
+        const rightDoor2: AbstractMesh = this.getMeshByName("DOOR.006");
+        const leftDoor2: AbstractMesh = this.getMeshByName("DOOR.007");
+
+        const door2: Door = new Door(
+            leftDoor2,
+            rightDoor2,
+            "door_to_serv",
+            ()=>{this.cali_.setCurrentDialogIndex(4)},
+            ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
+            ()=>{this.cali_.setCurrentDialogIndex(6)}
+        );
+        this.entityManager_.add(door2);
+    }
+
+    private createSecureDoor() {
+        const secureDoorMesh: AbstractMesh = this.getMesh_("secureDoor");
+        const secureDoor: SecureDoor = new SecureDoor(secureDoorMesh, "secureDoor", ()=>{this.cali_.setCurrentDialogIndex(9)});
+        this.entityManager_.add(secureDoor);
     }
 }

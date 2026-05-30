@@ -47,6 +47,9 @@ export class Speaker {
     public setCurrentDialogIndex(index:number):void{
         this.dialogGraph.safeSetCurrentCurrentNode(index);
     }
+    public forceCurrentDialogIndex(index:number):void{
+        this.dialogGraph.setCurrentNodeIndex(index);
+    }
     public conditionalSetCurrentNode(index:number, currentIndex:number):void{
        this.dialogGraph.conditionalSetCurrentNode(index, currentIndex);
     }

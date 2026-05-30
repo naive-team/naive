@@ -51,7 +51,9 @@ export class Door implements Entity, Commandable {
             width: 2,
             height: 4,
             depth: 2
-        });
+        },
+            leftMesh.getScene()
+        );
 
         proximityZone.checkCollisions = false;
         proximityZone.visibility = 0;

@@ -141,10 +141,10 @@ export class CALISpeaker extends Speaker implements Entity {
             "Non, rien en fait."
             ],
             [
-                new Line("Il suffit de l'accorcher à la porte !",
+                new Line("Il suffit de l'accrocher à la porte !",
                     new ChoiceLine("",
                         [
-                            "L'accorcher ?",
+                            "L'accrocher ?",
                             "D'accord !"],
                         [
                             new Line("Oui pour cela il suffit d'appuyer sur le bouton [F].", null),
@@ -304,7 +304,25 @@ export class CALISpeaker extends Speaker implements Entity {
                 ]
             )
         )
-    )
+    );
+    let openTheDoor: Line = new Line("Besoin d'aide ?",
+        new ChoiceLine("",
+            [
+                "Tu peux ouvrir la porte ?",
+                "C'est quoi la commende déja ?",
+                "Non rien"
+            ],
+            [
+                new Line("D'acc je fais ça !", null, ()=>{openDoor("door_to_serv")}),
+                new Line("Une fois dans le terminal, tape `yellow open`", null),
+                new Line("Oki !", null, thxThenNormal)
+            ]
+        )
+    );
+
+    let sayonara : Line = new Line ("Mon programme ne me permet pas aller plus loin...",
+        new Line("Désolé tu vas devoir continuer sans moi..." , null, sadThenNormal)
+    ),
 
         /// -------- Dialogs ------------
 

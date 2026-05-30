@@ -8,6 +8,7 @@ import {Player} from "./Player";
 import {Color} from "../Commands/Color";
 import {Commandable} from "./interfaces/Commandable";
 import {BugCounter} from "../UI/BugCounter";
+import {LabScene} from "../Scenes/LabScene";
 
 export class Firefly implements Entity, Bug {
     private mesh_;
@@ -74,6 +75,8 @@ export class Firefly implements Entity, Bug {
         }
         this.actionOnCatch();
         ui.increment();
+
+        this.mesh_.getScene().playSfx("bugCatch");
     }
 
     attachToCommandable(commandable: Commandable, position: Vector3, entityManager: EntityManager): void {
@@ -83,6 +86,8 @@ export class Firefly implements Entity, Bug {
         entityManager.add(this);
 
         this.collider_.position = new Vector3().copyFrom(position);
+
+        this.mesh_.getScene().playSfx("releaseBug");
     }
 
     getColor(): Color {

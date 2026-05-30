@@ -59,6 +59,7 @@ export class LabScene extends Scene implements AsyncScene {
     private bgmPlaying_: boolean = false;
     private blockMesh_: AbstractMesh;
     private buttonMesh_: AbstractMesh;
+    private sfx_: Map<string, Sound>;
 
     constructor(engine: Engine, sceneManager: SceneManager) {
         super(engine);
@@ -228,6 +229,7 @@ export class LabScene extends Scene implements AsyncScene {
 
         const caliBgm: Sound = new Sound("CaliBGM", "./music/cali.ogg", this, null);
         this.caliBgm_ = caliBgm;
+        this.caliBgm_.setVolume(0.5);
 
         const pcMeshData = await MeshLoader.loadMesh("./pc_v2.glb", this);
         this.pcMesh_ = pcMeshData.mesh;
@@ -237,6 +239,8 @@ export class LabScene extends Scene implements AsyncScene {
 
         const buttonMeshData = await MeshLoader.loadMesh("./button.glb", this);
         this.buttonMesh_ = buttonMeshData.mesh;
+
+        this.loadSfx_();
     }
     createBlocEtButton(){
         const buttonMesh1: AbstractMesh = this.getMesh_("bouton");
@@ -465,5 +469,40 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
         const secureDoorMesh: AbstractMesh = this.getMesh_("secureDoor");
         const secureDoor: SecureDoor = new SecureDoor(secureDoorMesh, "secureDoor", ()=>{this.cali_.setCurrentDialogIndex(9)});
         this.entityManager_.add(secureDoor);
+    }
+
+    private loadSfx_() {
+        const names: string[] = [
+            "bugCatch",
+            "calliSwitchFace",
+            "doorOpening",
+            "error",
+            "keyboard",
+            "ok",
+            "releaseBug",
+            "turnOnPC"
+        ]
+
+
+        let sfx: Map<string, Sound> = new Map();
+
+        for (const name of names) {
+            sfx.set(name, new Sound(name, `./sfx/${name}.ogg`, this, null, {loop: false, autoplay: false}));
+        }
+
+        sfx.get("turnOnPC").setVolume(0.4);
+
+        this.sfx_ = sfx;
+
+    }
+
+    public playSfx(name: string) {
+        const sound: Sound = this.sfx_.get(name);
+
+        if (sound === undefined) return;
+
+        sound.loop = false;
+        sound.play();
+        sound.stop(2);
     }
 }

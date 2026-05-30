@@ -18,6 +18,7 @@ import {Color} from "../Commands/Color";
 import {ColorConverter} from "../Commands/ColorConverter";
 import {InteractUI} from "../UI/interactUI";
 import {InteractTrigger} from "../util/InteractTrigger";
+import {LabScene} from "../Scenes/LabScene";
 
 enum PCState {
     OFF,
@@ -204,6 +205,8 @@ export class PC implements Entity {
     }
 
     public turnOn(): void {
+        (this.mesh_.getScene() as LabScene).playSfx("turnOnPC");
+
         this.state_ = PCState.ON;
         this.exitFlag_ = false;
         this.ui.hide();
@@ -295,6 +298,7 @@ export class PC implements Entity {
 
         if (msg === "OK") {
             this.writeLine_(msg, "lime");
+            (this.mesh_.getScene() as LabScene).playSfx("ok");
             this.exit_();
         }
         else if (msg.startsWith("<targ>")) {

@@ -1,6 +1,7 @@
 ﻿import {AbstractMesh, Texture} from "@babylonjs/core";
 import {TextureSwitcher} from "./TextureSwitcher";
 import {CaliFaces} from "./CaliFaces";
+import {LabScene} from "../Scenes/LabScene";
 
 export class CalifaceSwitcher {
     califace:AbstractMesh;

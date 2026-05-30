@@ -7,6 +7,7 @@ import {Color} from "../Commands/Color";
 import {EntityFamily} from "./util/EntityFamily";
 import {Firefly} from "./Firefly";
 import {EntityManager} from "./util/EntityManager";
+import {LabScene} from "../Scenes/LabScene";
 
 enum DoorState {
     CLOSED,
@@ -82,7 +83,7 @@ export class Door implements Entity, Commandable {
             case Command.OPEN:
                 if (this.state_ !== DoorState.CLOSED) return "ERROR: Door not closed";
 
-                this.state_ = DoorState.OPENING;
+                this.open();
                 break;
 
             case Command.HELP:
@@ -173,6 +174,7 @@ export class Door implements Entity, Commandable {
     }
 
     open(){
+        (this.rightMesh_.getScene() as LabScene).playSfx("doorOpening");
         this.state_ = DoorState.START_OPENING;
     }
 

@@ -1,7 +1,7 @@
 import {
     AbstractMesh,
     ActionManager,
-    Effect,
+    Effect, Engine,
     ExecuteCodeAction,
     Mesh,
     PostProcess,
@@ -13,6 +13,8 @@ import { Player } from "../Entities/Player";
 import { GameContext } from "../util/GameContext";
 import {SceneManager} from "../Scenes/SceneManager";
 import {AsyncScene} from "../Scenes/AsyncScene";
+import {VideoScene} from "./VideoCinematic/VideoScene";
+import {TitleScreenScene} from "../Scenes/TitleScreenScene";
 
 export interface RailFadeSequenceParams {
     /** Mesh qui déclenche la séquence au passage du joueur */
@@ -56,6 +58,8 @@ export class RailFadeSequence {
     // ── State ─────────────────────────────────────────────────────────────────
     private triggered_: boolean = false;
     private fadeAlpha_: number = 0;
+    private sceneSwitching_: boolean = false;   // ← nouveau flag
+
 
     // ── BabylonJS objects ─────────────────────────────────────────────────────
     private railCamera_: UniversalCamera;
@@ -83,6 +87,7 @@ export class RailFadeSequence {
         this.registerShader_();
         this.buildRailCamera_();
         this.registerStartTrigger_();
+        this.registerEndTrigger_();
     }
 
     // ── Public API ────────────────────────────────────────────────────────────
@@ -185,16 +190,45 @@ export class RailFadeSequence {
         this.railCamera_.setTarget(new Vector3(1.51, pos.y, pos.z));
     }
 
-    async updateFade_(): Promise<void> {
+     updateFade_():void {
         const playerZ = this.player_.getCollider().position.z;
         const startZ  = this.startTrigger_.getAbsolutePosition().z;
         const endZ    = this.endPlane_.getAbsolutePosition().z;
 
         const raw = (playerZ - startZ) / (endZ - startZ);
         this.fadeAlpha_ = Math.min(1, Math.max(0, raw));
+    }
 
-        if (this.fadeAlpha_ >= 1) {
-            await this.sceneManager_.switchTo(this.nextScene_, false);
-        }
+    private registerEndTrigger_() {
+            const playerMesh = this.player_.getCollider();
+
+            this.endPlane_.actionManager = new ActionManager(this.scene_);
+            this.endPlane_.actionManager.registerAction(
+                new ExecuteCodeAction(
+                    {
+                        trigger: ActionManager.OnIntersectionEnterTrigger,
+                        parameter: { mesh: playerMesh },
+                    },
+                    async () => {
+                        if (this.sceneSwitching_) return;
+                        this.sceneSwitching_ = true;
+                        this.fadeAlpha_ = 1;   // s'assure que l'écran est noir avant la transition
+                        let video = new VideoScene(this.scene_.getEngine() as Engine,
+                                "badEnd",
+                                "./badend.mp4",
+                                -1.18,
+                                ()=>{ },
+                                async() => {
+                                    await this.sceneManager_.switchTo(
+                                        new TitleScreenScene(this.scene_.getEngine() as Engine,this.sceneManager_)
+                                    )
+                                }
+                            );
+                        await this.sceneManager_.switchTo(video, false);
+
+                    }
+                    )
+            );
+
     }
 }

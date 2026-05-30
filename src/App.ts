@@ -13,6 +13,7 @@ function createCanvas() {
 	canvas.style.height = "100%";
 	canvas.id = "gameCanvas";
 	document.body.appendChild(canvas);
+	document.body.style.backgroundColor = "#000000";
 	return canvas;
 }
 

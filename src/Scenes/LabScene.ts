@@ -132,23 +132,12 @@ export class LabScene extends Scene implements AsyncScene {
           matrixFx.applyToTextureSlot(this.calimesh_, "emissive","Face");*/
 // -----------------------------------------------------
 
-        // TODO tester...
         const MeshStart = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_TO_SERVER_ROOM");
         const MeshEnd = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_END");
 
         this.railFade_ = new RailFadeSequence(this,
             this.SceneManager,
-            new VideoScene(this.engine,
-                "badEnd",
-                "./badend.mp4",
-                -1.18,
-                ()=>{ },
-                async() => {
-                await this.SceneManager.switchTo(
-                    new TitleScreenScene(this.engine, this.SceneManager)
-                )
-                }
-            ),
+            this,
             this.player_,
             this.gameContext_, {
             startTrigger: MeshStart,

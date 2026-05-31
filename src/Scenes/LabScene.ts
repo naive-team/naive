@@ -129,7 +129,7 @@ export class LabScene extends Scene implements AsyncScene {
 
             if (firstDoorIsOpened) return;
 
-            this.cali_.setCurrentDialogIndex(3)
+            this.cali_.setCurrentDialogIndex(3);
 
         });
         this.entityManager_.add(firefly);
@@ -447,9 +447,19 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
             leftDoor,
             rightDoor,
             "door_to_dev",
-            ()=>{this.cali_.setCurrentDialogIndex(4)},
-            ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
-            ()=>{this.cali_.setCurrentDialogIndex(8)}
+            ()=>{ // onAttach
+                if (door.isOpened()) return;
+
+                this.cali_.setCurrentDialogIndex(4);
+            },
+            ()=> { // onUnlink
+                if (door.isOpened()) return;
+
+                this.cali_.conditionalSetCurrentNode(3, 4);
+            },
+            ()=>{ // onOpened
+                this.cali_.setCurrentDialogIndex(8);
+            }
         );
         this.entityManager_.add(door);
 

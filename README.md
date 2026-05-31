@@ -19,33 +19,33 @@ npm run dev
 - **Mouse**: Camera
 - **Space**: Catch
 - **F**: Interact
-- **Click**: Interact (in dialogs)
+- **Click**: Interact (during dialogs)
 
 ## Credits
 
 ### Programming
-- Björn LAI
-- Zia LAI
+- Björn Lai
+- Zia Lai
 
 ### Game Design
-- Björn LAI
-- Zia LAI
+- Björn Lai
+- Zia Lai
 
 ### Art
-- Zia LAI
+- Zia Lai
 
 ### Writing
-- Zia LAI
+- Zia Lai
 
 ### Music & Sound Design
-- Björn LAI
+- Björn Lai
 
 ### Build & Release Support
-- Florent GILLOTEAUX
+- Florent Gilloteaux
 
 ### Experimental Features
-- Florent GILLOTEAUX
-- Björn LAI
+- Florent Gilloteaux
+- Björn Lai
 
 All art, music, and writing were created without generative AI.
 

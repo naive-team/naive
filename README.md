@@ -20,6 +20,7 @@ npm run dev
 - **Space**: Catch
 - **F**: Interact
 - **Click**: Interact (during dialogs)
+- **TAB**: switch between AZERTY and QWERTY layouts (when using a PC)
 
 ## Credits
 

@@ -78,7 +78,7 @@ export class CALISpeaker extends Speaker implements Entity {
 
         /// -------- LINES ------------
         let tuto1 : Line = new Line ("D'acc on fait ça !",
-            new Line ("Alors d'abord, il faut aller chercher une LUCIOLE ENERGETIQUE",
+            new Line ("Alors d'abord, il faut aller chercher une LUCIOLE ÉNERGÉTIQUE",
                 new Line ("Tu devrais en trouver une dans un coin...",
                     new Line ("Appuie sur [ESPACE] pour utiliser ton filet ;)", null, winkThenNormal)
                 )
@@ -91,17 +91,17 @@ export class CALISpeaker extends Speaker implements Entity {
                     "Comment capturer un insecte ?",
                 ],
                 [
-                    new Line("C'est une petite besiole qui fait de la lumiere. Tu en trouvera une dans la salle.", null, starThenNormal),
+                    new Line("C'est une petite besiole qui fait de la lumière. Tu en trouveras une dans la salle.", null, starThenNormal),
                     new Line("Appuie sur [ESPACE] pour utiliser ton filet ;)", null, winkThenNormal)
                 ]
             )
         )
         let welcome: Line = new Line("Bonjour, je m'appelle C.A.L.I. Enchantée de faire ta connaissance !",
-            new Line("On dirait qu'on est coincées ici... mais ne t'inquète pas, je peux t'aider !",
+            new Line("On dirait qu'on est coincées ici... mais ne t'inquiète pas, je peux t'aider !",
                 new ChoiceLine(
                     "",
                     [
-                        "Oui, s'il te plait !",
+                        "Oui, s'il te plaît !",
                         "Non, je préfère me débrouiller.",
                     ],
                     [
@@ -162,7 +162,7 @@ export class CALISpeaker extends Speaker implements Entity {
             [
                 new Line("Comme la porte est de nouveau alimentée en énergie, on va pouvoir l'ouvrir !",
                     new Line("Tu vois l'ordinateur beige contre le mur ? Il permet de contrôler les objets imprégnés d'Énergie.",
-                        new Line("Il suffit de lui dire d'ouvir la porte !",
+                        new Line("Il suffit de lui dire d'ouvrir la porte !",
                            howtoOpenTerminal
                         )
                     )
@@ -228,7 +228,7 @@ export class CALISpeaker extends Speaker implements Entity {
                 "Nan,rien..."
             ],
             [
-                new Line ("C'est un problème courrant !",
+                new Line ("C'est un problème courant !",
                     new Line("Il y a une porte de sécurité devant... ce type de porte n'a pas la même source d'énergie.",
                         new Line ("Il y a une double sécurité pour pouvoir l'ouvrir.",
                             new Line("Tu veux que je t'explique ?",
@@ -240,7 +240,7 @@ export class CALISpeaker extends Speaker implements Entity {
                                     ],
                                     [
                                         new Line("Il y a deux boutons à actionner. Pour les activer en même temps, tu va pouvoir utiliser les bloc.",
-                                            new Line("Les bloc sont déplaçables grace à l'énergie des lucioles.",null
+                                            new Line("Les blocs sont déplaçables grace à l'énergie des lucioles.",null
                                             )
                                         ),
                                         new Line("Oui je peux !",
@@ -288,14 +288,14 @@ export class CALISpeaker extends Speaker implements Entity {
         winkThenNormal
     );
     let secureDoorOpen:Line = new Line ("La porte de sécurité est ouverte !",
-        new Line("Plus qu'a ouvrir la porte avec la luciole !",
+        new Line("Plus qu'à ouvrir la porte avec la luciole !",
             new ChoiceLine("",
                 [
                     "Tu peux le faire ?",
                     "YATTA !"
                 ],
                 [
-                    new Line("Il faut d'abbord accrocher la luciole à la porte pour que je puisse l'acctionner...", null, sadThenNormal),
+                    new Line("Il faut d'abord accrocher la luciole à la porte pour que je puisse l'actionner...", null, sadThenNormal),
                     new Line("YATTA !", null, starThenNormal)
                 ]
             )
@@ -305,7 +305,7 @@ export class CALISpeaker extends Speaker implements Entity {
         new ChoiceLine("",
             [
                 "Tu peux ouvrir la porte ?",
-                "C'est quoi la commende déja ?",
+                "C'est quoi la commande déjà ?",
                 "Non rien"
             ],
             [
@@ -316,7 +316,7 @@ export class CALISpeaker extends Speaker implements Entity {
         )
     );
 
-    let sayonara : Line = new Line ("Mon programme ne me permet pas aller plus loin...",
+    let sayonara : Line = new Line ("Mon programme ne me permet pas d'aller plus loin...",
         new Line("Désolé tu vas devoir continuer sans moi..." , null, sadThenNormal)
     );
 

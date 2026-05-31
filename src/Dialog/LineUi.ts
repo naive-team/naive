@@ -14,6 +14,7 @@ export class LineUi {
         this.createPanel();
         this.createNamePanel()
         this.createTextBlock();
+        this.createIndicator();
         ui.addControl(this.panel);
 
     }
@@ -114,5 +115,19 @@ export class LineUi {
 
     public dispose(): void {
         this.panel.dispose();
+    }
+
+    private createIndicator() {
+        let textBlock = new GUI.TextBlock();
+        textBlock.color = "white";
+        textBlock.fontSize = 15;
+        textBlock.fontFamily = "Courier New";
+        textBlock.textWrapping = true;
+        textBlock.textHorizontalAlignment = GUI.TextBlock.HORIZONTAL_ALIGNMENT_RIGHT;
+        textBlock.horizontalAlignment = GUI.TextBlock.HORIZONTAL_ALIGNMENT_RIGHT;
+        textBlock.text = "Clique pour continuer";
+        textBlock.paddingBottom = "-70%";
+        textBlock.paddingRight = "5%";
+        this.panel.addControl(textBlock);
     }
 }

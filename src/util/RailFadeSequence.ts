@@ -15,6 +15,8 @@ import {SceneManager} from "../Scenes/SceneManager";
 import {AsyncScene} from "../Scenes/AsyncScene";
 import {VideoScene} from "./VideoCinematic/VideoScene";
 import {TitleScreenScene} from "../Scenes/TitleScreenScene";
+import {CALISpeaker} from "../Dialog/Speaker/CALISpeaker";
+import {GoodEndScene} from "../Scenes/GoodEndScene";
 
 export interface RailFadeSequenceParams {
     /** Mesh qui déclenche la séquence au passage du joueur */
@@ -66,12 +68,15 @@ export class RailFadeSequence {
     private fadePostProcess_: PostProcess;
     private gameContext_: GameContext;
 
+    private caliSpeaker_: CALISpeaker;
+
     constructor(
         scene: Scene,
         sceneManager: SceneManager,
         nextScene: AsyncScene,
         player: Player,
         gameContext: GameContext,
+        caliSpeaker:CALISpeaker,
         params: RailFadeSequenceParams
     ) {
         this.scene_        = scene;
@@ -88,6 +93,8 @@ export class RailFadeSequence {
         this.buildRailCamera_();
         this.registerStartTrigger_();
         this.registerEndTrigger_();
+
+        this.caliSpeaker_ = caliSpeaker;
     }
 
     // ── Public API ────────────────────────────────────────────────────────────
@@ -195,8 +202,14 @@ export class RailFadeSequence {
         const startZ  = this.startTrigger_.getAbsolutePosition().z;
         const endZ    = this.endPlane_.getAbsolutePosition().z;
 
-        const raw = (playerZ - startZ) / (endZ - startZ);
-        this.fadeAlpha_ = Math.min(1, Math.max(0, raw));
+        const dist = endZ - startZ;
+        if (playerZ - startZ < dist/2){
+            const raw = ((playerZ - startZ)-(dist/2)) / (dist/2);
+            this.fadeAlpha_ = Math.min(1, Math.max(0, raw));
+        }
+        else{
+            this.fadeAlpha_ = 0;
+        }
     }
 
     private registerEndTrigger_() {
@@ -212,8 +225,11 @@ export class RailFadeSequence {
                     async () => {
                         if (this.sceneSwitching_) return;
                         this.sceneSwitching_ = true;
-                        this.fadeAlpha_ = 1;   // s'assure que l'écran est noir avant la transition
-                        let video = new VideoScene(this.scene_.getEngine() as Engine,
+                        this.fadeAlpha_ = 1;
+                        console.log("cali final counter = ", this.caliSpeaker_.getInteractionCounter());
+                        if (this.caliSpeaker_.getInteractionCounter()>2){
+
+                            let video = new VideoScene(this.scene_.getEngine() as Engine,
                                 "badEnd",
                                 "./badend.mp4",
                                 -1.18,
@@ -224,7 +240,13 @@ export class RailFadeSequence {
                                     )
                                 }
                             );
-                        await this.sceneManager_.switchTo(video, false);
+                            await this.sceneManager_.switchTo(video, false);
+                        }
+                        else {
+
+                            let good = new GoodEndScene(this.scene_.getEngine() as Engine, this.sceneManager_);
+                            await this.sceneManager_.switchTo(good, false);
+                        }
 
                     }
                     )

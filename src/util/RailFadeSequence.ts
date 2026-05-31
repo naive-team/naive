@@ -231,7 +231,7 @@ export class RailFadeSequence {
 
                             let video = new VideoScene(this.scene_.getEngine() as Engine,
                                 "badEnd",
-                                "./badend.mp4",
+                                "./badend-corigee.mp4",
                                 -1.18,
                                 ()=>{ },
                                 async() => {

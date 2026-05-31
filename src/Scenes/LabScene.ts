@@ -134,12 +134,15 @@ export class LabScene extends Scene implements AsyncScene {
 
         const MeshStart = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_TO_SERVER_ROOM");
         const MeshEnd = this.labMesh.getChildMeshes().find(mesh => mesh.name === "#TRIGGER_END");
+        MeshStart.isVisible = false;
 
         this.railFade_ = new RailFadeSequence(this,
             this.SceneManager,
             this,
             this.player_,
-            this.gameContext_, {
+            this.gameContext_,
+            this.cali_,
+            {
             startTrigger: MeshStart,
             endPlane:     MeshEnd,
         });
@@ -161,7 +164,7 @@ export class LabScene extends Scene implements AsyncScene {
             )
         );
 
-        const toServerRoomTrigger: AbstractMesh = this.getMesh_("#TRIGGER_TO_SERVER_ROOM");
+        const toServerRoomTrigger: AbstractMesh = this.getMesh_("#TRIGGER_TO_SERVER_ROOM.001");
 
         toServerRoomTrigger.isVisible = false;
 

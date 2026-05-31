@@ -396,7 +396,9 @@ export class CALISpeaker extends Speaker implements Entity {
 
     }
 
-
+    getInteractionCounter(){
+        return this.interactionCounter;
+    }
     getCollider(): AbstractMesh {
         return this.collider_;
     }

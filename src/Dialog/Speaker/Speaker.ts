@@ -1,0 +1,60 @@
+import {Dialog} from "../Dialog";
+import {AbstractMesh, ActionManager, ExecuteCodeAction, KeyboardEventTypes, MeshBuilder, Scene} from "@babylonjs/core";
+import {DialogGraph} from "../DialogNode";
+import {InteractUI} from "../../UI/interactUI";
+import {InteractTrigger} from "../../util/InteractTrigger";
+
+export class Speaker {
+    dialogGraph: DialogGraph = new DialogGraph();
+    name: string;
+    currentDialogIndex: number;
+    mesh: AbstractMesh;
+    collider_: AbstractMesh;
+    ui: InteractUI;
+    private wantsToSpeak_: boolean = false;
+
+    constructor(name: string, mesh: AbstractMesh, _scene: Scene, _playermesh: AbstractMesh) {
+        this.name = name;
+        this.currentDialogIndex = 0;
+        this.mesh = mesh;
+        this.mesh.getChildMeshes().forEach(child => {
+            child.checkCollisions = true;
+        });
+        this.mesh.checkCollisions = true;
+        this.collider_ = MeshBuilder.CreateBox("speaker_collider", {
+            width: 4,
+            depth: 3,
+            height: 4
+        });
+        this.collider_.isVisible = true;
+        this.mesh.parent = this.collider_;
+        this.ui = new InteractUI("Parler");
+        InteractTrigger.init(_playermesh, _scene, this.collider_, this.ui,(scene: Scene) => this.interact(scene));
+    }
+
+    async interact(scene: Scene) {
+        const dialog = this.dialogGraph.getCurrentDialog();
+        if (!dialog.started) {
+            dialog.started = true;
+            this.wantsToSpeak_ = true;
+            const choiceIndex = await dialog.play(scene);
+            dialog.started = false;
+            this.wantsToSpeak_ = false;
+            this.dialogGraph.transitionTo(choiceIndex);
+        }
+    }
+
+    public setCurrentDialogIndex(index:number):void{
+        this.dialogGraph.safeSetCurrentCurrentNode(index);
+    }
+    public forceCurrentDialogIndex(index:number):void{
+        this.dialogGraph.setCurrentNodeIndex(index);
+    }
+    public conditionalSetCurrentNode(index:number, currentIndex:number):void{
+       this.dialogGraph.conditionalSetCurrentNode(index, currentIndex);
+    }
+
+    public wantsToSpeak(): boolean {
+        return this.wantsToSpeak_;
+    }
+}

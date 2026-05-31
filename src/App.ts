@@ -1,60 +1,64 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
-import { Engine, Scene, ArcRotateCamera, Vector3, HemisphericLight, Mesh, MeshBuilder } from "@babylonjs/core";
-import {KeyboardInput} from "./Input/KeyboardInput";
-import {InputStrategy} from "./Input/InputStrategy";
+import {Engine} from "@babylonjs/core";
+import {SceneManager} from "./Scenes/SceneManager";
+import {TitleScreenScene} from "./Scenes/TitleScreenScene";
+import {LabScene} from "./Scenes/LabScene";
+import {FadeTestScene} from "./Scenes/FadeTestScene";
+import {VideoScene} from "./util/VideoCinematic/VideoScene";
+
+function createCanvas() {
+	const canvas: HTMLCanvasElement = document.createElement("canvas");
+	canvas.style.width = "100%";
+	canvas.style.height = "100%";
+	canvas.id = "gameCanvas";
+	document.body.appendChild(canvas);
+	document.body.style.backgroundColor = "#000000";
+	return canvas;
+}
 
 class App {
-    constructor() {
+	private canvas_: HTMLCanvasElement;
+	private engine_: Engine;
+	private sceneManager_: SceneManager;
 
-        document.documentElement.style["overflow"] = "hidden";
-        document.documentElement.style.overflow = "hidden";
-        document.documentElement.style.width = "100%";
-        document.documentElement.style.height = "100%";
-        document.documentElement.style.margin = "0";
-        document.documentElement.style.padding = "0";
-        document.body.style.overflow = "hidden";
-        document.body.style.width = "100%";
-        document.body.style.height = "100%";
-        document.body.style.margin = "0";
-        document.body.style.padding = "0";
+	constructor() {
+		this.canvas_ = createCanvas();
+		this.engine_ = new Engine(this.canvas_, true, {audioEngine: true});
+		this.sceneManager_ = new SceneManager(this.engine_, this.canvas_);
+		this.engine_.maxFPS = 60;
+		this.initDebugLayer_();
+		this.loadFont_().then(() => this.start_());
 
-        // create the canvas HTML element and attach it to the webpage
-        const canvas = document.createElement("canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.id = "gameCanvas";
-        document.body.appendChild(canvas);
+	}
 
-        // initialize babylon scene and engine
-        const engine = new Engine(canvas, true);
-        const scene = new Scene(engine);
+	private initDebugLayer_() {
+		window.addEventListener("keydown", (ev) => {
+			// Shift+Ctrl+Alt+I
+			if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.keyCode === 73) {
+				const scene = this.sceneManager_.scene;
+				if (scene?.debugLayer.isVisible()) {
+					scene.debugLayer.hide();
+				} else {
+					scene?.debugLayer.show();
+				}
+			}
 
-        let camera: ArcRotateCamera = new ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, Vector3.Zero(), scene);
-        camera.attachControl(canvas, true);
-        let light1: HemisphericLight = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
-        let sphere: Mesh = MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
+			if (ev.code === "Space") {
+				ev.preventDefault();
+			}
+		});
 
-        const input: InputStrategy = new KeyboardInput().attach();
+	}
 
-        // hide/show the Inspector
-        window.addEventListener("keydown", (ev) => {
-            // Shift+Ctrl+Alt+I
-            if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.code === "KeyI") {
-                if (scene.debugLayer.isVisible()) {
-                    scene.debugLayer.hide();
-                } else {
-                    scene.debugLayer.show().then(() => {});
-                }
-            }
-        });
-
-        // run the main render loop
-        engine.runRenderLoop(() => {
-            scene.render();
-            input.update();
-        });
-    }
+	private async start_(): Promise<void> {
+		// Première scène
+		await this.sceneManager_.switchTo(new TitleScreenScene(this.engine_, this.sceneManager_));
+		//await this.sceneManager_.switchTo(new LabScene(this.engine_, this.sceneManager_));
+	}
+	private async loadFont_(): Promise<void> {
+		await document.fonts.load("16px 'Press Start 2P'");
+	}
 }
 
 new App();

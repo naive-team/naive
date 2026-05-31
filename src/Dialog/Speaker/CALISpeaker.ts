@@ -35,7 +35,7 @@ export class CALISpeaker extends Speaker implements Entity {
         this.collider_.isVisible = false;
 
         let faceMesh = mesh.getChildMeshes()[1];
-        this.califaceSwitcher = new CalifaceSwitcher(faceMesh);
+        this.califaceSwitcher = new CalifaceSwitcher(faceMesh, scene);
 
         CaliFaces.initialize(scene);
 
@@ -58,9 +58,7 @@ export class CALISpeaker extends Speaker implements Entity {
 
         let sadThenNormal = ()=>{this.califaceSwitcher.switchThenNormalFace(CaliFaces.sadFace)};
 
-        let bigbrain = ()=>{
-            //TODO lancer anim matrix
-        }
+        let bigbrain = ()=>{this.califaceSwitcher.applyMatrixEffect();}
 
         let openDoor = (id:string)=>{
            let entity = this.entityManager.getEntityById(id);
@@ -111,7 +109,7 @@ export class CALISpeaker extends Speaker implements Entity {
                         new Line ("Je suis là si tu as besoin de moi...", null, thxThenNormal),
                     ],
 
-                )
+                ),
             )
             ,
 

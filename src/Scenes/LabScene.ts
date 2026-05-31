@@ -1,10 +1,19 @@
 ﻿import {
-    AbstractMesh, ActionManager,
-    AnimationGroup, Color3, Effect,
-    Engine, ExecuteCodeAction,
-    HemisphericLight, Mesh,
+    AbstractMesh,
+    ActionManager,
+    AnimationGroup,
+    Color3,
+    Effect,
+    Engine,
+    ExecuteCodeAction,
+    HemisphericLight,
+    Mesh,
     MeshBuilder,
-    Scene, ShaderMaterial, Sound, Tools, TransformNode,
+    Scene,
+    ShaderMaterial,
+    Sound,
+    Tools,
+    TransformNode,
     Vector3
 } from "@babylonjs/core";
 import {AsyncScene} from "./AsyncScene";
@@ -24,11 +33,10 @@ import {Firefly} from "../Entities/Firefly";
 import {Door} from "../Entities/Door";
 import {BugCounterFabric} from "../util/bugCounterFabric";
 import {RailFadeSequence} from "../util/RailFadeSequence";
-import {TitleScreenScene} from "./TitleScreenScene";
 import {Block} from "../Entities/Block";
 import {Button} from "../Entities/Button";
 import {SecureDoor} from "../Entities/SecureDoor";
-import {VideoScene} from "../util/VideoCinematic/VideoScene";
+import {EntityFamily} from "../Entities/util/EntityFamily";
 
 export class LabScene extends Scene implements AsyncScene {
     private SceneManager: SceneManager;
@@ -190,8 +198,42 @@ export class LabScene extends Scene implements AsyncScene {
 
         this.createSecureDoor();
 
+        this.hideAndLinkMeshes();
 
         return true;
+    }
+
+    hideAndLinkMeshes(): void {
+        this.getTransformNode_("devRoomRoot").setEnabled(false);
+        this.entityManager_.getEntitiesByFamily(EntityFamily.BUTTON).forEach(entity => {
+            entity.getCollider().setEnabled(false);
+        })
+        this.entityManager_.getEntitiesByFamily(EntityFamily.BLOCK).forEach(entity => {
+            entity.getCollider().setEnabled(false);
+        })
+        this.entityManager_.getEntitiesByFamily(EntityFamily.SECURE_DOOR).forEach(entity => {
+            entity.getCollider().setEnabled(false);
+        })
+        this.getMesh_("Cube.011").setEnabled(false);
+        this.getMesh_("Cylinder.010").setEnabled(false);
+        this.getMesh_("DOOR.006").setEnabled(false);
+        this.getMesh_("DOOR.007").setEnabled(false);
+        this.getTransformNode_("LightCylinder").setEnabled(false);
+        this.getTransformNode_("LightCylinder.001").setEnabled(false);
+        this.getMesh_("Cylinder.001").setEnabled(false);
+        this.getMesh_("Cylinder.003").setEnabled(false);
+        this.blockMesh_.setEnabled(false);
+        this.getMeshByName("block2").setEnabled(false);
+
+        this.getTransformNode_("serversRoomRoot").setEnabled(false);
+        this.getTransformNode_("Cube.019").setEnabled(false);
+        this.getTransformNode_("Cube.021").setEnabled(false);
+        this.getTransformNode_("Cube.022").setEnabled(false);
+        this.getMesh_("DOOR.004").setEnabled(false);
+        this.getMesh_("DOOR.005").setEnabled(false);
+        this.getTransformNode_("Cylinder.007").setEnabled(false);
+
+
     }
 
     update(): void {
@@ -235,6 +277,7 @@ export class LabScene extends Scene implements AsyncScene {
         this.loadSfx_();
     }
     createBlocEtButton(){
+
         const buttonMesh1: AbstractMesh = this.getMesh_("bouton");
         const buttonMesh2: AbstractMesh = this.getMesh_("bouton.001");
         buttonMesh1.dispose();
@@ -439,7 +482,29 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
             "door_to_dev",
             ()=>{this.cali_.setCurrentDialogIndex(4)},
             ()=>{this.cali_.conditionalSetCurrentNode(3,4)},
-            ()=>{this.cali_.setCurrentDialogIndex(8)}
+            ()=>{
+                this.cali_.setCurrentDialogIndex(8);
+                this.getTransformNode_("devRoomRoot").setEnabled(true);
+                this.entityManager_.getEntitiesByFamily(EntityFamily.BUTTON).forEach(entity => {
+                    entity.getCollider().setEnabled(true);
+                })
+                this.entityManager_.getEntitiesByFamily(EntityFamily.BLOCK).forEach(entity => {
+                    entity.getCollider().setEnabled(true);
+                })
+                this.entityManager_.getEntitiesByFamily(EntityFamily.SECURE_DOOR).forEach(entity => {
+                    entity.getCollider().setEnabled(true);
+                })
+                this.getMesh_("Cube.011").setEnabled(true);
+                this.getMesh_("Cylinder.010").setEnabled(true);
+                this.getMesh_("DOOR.006").setEnabled(true);
+                this.getMesh_("DOOR.007").setEnabled(true);
+                this.getTransformNode_("LightCylinder").setEnabled(true);
+                this.getTransformNode_("LightCylinder.001").setEnabled(true);
+                this.getMesh_("Cylinder.001").setEnabled(true);
+                this.getMesh_("Cylinder.003").setEnabled(true);
+                this.blockMesh_.setEnabled(true);
+                this.getMeshByName("block2").setEnabled(true);
+            }
         );
         this.entityManager_.add(door);
 
@@ -452,7 +517,16 @@ vec3 sunPeek   = vec3(0.455, 0.757, 0.525); // #59B8B8 — éclat lumineux
             "door_to_serv",
             ()=>{this.cali_.setCurrentDialogIndex(10)},
             ()=>{this.cali_.forceCurrentDialogIndex(9)},
-            ()=>{this.cali_.setCurrentDialogIndex(11)}
+            ()=>{
+                this.cali_.setCurrentDialogIndex(11);
+                this.getTransformNode_("serversRoomRoot").setEnabled(true);
+                this.getTransformNode_("Cube.019").setEnabled(true);
+                this.getTransformNode_("Cube.021").setEnabled(true);
+                this.getTransformNode_("Cube.022").setEnabled(true);
+                this.getMesh_("DOOR.004").setEnabled(true);
+                this.getMesh_("DOOR.005").setEnabled(true);
+                this.getTransformNode_("Cylinder.007").setEnabled(true);
+            }
         );
         this.entityManager_.add(door2);
     }

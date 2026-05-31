@@ -58,11 +58,11 @@ export class Door implements Entity, Commandable {
         const proximityZone = MeshBuilder.CreateBox("doorProximityZone", {
             width: 2,
             height: 4,
-            depth: 2
+            depth: 1.5
         }, leftMesh.getScene());
 
         proximityZone.checkCollisions = false;
-        proximityZone.visibility = 0;
+        proximityZone.visibility = 0.5;
 
         //proximityZone.position = new Vector3(2, 0, -1.5);
         proximityZone.parent = leftMesh.parent;

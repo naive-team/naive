@@ -62,7 +62,7 @@ export class Door implements Entity, Commandable {
         }, leftMesh.getScene());
 
         proximityZone.checkCollisions = false;
-        proximityZone.visibility = 0.5;
+        proximityZone.visibility = 0;
 
         //proximityZone.position = new Vector3(2, 0, -1.5);
         proximityZone.parent = leftMesh.parent;

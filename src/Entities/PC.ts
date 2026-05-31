@@ -270,8 +270,16 @@ export class PC implements Entity {
             return;
         }
 
+        console.log("executing command", text);
 
         const color: Color = ColorConverter.fromString(tokens[0]);
+
+        if (color === null) {
+            this.writeLine_("ERROR: target not found", "red");
+            return;
+        }
+
+        console.log("color", color);
 
 
         const command: Command = CommandConverter.fromString(tokens[1]);

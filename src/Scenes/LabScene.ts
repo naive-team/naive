@@ -120,11 +120,21 @@ export class LabScene extends Scene implements AsyncScene {
 
         this.placePC();
 
+        this.initDoors();
 
-        const firefly: Firefly = new Firefly(this.fireflyMesh_, "firefly", ()=>{this.cali_.setCurrentDialogIndex(3)});
+
+        const firefly: Firefly = new Firefly(this.fireflyMesh_, "firefly", ()=>{
+
+            const firstDoorIsOpened: boolean = (this.entityManager_.getEntityById("door_to_dev") as Door).isOpened();
+
+            if (firstDoorIsOpened) return;
+
+            this.cali_.setCurrentDialogIndex(3)
+
+        });
         this.entityManager_.add(firefly);
 
-        this.initDoors();
+
 
         BugCounterFabric.initialize();
 

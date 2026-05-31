@@ -186,4 +186,8 @@ export class Door implements Entity, Commandable {
         this.state_ = DoorState.CLOSING;
     }
 
+    isOpened(): boolean {
+        return this.state_ === DoorState.OPENING || this.state_ === DoorState.OPENED;
+    }
+
 }

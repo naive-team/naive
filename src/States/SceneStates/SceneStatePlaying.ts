@@ -69,6 +69,9 @@ export class SceneStatePlaying implements SceneState {
             if (ctx.input.getJustPressed(DIALOG_BUTTON)) {
 
                 const firefly: Firefly = player.popFirefly();
+
+                if (firefly === null) return;
+
                 commandable.attachFirefly(firefly, ctx.entityManager);
                 BugCounterFabric.getFireflyCounter().increment(-1);
                 return;

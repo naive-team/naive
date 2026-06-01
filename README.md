@@ -24,6 +24,7 @@ npm run dev
 - **Click**: Interact (during dialogs)
 - **TAB**: switch between AZERTY and QWERTY layouts (when using a PC)
 - **Shift**: exit PC (when using a PC)
+- **Enter**: execute a command (when using a PC)
 
 ## Credits
 

@@ -49,7 +49,6 @@ export class VideoMesh extends Mesh implements IVideoMesh {
     waitUntilReady(): Promise<void> {
         console.log("entre wait until ready", this.ready_)
         if (this.loaded_) {
-            console.log("caca");
             return Promise.resolve();
         }
 

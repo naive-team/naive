@@ -63,7 +63,6 @@ export class ActivezLeSon extends Scene implements AsyncScene {
         btn.fontSize = 25;
         btn.fontWeight = "bold";
         btn.onPointerClickObservable.add(async() => {
-            console.log("caca 1");
             await this.onNextScene_();
         });
         gui.addControl(btn);

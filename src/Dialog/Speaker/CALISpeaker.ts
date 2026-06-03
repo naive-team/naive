@@ -309,7 +309,9 @@ export class CALISpeaker extends Speaker implements Entity {
                 "Non rien"
             ],
             [
-                new Line("D'acc je fais ça !", null, ()=>{openDoor("door_to_serv")}),
+                new Line("D'acc je fais ça !", null, ()=>{
+                    openDoor("door_to_serv");
+                    bigbrain()}),
                 new Line("Une fois dans le terminal, tape `yellow open`", null),
                 new Line("Oki !", null, thxThenNormal)
             ]

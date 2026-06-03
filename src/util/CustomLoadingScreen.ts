@@ -19,7 +19,7 @@ export class CustomLoadingScreen implements ILoadingScreen {
             left: ${this.canvas_.offsetLeft}px;
             width: ${this.canvas_.width}px;
             height: ${this.canvas_.height}px;
-            background: url('/background ladybug.png') center/cover no-repeat;
+            background: url('./background ladybug.png') center/cover no-repeat;
             display: flex;
             flex-direction: column;
             align-items: center;

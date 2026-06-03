@@ -35,7 +35,7 @@ export class ChoiceUI {
         button.textBlock.textHorizontalAlignment = GUI.TextBlock.HORIZONTAL_ALIGNMENT_LEFT;
         button.textBlock.left = "80px";
 
-        const cursorImage = new GUI.Image("cursor", "src/data/ladybug.png");
+        const cursorImage = new GUI.Image("cursor", "./ladybug.png");
         cursorImage.width = "70px";
         cursorImage.height = "70px";
         cursorImage.left = "-3px";
@@ -50,14 +50,14 @@ export class ChoiceUI {
         }
 
         // Image de fond normale
-        const bgImage = new GUI.Image("btnBg", "src/data/choiceButton.png");
+        const bgImage = new GUI.Image("btnBg", "./choiceButton.png");
         bgImage.width = "100%";
         bgImage.height = "100%";
         bgImage.stretch = GUI.Image.STRETCH_FILL;
         bgImage.isPointerBlocker = false; // laisser les événements passer au bouton
 
         // Image de fond hover
-        const bgImageHover = new GUI.Image("btnBgHover", "src/data/choiceButtonHoverhover.png");
+        const bgImageHover = new GUI.Image("btnBgHover", "./choiceButtonHoverhover.png");
         bgImageHover.width = "100%";
         bgImageHover.height = "100%";
         bgImageHover.stretch = GUI.Image.STRETCH_FILL;

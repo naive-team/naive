@@ -1,6 +1,6 @@
 import {SceneState} from "./interface/SceneState";
 import {SceneStateMachine} from "./StateMachine/SceneStateMachine";
-import {EXIT_BUTTON, TAB} from "../../Input/Keys";
+import {EXIT_BUTTON, EXIT_BUTTON_2, TAB} from "../../Input/Keys";
 import {SceneStatePlaying} from "./SceneStatePlaying";
 import {EntityFamily} from "../../Entities/util/EntityFamily";
 import {GameContext} from "../../util/GameContext";
@@ -19,7 +19,7 @@ export class SceneStateUsingPC implements SceneState {
         ctx.input.update();
         this.pc_.update(ctx);
 
-        if (ctx.input.getPressed(EXIT_BUTTON) || this.pc_.getExitFlag()) {
+        if (ctx.input.getPressed(EXIT_BUTTON) || ctx.input.getPressed(EXIT_BUTTON_2) || this.pc_.getExitFlag()) {
             stateMachine.changeState(new SceneStatePlaying(), ctx);
         }
         if (ctx.input.getJustPressed(TAB)){

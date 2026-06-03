@@ -12,7 +12,7 @@ export class TitleScreenScene extends Scene implements AsyncScene {
     private imageUrl_: string;
     private sceneManager_: SceneManager;
 
-    constructor(engine: Engine, sceneManager: SceneManager, imageUrl: string = "/title screen.png") {
+    constructor(engine: Engine, sceneManager: SceneManager, imageUrl: string = "./title screen.png") {
         super(engine);
         this.engine_ = engine;
         this.imageUrl_ = imageUrl;

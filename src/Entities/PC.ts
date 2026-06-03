@@ -297,7 +297,11 @@ export class PC implements Entity {
 
         const target: Commandable = ctx.entityManager.getCommandableByColor(color);
         if (target === undefined) {
+            this.clearScreen_();
             this.writeLine_("ERROR: Target not found", "red");
+            this.writeLine_("");
+            this.writeLine_("hint: attach a firefly", "yellow");
+            this.writeLine_("      to the target", "yellow");
             return;
         }
 

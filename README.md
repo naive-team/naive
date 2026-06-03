@@ -5,6 +5,8 @@
 
 This project is a 3D puzzle game developed with Babylon.js and Typescript for the French "Games on Web" contest.
 
+Looking for the game? Check out the [contest repository](https://github.com/gamesonweb/ia-edition-naive).
+
 _This game was made by humans, for humans._
 
 ##  How to run
@@ -21,6 +23,8 @@ npm run dev
 - **F**: Interact
 - **Click**: Interact (during dialogs)
 - **TAB**: switch between AZERTY and QWERTY layouts (when using a PC)
+- **Shift**: exit PC (when using a PC)
+- **Enter**: execute a command (when using a PC)
 
 ## Credits
 

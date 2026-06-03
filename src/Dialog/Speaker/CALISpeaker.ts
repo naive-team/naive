@@ -191,16 +191,18 @@ export class CALISpeaker extends Speaker implements Entity {
                                     bigbrain();
                                     openDoor("door_to_dev");
                                 }),
-                                new Line("L'ordinateur fonctionne avec des commandes simples(?). Tu trouveras les détails de syntaxe en écrivant \"help\" dans le terminal",
-                                    new ChoiceLine("",
-                                        [
-                                            "Comment on ouvre le terminal déjà ?",
-                                            "Merci C.A.L.I !"
-                                        ],
-                                        [
-                                            howtoOpenTerminal,
-                                            new Line ("Y'a pas de quoi ^u^", null, thxThenNormal)
-                                        ]
+                                new Line("L'ordinateur fonctionne avec des commandes simples(?)",
+                                    new Line("Tu trouveras les détails de syntaxe en écrivant \"help\" puis en tapant sur [Entrée] !",
+                                        new ChoiceLine("",
+                                            [
+                                                "Comment on ouvre le terminal déjà ?",
+                                                "Merci C.A.L.I !"
+                                            ],
+                                            [
+                                                howtoOpenTerminal,
+                                                new Line ("Y'a pas de quoi ^u^", null, thxThenNormal)
+                                            ]
+                                        )
                                     )
                                 ),
                                 new Line("Okidoki !", null)
@@ -310,7 +312,7 @@ export class CALISpeaker extends Speaker implements Entity {
             ],
             [
                 new Line("D'acc je fais ça !", null, ()=>{openDoor("door_to_serv")}),
-                new Line("Une fois dans le terminal, tape `yellow open`", null),
+                new Line("Une fois dans le terminal, tape `yellow open`, et tape sur [Entrée] pour bien valider !", null),
                 new Line("Oki !", null, thxThenNormal)
             ]
         )

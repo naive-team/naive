@@ -59,7 +59,7 @@ export class LineUi {
         container.left = "24%";
         container.top = "4%";
 
-        const bg = new GUI.Image("bg", "src/data/bg_speaker.png");
+        const bg = new GUI.Image("bg", "./bg_speaker.png");
         bg.width = "222px";
         bg.height = "92px";
         bg.stretch = GUI.Image.STRETCH_FILL;
@@ -77,7 +77,7 @@ export class LineUi {
         container.top = "-5%";
         container.clipChildren = false;
 
-        const bg = new GUI.Image("bg", "src/data/bg_dialog.png");
+        const bg = new GUI.Image("bg", "./bg_dialog.png");
         bg.width = "100%";
         bg.height = "100%";
         bg.stretch = GUI.Image.STRETCH_FILL;

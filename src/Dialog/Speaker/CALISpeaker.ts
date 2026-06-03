@@ -312,7 +312,7 @@ export class CALISpeaker extends Speaker implements Entity {
             ],
             [
                 new Line("D'acc je fais ça !", null, ()=>{openDoor("door_to_serv")}),
-                new Line("Une fois dans le terminal, tape `yellow open`, et tape sur [Entrée] pour bien valider !", null),
+                new Line("Une fois dans le terminal, tape `yellow open, et appuie sur [Entrée] pour bien valider !`", null),
                 new Line("Oki !", null, thxThenNormal)
             ]
         )
